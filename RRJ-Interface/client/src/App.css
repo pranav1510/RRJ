@@ -1,0 +1,9 @@
+body {
+    background: linear-gradient(to right,  rgb(177, 121, 17),rgb(178, 178, 22));
+}
+
+.title {
+    font-family: 'Playfair Display', 'serif';
+    font-weight: bold;
+}
+
