@@ -3,8 +3,8 @@ import { Form, Button } from "react-bootstrap";
 
 const DailyPrice = ({date}) => {
 
-    
     const time = new Date().toLocaleTimeString();
+
     const SubmitHandler = () => {
 
     }
@@ -42,15 +42,15 @@ const DailyPrice = ({date}) => {
                         <Form.Group className="mb-3">
                             <Form.Label className="fw-bold m-1">Gold Price</Form.Label>
                             <div className="d-flex justify-content-center m-1">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text material-symbols-outlined">
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text material-symbols-outlined">
                                             currency_rupee
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" />
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">/10 grams</span>
+                                    <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" />
+                                    <div className="input-group-append">
+                                        <span className="input-group-text">/10 grams</span>
                                     </div>
                                 </div>
                             </div>
@@ -64,15 +64,15 @@ const DailyPrice = ({date}) => {
                         <Form.Group className="mb-3">
                             <Form.Label className="fw-bold m-1">Silver Price</Form.Label>
                             <div className="d-flex justify-content-center m-1">
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text material-symbols-outlined">
+                                <div className="input-group mb-3">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text material-symbols-outlined">
                                             currency_rupee
                                         </span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)" />
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">/10 grams</span>
+                                    <input type="text" className="form-control" aria-label="Amount (to the nearest dollar)" />
+                                    <div className="input-group-append">
+                                        <span className="input-group-text">/10 grams</span>
                                     </div>
                                 </div>
                             </div>

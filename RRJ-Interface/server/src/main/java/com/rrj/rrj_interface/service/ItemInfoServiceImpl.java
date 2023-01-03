@@ -5,6 +5,8 @@ import com.rrj.rrj_interface.repository.ItemInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ItemInfoServiceImpl implements ItemInfoService {
 
@@ -14,5 +16,10 @@ public class ItemInfoServiceImpl implements ItemInfoService {
     @Override
     public ItemInfo save(ItemInfo itemInfo) {
         return itemInfoRepository.save(itemInfo);
+    }
+
+    @Override
+    public List<ItemInfo> getItemData(ItemInfo itemInfo) {
+        return itemInfoRepository.findByItemId(itemInfo.getItemId());
     }
 }

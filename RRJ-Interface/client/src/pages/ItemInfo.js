@@ -92,6 +92,7 @@ const ItemInfo = ({date}) => {
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
+                    <li className="breadcrumb-item fw-bold"><a href="/infoentry">Information Entry</a></li>
                     <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Item Information</li>
                 </ol>
             </nav>
@@ -201,7 +202,7 @@ const ItemInfo = ({date}) => {
                 <div className="row">
                     <div className="col-3">
                         <Form.Group className="mt-3">
-                            <Form.Label class="fw-bold m-1">Item Price</Form.Label>
+                            <Form.Label className="fw-bold m-1">Item Price</Form.Label>
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ITEM_PRICE, payload: e})}/>
                         </Form.Group>
                     </div>

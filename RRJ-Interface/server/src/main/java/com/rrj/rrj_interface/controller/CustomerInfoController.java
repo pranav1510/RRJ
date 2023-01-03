@@ -20,15 +20,15 @@ public class CustomerInfoController {
     public String add(@RequestBody CustomerInfo customerInfo) {
         try {
             customerInfoService.save(customerInfo);
-            return "new customer is added";
+            return "Customer Information Saved Successfully";
         }
         catch (Exception ex1){
             return ex1.getMessage();
         }
     }
 
-    @GetMapping("/check")
-    public List<CustomerInfo> getCustomer(){
-        return customerInfoService.getCustomerData(new Ordertaking());
+    @PostMapping("/check")
+    public List<CustomerInfo> getCustomer(@RequestBody Ordertaking ordertaking){
+        return customerInfoService.getCustomerData(ordertaking);
     }
 }

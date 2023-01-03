@@ -79,6 +79,7 @@ const PaymentDetails = ({date}) => {
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
             <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
+            <li className="breadcrumb-item fw-bold"><a href="/infoentry">Information Entry</a></li>
             <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Payment Details</li>
             </ol>
         </nav>

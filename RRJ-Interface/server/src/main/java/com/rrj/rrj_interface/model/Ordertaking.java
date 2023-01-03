@@ -15,8 +15,7 @@ import lombok.Setter;
 public class Ordertaking {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int OrderId;
+    private String OrderId;
     private String Date;
     private String ExpectedDeliveryDate;
     private String CustomerMobile;

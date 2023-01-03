@@ -7,6 +7,8 @@ import ItemInfo from './pages/ItemInfo';
 import PaymentDetails from './pages/PaymentDetails';
 import HomePage from './pages/Homepage';
 import DailyPrice from './pages/DailyPrice';
+import InfoEntry from './pages/InfoEntry';
+import SearchInfo from './pages/SearchInfo';
 
 function App() {
 
@@ -34,6 +36,8 @@ function App() {
         <Route exact path='/iteminfo' element={<ItemInfo date={date}/>}/>
         <Route exact path='/paymentdetails' element={<PaymentDetails date={date}/>}/>
         <Route exact path='/dailyprice' element={<DailyPrice date={date}/>}/>
+        <Route exact path='/infoentry' element={<InfoEntry />}/>
+        <Route exact path='/searchinfo' element={<SearchInfo />}/>
       </Routes>
     </div>
   );

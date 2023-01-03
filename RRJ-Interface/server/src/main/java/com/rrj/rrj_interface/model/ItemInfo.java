@@ -17,16 +17,16 @@ import lombok.Setter;
 public class ItemInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ItemId;
+    private String ItemId;
+    private String OrderId;
     private String ItemName;
     private String ItemType;
     private String CustomerComments;
-    private String ReceiverComments;
+    private String OrderReceiverComments;
     private String ItemResponsibility;
     private String ItemStatus;
     private String ItemPrice;
-    private String DeliveryDate;
+    private String ItemDeliveryDate;
     private String MakingCharges;
     private String ItemGrossWeight;
     private String ItemNetWeight;
@@ -35,4 +35,5 @@ public class ItemInfo {
     private String StoneWeight;
     private String BeadsCost;
     private String StonesCost;
+
 }
