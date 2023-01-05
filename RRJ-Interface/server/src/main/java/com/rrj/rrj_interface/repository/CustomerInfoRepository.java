@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface CustomerInfoRepository extends JpaRepository<CustomerInfo,String> {
 
-    @Query("select e FROM CustomerInfo e WHERE e.CustomerMobile =?1 OR e.AlternateMobileOne =?1 OR e.AlternateMobileTwo =?1")
-    List<CustomerInfo> findByCustomerMobile(String CustomerMobile);
+    @Query("select e.CustomerFullName FROM CustomerInfo e WHERE e.CustomerMobile =?1 OR e.AlternateMobileOne =?1 OR e.AlternateMobileTwo =?1")
+    List<String> findByCustomerMobile(String CustomerMobile);
 }

@@ -14,7 +14,7 @@ const InfoEntry = () => {
         </Container>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <a href="/orderview">
+                <a href="/ordertaking">
                     <div className="card m-3 rounded">
                         <div className="card-body">
                             <h5 className="card-title link-dark">ORDER TAKING ENTRY</h5>
@@ -29,17 +29,6 @@ const InfoEntry = () => {
                     <div className="card m-3 rounded">
                         <div className="card-body">
                             <h5 className="card-title link-dark"> ENTER CUSTOMER INFORMATION</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div className="row justify-content-center">
-            <div className="col-sm-6">
-                <a href="/iteminfo">
-                    <div className="card m-3 rounded hover">
-                        <div className="card-body">
-                            <h5 className="card-title link-dark">ENTER ITEM INFORMATION</h5>
                         </div>
                     </div>
                 </a>

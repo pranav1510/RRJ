@@ -8,11 +8,14 @@ const initialState = {
     customerMobile: "",
     customerRemarks: "",
     orderReceiverRemarks: "",
+    goldCost: "",
+    silverCost: "",
     orderStatus: "",
     GST: "",
     orderReceivedBy: "",
     orderResponsibility: "",
     customerFullName: "",
+    customerFullNameOne: "",
     customerInfoStatus: "",
     orderTakingStatus: "",
     itemInfoStatus: "",
@@ -39,7 +42,7 @@ const initialState = {
     show1: false,
     show2: false,
     show3: false,
-    nameShow: false,
+    show4: true,
     generateShow: true,
 }
 
@@ -47,14 +50,17 @@ const ACTIONS = {
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
     SHOW3: "SHOW3",
-    NAMESHOW: "NAMESHOW",
+    SHOW4: "SHOW4",
     GENERATESHOW: "GENERATESHOW",
     ORDER_ID: "ORDER_ID",
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
+    CUSTOMER_FULL_NAME_ONE: "CUSTOMER_FULL_NAME_ONE",
     EXPECTED_DELIVERY_DATE: "EXPECTED_DELIVERY_DATE",
     CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
     CUSTOMER_REMARKS: "CUSTOMER_REMARKS",
     ORDER_REVCEIVER_REMARKS: "ORDER_RECEIVER_REMARKS",
+    GOLD_COST: "GOLD_COST",
+    SILVER_COST: "SILVER_COST",
     ORDER_STATUS: "ORDER_STATUS",
     GST:"GST",
     ORDER_RECEIVED_BY: "ORDER_RECEIVED_BY",
@@ -147,6 +153,8 @@ const reducer = (state, {type, payload}) => {
             return initialState
         case ACTIONS.CUSTOMER_FULL_NAME:
             return {...state, customerFullName: payload}
+        case ACTIONS.CUSTOMER_FULL_NAME_ONE:
+            return {...state, customerFullNameOne: payload.target.value}
         case ACTIONS.EXPECTED_DELIVERY_DATE:
             return {...state, expectedDeliveryDate: payload.target.value}
         case ACTIONS.CUSTOMER_MOBILE:
@@ -155,6 +163,10 @@ const reducer = (state, {type, payload}) => {
             return {...state, customerRemarks: payload.target.value}
         case ACTIONS.ORDER_REVCEIVER_REMARKS:
             return {...state, orderReceiverRemarks: payload.target.value}
+        case ACTIONS.GOLD_COST:
+            return {...state, goldCost: payload.target.value}
+        case ACTIONS.SILVER_COST:
+            return {...state, silverCost: payload.target.value}
         case ACTIONS.ORDER_STATUS:
             return {...state, orderStatus: payload.target.value}
         case ACTIONS.GST:
@@ -189,14 +201,14 @@ const reducer = (state, {type, payload}) => {
             return {...state, show2: payload}
         case ACTIONS.SHOW3:
             return {...state, show3: payload}
-        case ACTIONS.NAMESHOW:
-            return {...state, nameShow: payload}
         case ACTIONS.GENERATESHOW:
             return {...state, generateShow: payload}
         case ACTIONS.PREVORDERIDPATTERN:
             return {...state, prevOrderIdPattern: payload}
         case ACTIONS.PREVITEMIDPATTERN:
             return {...state, prevItemOrderIdPattern: payload}
+        case ACTIONS.SHOW4:
+            return {...state, show4: payload}
         default:
             return state
     }
@@ -214,7 +226,7 @@ const OrderTaking = ({date}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const GenerateId = () => {
-        axios.post("http://localhost:8080/OrderTaking/orderid", {})
+        axios.get("http://localhost:8080/OrderTaking/orderid")
             .then(res => {
                 let newIdPattern = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, "0") + new Date().getDate().toString().padStart(2, "0")
                 let prevIdPattern = res.data[0]
@@ -222,41 +234,40 @@ const OrderTaking = ({date}) => {
                     let value = newIdPattern + "01"
                     dispatch({type:ACTIONS.ORDER_ID, payload: value})
                 } else {
-                    if(prevIdPattern.orderId.slice(0,8) !== newIdPattern){
+                    if(prevIdPattern.slice(0,8) !== newIdPattern){
                         let value = newIdPattern + "01"
                         dispatch({type:ACTIONS.ORDER_ID, payload: value})
                     } else {
-                        let value = Number(prevIdPattern.orderId) + 1
+                        let value = Number(prevIdPattern) + 1
                         dispatch({type:ACTIONS.ORDER_ID, payload: value.toString()})
                     }
                 }
             })
             .catch(err => console.log(err))
         dispatch({type:ACTIONS.GENERATESHOW, payload: false})
+        dispatch({type:ACTIONS.SHOW4, payload: false})
     }
 
     const SubmitHandler = (e) => {
         e.preventDefault()
         axios.post("http://localhost:8080/OrderTaking/add", newState)
-            .then(() => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
+            .then((res) => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
             .catch(err => console.log(err));
-        dispatch({type: ACTIONS.SUBMISSION})
-        dispatch({type:ACTIONS.NAMESHOW, payload:false})
-        setTimeout(() => {
-            dispatch({type: ACTIONS.INITIAL})
-            dispatch({type:ACTIONS.GENERATESHOW, payload: true})
-            setFormfields([])
-        },2000)
+        // setTimeout(() => {
+        //     dispatch({type: ACTIONS.INITIAL})
+        //     dispatch({type:ACTIONS.GENERATESHOW, payload: true})
+        //     setFormfields([])
+        // },2000)
     }
 
     const Validate = () => {
         axios.post("http://localhost:8080/CustomerInfo/check", newState)
         .then(res => {
-            if(res.data.length === 0) {
+            if(res.data[0] === undefined) {
                 dispatch({type:ACTIONS.SHOW1, payload: true})
             }
             else{
-                dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: res.data[0].customerFullName})
+                dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: res.data[0]})
             }
         })
         .catch(err => console.log(err));
@@ -291,7 +302,7 @@ const OrderTaking = ({date}) => {
             <div className="row"><h5 className="text-dark d-flex flex-row justify-content-center">{newState.customerInfoStatus}</h5></div>
             <Form.Group className="mt-3">
                 <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                <Form.Control type="text"  onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})}/>
+                <Form.Control type="text"  onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME_ONE, payload: e})}/>
             </Form.Group>
             <div className="row">
                 <Form.Group className="mt-3">
@@ -331,9 +342,8 @@ const OrderTaking = ({date}) => {
           </Button>
           <Button variant="primary" onClick={() => {
             dispatch({type:ACTIONS.SHOW2, payload: false})
-            dispatch({type:ACTIONS.NAMESHOW, payload: true})
             const customerData = {
-                customerFullName: newState.customerFullName.target.value,
+                customerFullName: newState.customerFullNameOne,
                 customerMobile: newState.customerMobile,
                 alternateMobileOne: newState.alternateMobileOne,
                 alternateMobileTwo: newState.alternateMobileTwo,
@@ -343,7 +353,8 @@ const OrderTaking = ({date}) => {
             axios.post("http://localhost:8080/CustomerInfo/add",customerData)
             .then((response) => {
                 dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: response.data})
-                setTimeout(() => {dispatch({type:ACTIONS.SHOW2, payload: false})},2000)
+                dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: customerData.customerFullName})
+                // setTimeout(() => {dispatch({type:ACTIONS.SHOW2, payload: false})},2000)
             })
             .catch(err => console.log(err.message));
           }}>
@@ -491,15 +502,15 @@ const OrderTaking = ({date}) => {
           <Button variant="primary" onClick={() => {
             axios.post("http://localhost:8080/ItemInfo/add", newState)
                 .then(res => {
-                    dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: res.data})
+                    dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: "Item saved Successfully!"})
                     setFormfields([...formfields, newState.itemName])
                 })
                 .catch(err => console.log(err))
             dispatch({type:ACTIONS.ITEM_INFO_INITIAL_STATE})
-            setTimeout(() => {
-                dispatch({type:ACTIONS.SHOW3, payload: false})
-                dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
-            }, 1000)
+            // setTimeout(() => {
+            //     dispatch({type:ACTIONS.SHOW3, payload: false})
+            //     dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
+            // }, 1000)
           }}>Add New Item</Button>
         </Modal.Footer>
       </Modal>
@@ -526,7 +537,7 @@ const OrderTaking = ({date}) => {
                                 </div>
                                 <div className="mt-2">
                                     {
-                                        newState.generateShow? <Button variant="secondary" onClick={GenerateId}>Get Order Id</Button> : <div></div>
+                                        newState.generateShow? <Button variant="secondary" onClick={GenerateId}>Get Order Id</Button> : <></>
                                     }
                                 </div>
                             </div>
@@ -574,25 +585,49 @@ const OrderTaking = ({date}) => {
                             })
                         }
                         <div className="col">
-                            <Button variant="info" onClick={() => {
-                                 dispatch({type:ACTIONS.SHOW3, payload: true})
-                                axios.post("http://localhost:8080/ItemInfo/itemid",{})
-                                .then(res => {
-                                    let newIdPattern = newState.orderId
-                                    let prevIdPattern = res.data[0]
-                                    if(prevIdPattern === undefined){
-                                        let value = newIdPattern + "01"
-                                        dispatch({type:ACTIONS.ITEM_ID, payload: value})
-                                    } else {
-                                        if(prevIdPattern.itemId.slice(0,10) !== newIdPattern){
-                                            let value = newIdPattern + "01"
-                                            dispatch({type:ACTIONS.ITEM_ID, payload: value})
-                                        } else {
-                                            let value = Number(prevIdPattern.itemId) + 1
-                                            dispatch({type:ACTIONS.ITEM_ID, payload: value.toString()})
-                                        }}
-                                }).catch(err => console.log(err))
-                            }}>Add more...</Button>
+                            {
+                                newState.show4 ? (<></>) : (
+                                    <Button variant="info" onClick={() => {
+                                        dispatch({type:ACTIONS.SHOW3, payload: true})
+                                       axios.get("http://localhost:8080/ItemInfo/itemid")
+                                       .then(res => {
+                                           let newIdPattern = newState.orderId
+                                           let prevIdPattern = res.data[0]
+                                           if(prevIdPattern === undefined){
+                                               let value = newIdPattern + "01"
+                                               dispatch({type:ACTIONS.ITEM_ID, payload: value})
+                                           } else {
+                                               if(prevIdPattern.slice(0,10) !== newIdPattern){
+                                                   let value = newIdPattern + "01"
+                                                   dispatch({type:ACTIONS.ITEM_ID, payload: value})
+                                               } else {
+                                                   let value = Number(prevIdPattern) + 1
+                                                   dispatch({type:ACTIONS.ITEM_ID, payload: value.toString()})
+                                               }}
+                                       }).catch(err => console.log(err))
+                                   }}>Add more...</Button>
+                                )
+                            }
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <Form.Group>
+                                <Form.Label className="fw-bold m-1">Gold Cost</Form.Label>
+                                <div className="d-flex flex-row">
+                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.GOLD_COST, payload: e})}/>
+                                <span className="input-group-text fw-bold p-1">/10 gms</span>
+                                </div>    
+                            </Form.Group>
+                        </div>
+                        <div className="col">
+                            <Form.Group>
+                                <Form.Label className="fw-bold m-1">Silver Cost</Form.Label>
+                                <div className="d-flex flex-row">
+                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.SILVER_COST, payload: e})} />
+                                <span className="input-group-text fw-bold p-1">/10 gms</span>
+                                </div>    
+                            </Form.Group>
                         </div>
                     </div>
                     <div className="row">
@@ -667,7 +702,10 @@ const OrderTaking = ({date}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customers Full Name</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.nameShow? newState.customerFullName.target.value : newState.customerFullName} onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})}/>
+                            <Form.Control type="text" defaultValue={newState.customerFullName} onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})}/>
+                            <div className="d-flex flex-row justify-content-end">
+                                <a href="/paymentdetails"><Button className="btn btn-info mt-2">Click here to proceed for Payment</Button></a>
+                            </div>
                             </Form.Group>
                         </div>
                     </div>

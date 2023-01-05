@@ -17,11 +17,14 @@ import lombok.Setter;
 public class PaymentInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int PaymentId;
+    private String PaymentId;
+    private String CustomerMobile;
+    private String CustomerFullName;
     private String AmountReceived;
-    private String ExchangeReceivedType;
-    private String ExchangeReceivedCost;
+    private String ExchangeGoldWeight;
+    private String ExchangeGoldCost;
+    private String ExchangeSilverWeight;
+    private String ExchangeSilverCost;
     private String OrderPrice;
     private String Discount;
     private String CustomerDueStatus;

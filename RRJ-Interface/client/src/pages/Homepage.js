@@ -14,7 +14,7 @@ const HomePage = () => {
         
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <a href="/ordertaking">
+                <a href="/infoentry">
                     <div className="card m-3 rounded">
                         <div className="card-body">
                             <h5 className="card-title link-dark">INFORMATION ENTRY</h5>

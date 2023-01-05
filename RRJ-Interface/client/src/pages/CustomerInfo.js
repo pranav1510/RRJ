@@ -66,7 +66,7 @@ const CustomerInfo = () => {
             <Row>
                 <Col>
                     <Form>
-                    <div className="row"><h5 className="text-dark d-flex flex-row justify-content-center">{newState.status}</h5></div>
+                    <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.status}</h5></div>
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
                             <Form.Control type="text"  onChange={e => {

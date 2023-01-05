@@ -8,5 +8,5 @@ import java.util.List;
 public interface CustomerInfoService {
 
     public CustomerInfo save(CustomerInfo customerInfo);
-    public List<CustomerInfo> getCustomerData(Ordertaking ordertaking);
+    public List<String> getCustomerData(Ordertaking ordertaking);
 }

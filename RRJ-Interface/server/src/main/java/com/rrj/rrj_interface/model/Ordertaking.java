@@ -17,8 +17,11 @@ public class Ordertaking {
     @Id
     private String OrderId;
     private String Date;
+    private String GoldCost;
+    private String SilverCost;
     private String ExpectedDeliveryDate;
     private String CustomerMobile;
+    private String CustomerFullName;
     private String CustomerRemarks;
     private String OrderReceiverRemarks;
     private String OrderStatus;

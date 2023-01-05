@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface OrdertakingRepository extends JpaRepository<Ordertaking,Integer> {
 
-    @Query("select e FROM Ordertaking e ORDER BY e.OrderId DESC LIMIT 1")
-    List<Ordertaking> findByOrderId(String OrderId);
+    @Query("select e.OrderId FROM Ordertaking e ORDER BY e.OrderId DESC LIMIT 1")
+    List<String> findByOrderId(String OrderId);
+
+    @Query("select e.OrderId FROM Ordertaking e WHERE e.CustomerMobile = ?1 OR e.CustomerFullName = ?2")
+    List<String> findByCustomerMobile(String CustomerMobile, String CustomerFullName);
 }

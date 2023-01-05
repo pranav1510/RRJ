@@ -27,7 +27,7 @@ public class CustomerInfoServiceImpl implements CustomerInfoService{
         }
     }
 
-    public List<CustomerInfo> getCustomerData(Ordertaking ordertaking){
+    public List<String> getCustomerData(Ordertaking ordertaking){
         return customerInfoRepository.findByCustomerMobile(ordertaking.getCustomerMobile());
     }
 }

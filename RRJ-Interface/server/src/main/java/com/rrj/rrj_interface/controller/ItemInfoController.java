@@ -1,6 +1,7 @@
 package com.rrj.rrj_interface.controller;
 
 import com.rrj.rrj_interface.model.ItemInfo;
+import com.rrj.rrj_interface.model.PaymentInfo;
 import com.rrj.rrj_interface.service.ItemInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,13 @@ public class ItemInfoController {
         return "New Item Saved Successfully!";
     }
 
-    @PostMapping("/itemid")
-    public List<ItemInfo> getItem(@RequestBody ItemInfo itemInfo){
+    @GetMapping("/itemid")
+    public List<String> getItem(ItemInfo itemInfo){
         return itemInfoService.getItemData(itemInfo);
+    }
+
+    @PostMapping("/getitemdetails")
+    public List<Object[]> getItemPriceAndName(@RequestBody PaymentInfo paymentInfo){
+        return itemInfoService.getItemNameAndPrice(paymentInfo);
     }
 }

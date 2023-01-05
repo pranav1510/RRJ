@@ -1,9 +1,13 @@
 body {
+    margin:0;
     background: linear-gradient(to right,  rgb(177, 121, 17),rgb(178, 178, 22));
+}
+
+*,*::before,*::after {
+    box-sizing: border-box;
 }
 
 .title {
     font-family: 'Playfair Display', 'serif';
     font-weight: bold;
 }
-

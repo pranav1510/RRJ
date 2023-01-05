@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface ItemInfoRepository extends JpaRepository<ItemInfo,Integer> {
 
-    @Query("select e FROM ItemInfo e ORDER BY e.ItemId DESC LIMIT 1")
-    List<ItemInfo> findByItemId(String ItemId);
+    @Query("select e.ItemId FROM ItemInfo e ORDER BY e.ItemId DESC LIMIT 1")
+    List<String> findByItemId(String ItemId);
+
+    @Query("select e.ItemId, e.ItemName, e.ItemPrice FROM ItemInfo e WHERE e.OrderId =?1")
+    List<Object[]> getItemNameAndItemPrice(String PaymentId);
 }

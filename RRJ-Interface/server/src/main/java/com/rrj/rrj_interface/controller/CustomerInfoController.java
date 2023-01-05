@@ -28,7 +28,7 @@ public class CustomerInfoController {
     }
 
     @PostMapping("/check")
-    public List<CustomerInfo> getCustomer(@RequestBody Ordertaking ordertaking){
+    public List<String> getCustomer(@RequestBody Ordertaking ordertaking){
         return customerInfoService.getCustomerData(ordertaking);
     }
 }

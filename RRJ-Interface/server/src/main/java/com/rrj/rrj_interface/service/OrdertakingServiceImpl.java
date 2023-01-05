@@ -1,6 +1,7 @@
 package com.rrj.rrj_interface.service;
 
 import com.rrj.rrj_interface.model.Ordertaking;
+import com.rrj.rrj_interface.model.PaymentInfo;
 import com.rrj.rrj_interface.repository.OrdertakingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,12 @@ public class OrdertakingServiceImpl implements OrdertakingService {
     }
 
     @Override
-    public List<Ordertaking> getOrderData(Ordertaking ordertaking) {
+    public List<String> getOrderData(Ordertaking ordertaking) {
         return ordertakingrepository.findByOrderId(ordertaking.getOrderId());
+    }
+
+    @Override
+    public List<String> getOrderInfoAtPayment(PaymentInfo paymentInfo) {
+        return ordertakingrepository.findByCustomerMobile(paymentInfo.getCustomerMobile(), paymentInfo.getCustomerFullName());
     }
 }
