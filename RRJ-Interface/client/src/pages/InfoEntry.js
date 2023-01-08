@@ -1,59 +1,60 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Card, Container } from "react-bootstrap";
 
-const InfoEntry = () => {
+const InfoEntry = ({navigate}) => {
     return(
         <>
         <Container>
         <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-            <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
-            <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Information Entry</li>
+            <ol className="breadcrumb flex-nowrap">
+            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+            <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">InformationEntry</li>
             </ol>
         </nav>
         </Container>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <a href="/ordertaking">
-                    <div className="card m-3 rounded">
-                        <div className="card-body">
-                            <h5 className="card-title link-dark">ORDER TAKING ENTRY</h5>
-                        </div>
-                    </div>
-                </a>
+                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/ordertaking')}}>
+                    <Card.Body>
+                        <Card.Title><h5 className="link-dark">ORDER TAKING ENTRY</h5></Card.Title>
+                    </Card.Body>
+                </Card>
             </div>
         </div>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <a href="/customerinfo">
-                    <div className="card m-3 rounded">
-                        <div className="card-body">
-                            <h5 className="card-title link-dark"> ENTER CUSTOMER INFORMATION</h5>
-                        </div>
-                    </div>
-                </a>
+                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/customerinfo')}}>
+                    <Card.Body>
+                        <Card.Title><h5 className="link-dark"> ENTER CUSTOMER INFORMATION</h5></Card.Title>
+                    </Card.Body>
+                </Card>
             </div>
         </div>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <a href="/paymentdetails">
-                    <div className="card m-3 rounded">
-                        <div className="card-body">
-                            <h5 className="card-title link-dark">ENTER PAYMENT DETAILS</h5>
-                        </div>
-                    </div>
-                </a>
+                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/paymentdetails')}}>
+                    <Card.Body>
+                        <Card.Title><h5 className="link-dark">ENTER PAYMENT DETAILS</h5></Card.Title>
+                    </Card.Body>
+                </Card>
             </div>
         </div>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <a href="/dailyprice">
-                    <div className="card m-3 rounded">
-                        <div className="card-body">
-                            <h5 className="card-title link-dark"> ENTER DAILY PRICE INFORMATION</h5>
-                        </div>
-                    </div>
-                </a>
+                <Card style={{"cursor":"pointer"}}  className="m-3 rounded" onClick={() => {navigate('/dailyprice')}}>
+                    <Card.Body>
+                        <Card.Title><h5 className="link-dark"> ENTER DAILY PRICE INFORMATION</h5></Card.Title>
+                    </Card.Body>
+                </Card>
+            </div>
+        </div>
+        <div className="row justify-content-center">
+            <div className="col-sm-6">
+                <Card style={{"cursor":"pointer"}}  className="m-3 rounded" onClick={() => {navigate('/transactionentry')}}>
+                    <Card.Body>
+                        <Card.Title><h5 className="link-dark"> ENTER TRANSACTION DETAILS</h5></Card.Title>
+                    </Card.Body>
+                </Card>
             </div>
         </div>
         </>

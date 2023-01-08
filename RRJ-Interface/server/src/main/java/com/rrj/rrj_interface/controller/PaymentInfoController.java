@@ -2,6 +2,7 @@ package com.rrj.rrj_interface.controller;
 
 import com.rrj.rrj_interface.model.PaymentInfo;
 import com.rrj.rrj_interface.service.PaymentInfoService;
+import com.rrj.rrj_interface.service.TransactionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +18,7 @@ public class PaymentInfoController {
     private PaymentInfoService paymentInfoService;
 
     @RequestMapping("/add")
-    public String add(@RequestBody PaymentInfo paymentInfo){
-        paymentInfoService.save(paymentInfo);
-        return "new payment info added!";
+    public PaymentInfo add(@RequestBody PaymentInfo paymentInfo){
+        return paymentInfoService.save(paymentInfo);
     }
 }

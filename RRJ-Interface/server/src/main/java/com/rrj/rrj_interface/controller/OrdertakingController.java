@@ -17,9 +17,8 @@ public class OrdertakingController {
     private OrdertakingService ordertakingservice;
 
     @PostMapping("/add")
-    public String add(@RequestBody Ordertaking ordertaking){
-        ordertakingservice.save(ordertaking);
-        return "Order saved Successfully!";
+    public Ordertaking add(@RequestBody Ordertaking ordertaking){
+        return ordertakingservice.save(ordertaking);
     }
 
     @GetMapping("/orderid")

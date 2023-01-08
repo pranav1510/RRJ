@@ -1,9 +1,11 @@
 import React, { useReducer, useState } from "react";
 import { Container, Form, Button, Modal } from "react-bootstrap";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const initialState = {
     orderId: "",
+    date: "",
     expectedDeliveryDate: "",
     customerMobile: "",
     customerRemarks: "",
@@ -11,7 +13,7 @@ const initialState = {
     goldCost: "",
     silverCost: "",
     orderStatus: "",
-    GST: "",
+    gst: "",
     orderReceivedBy: "",
     orderResponsibility: "",
     customerFullName: "",
@@ -55,6 +57,7 @@ const ACTIONS = {
     ORDER_ID: "ORDER_ID",
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
     CUSTOMER_FULL_NAME_ONE: "CUSTOMER_FULL_NAME_ONE",
+    DATE: "DATE",
     EXPECTED_DELIVERY_DATE: "EXPECTED_DELIVERY_DATE",
     CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
     CUSTOMER_REMARKS: "CUSTOMER_REMARKS",
@@ -118,17 +121,17 @@ const reducer = (state, {type, payload}) => {
         case ACTIONS.ITEM_RESPONSIBILITY:
             return {...state, itemResponsibility: payload.target.value}
         case ACTIONS.ITEM_STATUS:
-            return {...state, itemStatus: payload.target.value}
+            return {...state, itemStatus: payload}
         case ACTIONS.ORDER_RECEIVER_COMMENTS:
             return {...state, orderReceiverComments: payload.target.value}
         case ACTIONS.CUSTOMER_COMMENTS:
             return {...state, customerComments: payload.target.value}
         case ACTIONS.ITEM_DELIVERY_DATE:
-            return {...state, itemDeliveryDate: payload.target.value}
+            return {...state, itemDeliveryDate: String(payload.target.value)}
         case ACTIONS.ITEM_NAME:
             return {...state, itemName: payload.target.value}
         case ACTIONS.ITEM_TYPE:
-            return {...state, itemType: payload.target.value}
+            return {...state, itemType: payload}
         case ACTIONS.ITEM_ID:
             return {...state, itemId: payload}
         case ACTIONS.INITIAL:
@@ -156,7 +159,7 @@ const reducer = (state, {type, payload}) => {
         case ACTIONS.CUSTOMER_FULL_NAME_ONE:
             return {...state, customerFullNameOne: payload.target.value}
         case ACTIONS.EXPECTED_DELIVERY_DATE:
-            return {...state, expectedDeliveryDate: payload.target.value}
+            return {...state, expectedDeliveryDate: String(payload.target.value)}
         case ACTIONS.CUSTOMER_MOBILE:
             return {...state, customerMobile: payload.target.value}
         case ACTIONS.CUSTOMER_REMARKS:
@@ -168,9 +171,9 @@ const reducer = (state, {type, payload}) => {
         case ACTIONS.SILVER_COST:
             return {...state, silverCost: payload.target.value}
         case ACTIONS.ORDER_STATUS:
-            return {...state, orderStatus: payload.target.value}
+            return {...state, orderStatus: payload}
         case ACTIONS.GST:
-            return {...state, GST: payload.target.value}
+            return {...state, gst: payload}
         case ACTIONS.ORDER_RECEIVED_BY:
             return {...state, orderReceivedBy: payload.target.value}
         case ACTIONS.ORDER_RESPONSIBILITY:
@@ -209,12 +212,14 @@ const reducer = (state, {type, payload}) => {
             return {...state, prevItemOrderIdPattern: payload}
         case ACTIONS.SHOW4:
             return {...state, show4: payload}
+        case ACTIONS.DATE:
+            return {...state, date: String(payload.target.value)}
         default:
             return state
     }
 }
 
-const OrderTaking = ({date}) => {
+const OrderTaking = ({date, navigate}) => {
 
     const handleClose1 = () => dispatch({type:ACTIONS.SHOW1, payload: false})
     const handleClose2 = () => dispatch({type:ACTIONS.SHOW2, payload: false})
@@ -223,6 +228,8 @@ const OrderTaking = ({date}) => {
         dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
     }
     const [formfields, setFormfields] = useState([])
+    const goldprice = useSelector(state => state.DailyPrice.goldPrice)
+    const silverprice = useSelector(state => state.DailyPrice.silverPrice)
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const GenerateId = () => {
@@ -251,13 +258,8 @@ const OrderTaking = ({date}) => {
     const SubmitHandler = (e) => {
         e.preventDefault()
         axios.post("http://localhost:8080/OrderTaking/add", newState)
-            .then((res) => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
+            .then(() => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
             .catch(err => console.log(err));
-        // setTimeout(() => {
-        //     dispatch({type: ACTIONS.INITIAL})
-        //     dispatch({type:ACTIONS.GENERATESHOW, payload: true})
-        //     setFormfields([])
-        // },2000)
     }
 
     const Validate = () => {
@@ -278,7 +280,7 @@ const OrderTaking = ({date}) => {
         <>
         <Modal show={newState.show1} onHide={handleClose1}>
         <Modal.Header closeButton>
-          <Modal.Title>Customer doesn't exist</Modal.Title>
+          <Modal.Title>Customer does not exist</Modal.Title>
         </Modal.Header>
         <Modal.Body>Click here to add Customer</Modal.Body>
         <Modal.Footer>
@@ -302,7 +304,7 @@ const OrderTaking = ({date}) => {
             <div className="row"><h5 className="text-dark d-flex flex-row justify-content-center">{newState.customerInfoStatus}</h5></div>
             <Form.Group className="mt-3">
                 <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                <Form.Control type="text"  onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME_ONE, payload: e})}/>
+                <Form.Control type="text"  onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME_ONE, payload: e})} required/>
             </Form.Group>
             <div className="row">
                 <Form.Group className="mt-3">
@@ -388,7 +390,17 @@ const OrderTaking = ({date}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Type</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.ITEM_TYPE, payload: e})} />
+                        <Form.Select onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_TYPE, payload: e.target.value})
+                        }}>
+                            <option value=""></option>
+                            <option value="Gold Sale">Gold Sale</option>
+                            <option value="Manufactured Gold Item">Manufactured Gold Item</option>
+                            <option value="Readymade Gold Item">Readymade Gold Item</option>
+                            <option value="Silver Sale">Silver Sale</option>
+                            <option value="Manufactured Silver Item">Manufactured Silver Item</option>
+                            <option value="Readymade Silver Item">Readymade Silver Item</option>
+                        </Form.Select>
                     </Form.Group>
                 </div>
             </div>
@@ -402,7 +414,7 @@ const OrderTaking = ({date}) => {
                 <div className="col-4">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Delivery Date</Form.Label>
-                        <Form.Control type="text" placeholder="dd/mm/yyyy" onChange={e => dispatch({type:ACTIONS.ITEM_DELIVERY_DATE, payload: e})}/>
+                        <Form.Control type="date" defaultValue={date} onChange={e => dispatch({type:ACTIONS.ITEM_DELIVERY_DATE, payload: e})}/>
                     </Form.Group>
                 </div>
             </div>
@@ -424,7 +436,15 @@ const OrderTaking = ({date}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Status</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.ITEM_STATUS, payload: e})} />
+                        <Form.Select onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_STATUS, payload: e.target.value})
+                        }}>
+                            <option value=""></option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </Form.Select>
                     </Form.Group>
                 </div>
                 <div className="col">
@@ -516,10 +536,10 @@ const OrderTaking = ({date}) => {
       </Modal>
             <Container>
                 <nav aria-label="breadcrumb">
-                    <ol className="breadcrumb">
-                        <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
-                        <li className="breadcrumb-item fw-bold"><a href="/infoentry">Information Entry</a></li>
-                        <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Order Taking</li>
+                    <ol className="breadcrumb flex-nowrap">
+                        <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+                        <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                        <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">OrderTakingEntry</li>
                     </ol>
                 </nav>
                 <Form>
@@ -531,7 +551,7 @@ const OrderTaking = ({date}) => {
                                     <fieldset disabled>
                                         <Form.Group className="mt-3">
                                             <Form.Label className="fw-bold m-1">Order Id</Form.Label>
-                                            <Form.Control type="text" defaultValue={newState.orderId}/>
+                                            <Form.Control type="text" defaultValue={newState.orderId} required/>
                                         </Form.Group>
                                     </fieldset>
                                 </div>
@@ -543,17 +563,15 @@ const OrderTaking = ({date}) => {
                             </div>
                         </div>
                         <div className="col">
-                            <fieldset disabled>
-                                <Form.Group className="mt-3">
-                                    <Form.Label className="fw-bold m-1">Date</Form.Label>
-                                    <Form.Control type="text" defaultValue={date} />
-                                </Form.Group>
-                            </fieldset>
+                            <Form.Group className="mt-3">
+                                <Form.Label className="fw-bold m-1">Date</Form.Label>
+                                <Form.Control type="date" defaultValue={date} onChange={e => dispatch({type:ACTIONS.DATE, payload: e})} />
+                            </Form.Group>
                         </div>
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Expected Delivery Date</Form.Label>
-                                <Form.Control type="text" placeholder="dd/mm/yyyy" onChange={e => {
+                                <Form.Control type="date" defaultValue={date} onChange={e => {
                                     dispatch({type: ACTIONS.EXPECTED_DELIVERY_DATE, payload: e})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
@@ -615,7 +633,7 @@ const OrderTaking = ({date}) => {
                             <Form.Group>
                                 <Form.Label className="fw-bold m-1">Gold Cost</Form.Label>
                                 <div className="d-flex flex-row">
-                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.GOLD_COST, payload: e})}/>
+                                <Form.Control type="text" defaultValue={newState.goldCost}/>
                                 <span className="input-group-text fw-bold p-1">/10 gms</span>
                                 </div>    
                             </Form.Group>
@@ -624,7 +642,7 @@ const OrderTaking = ({date}) => {
                             <Form.Group>
                                 <Form.Label className="fw-bold m-1">Silver Cost</Form.Label>
                                 <div className="d-flex flex-row">
-                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.SILVER_COST, payload: e})} />
+                                <Form.Control type="text" defaultValue={newState.SilverCost} />
                                 <span className="input-group-text fw-bold p-1">/10 gms</span>
                                 </div>    
                             </Form.Group>
@@ -634,19 +652,29 @@ const OrderTaking = ({date}) => {
                         <div className="col-3">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Order Status</Form.Label>
-                                <Form.Control type="text" onChange={e => {
-                                    dispatch({type: ACTIONS.ORDER_STATUS, payload: e})
+                                <Form.Select onChange={e => {
+                                    dispatch({type:ACTIONS.ORDER_STATUS, payload: e.target.value})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
-                                }} />
+                                }}>
+                                    <option value=""></option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </Form.Select>
                             </Form.Group>
                         </div>
                         <div className="col-1">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">GST</Form.Label>
-                                <Form.Control type="text" onChange={e => {
-                                    dispatch({type: ACTIONS.GST, payload: e})
+                                <Form.Select onChange={e => {
+                                    dispatch({type:ACTIONS.GST, payload: e.target.value})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
-                                }} />
+                                }}>
+                                    <option value=""></option>
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </Form.Select>
                             </Form.Group>
                         </div>
                         <div className="col">
@@ -702,7 +730,7 @@ const OrderTaking = ({date}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customers Full Name</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.customerFullName} onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})}/>
+                            <Form.Control type="text" defaultValue={newState.customerFullName} onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})} disabled/>
                             <div className="d-flex flex-row justify-content-end">
                                 <a href="/paymentdetails"><Button className="btn btn-info mt-2">Click here to proceed for Payment</Button></a>
                             </div>

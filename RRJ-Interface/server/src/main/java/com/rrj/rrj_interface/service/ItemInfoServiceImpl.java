@@ -26,6 +26,6 @@ public class ItemInfoServiceImpl implements ItemInfoService {
 
     @Override
     public List<Object[]> getItemNameAndPrice(PaymentInfo paymentInfo) {
-        return itemInfoRepository.getItemNameAndItemPrice(paymentInfo.getPaymentId());
+        return itemInfoRepository.getItemNameAndItemPrice(paymentInfo.getOrderId());
     }
 }

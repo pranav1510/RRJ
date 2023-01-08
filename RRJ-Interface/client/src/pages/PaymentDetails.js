@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import { Container, Form, Button, Table } from "react-bootstrap";
+import { Container, Form, Button, Table, Modal } from "react-bootstrap";
 
 const initialState = {
+    orderId: "",
     paymentId: "",
     paymentInfoStatus: "",
     itemDetails: [],
+    orderDetails: [],
     tableShow: false,
     customerFullName: "",
     customerMobile: "",
@@ -18,18 +20,26 @@ const initialState = {
     amountReceived: "",
     customerDueStatus: "",
     customerDueAmount: "",
-    RRJDueStatus: "",
-    RRJDueAmount: "",
+    rrjDueStatus: "",
+    rrjDueAmount: "",
     paymentRemarks: "",
     paymentType: "",
-    paymentReceivedBy: ""
+    paymentReceivedBy: "",
+    show1: false,
+    show2: false,
+    paymentDate: "",
+    transactionName: "Order Related",
+    paymentPurpose: "",
+    status: "Completed"
 }
 
 const ACTIONS = {
-    PAYMENTID: "PAYMENTID",
+    ORDER_ID: "ORDER_ID",
+    PAYMENT_ID: "PAYMENT_ID",
     PAYMENT_INFO_STATUS: "PAYMENT_INFO_STATUS",
     TABLE_SHOW: "TABLE_SHOW",
     ITEM_DETAILS: "ITEM_DETAILS",
+    ORDER_DETAILS: "ORDER_DETAILS",
     CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
     EXCHANGE_GOLD_WEIGHT: "EXCHANGE_GOLD_WEIGHT",
@@ -45,23 +55,33 @@ const ACTIONS = {
     RRJ_DUE_AMOUNT: "RRJ_DUE_AMOUNT",
     PAYMENT_REMARKS: "PAYMENT_REMARKS",
     PAYMENT_TYPE: "PAYMENT_TYPE",
-    PAYMENT_RECEIVED_BY: "PAYMENT_RECEIVED_BY"
+    PAYMENT_RECEIVED_BY: "PAYMENT_RECEIVED_BY",
+    SHOW1: "SHOW1",
+    SHOW2: "SHOW2",
+    PAYMENT_DATE: "PAYMENT_DATE",
+    PAYMENT_PURPOSE: "PAYMENT_PURPOSE"
 }
 
 const reducer = (state, {type, payload}) => {
     switch(type) {
+        case ACTIONS.PAYMENT_PURPOSE:
+            return {...state, paymentPurpose: payload}
+        case ACTIONS.ORDER_ID:
+            return {...state, orderId: payload}
+        case ACTIONS.PAYMENT_ID:
+            return {...state, paymentId: payload}
         case ACTIONS.PAYMENT_INFO_STATUS:
             return {...state, paymentInfoStatus: payload}
         case ACTIONS.TABLE_SHOW:
             return {...state, tableShow: payload}
         case ACTIONS.ITEM_DETAILS:
             return {...state, itemDetails: payload}
+        case ACTIONS.ORDER_DETAILS:
+            return {...state, orderDetails: payload}
         case ACTIONS.CUSTOMER_MOBILE:
             return {...state, customerMobile: payload.target.value}
         case ACTIONS.CUSTOMER_FULL_NAME:
             return {...state, customerFullName: payload.target.value}
-        case ACTIONS.PAYMENTID:
-            return {...state, paymentId: payload}
         case ACTIONS.EXCHANGE_GOLD_WEIGHT:
             return {...state, exchangeGoldWeight: payload.target.value}
         case ACTIONS.EXCHANGE_GOLD_COST:
@@ -77,95 +97,105 @@ const reducer = (state, {type, payload}) => {
         case ACTIONS.AMOUNT_RECEIVED:
             return {...state, amountReceived: payload.target.value}
         case ACTIONS.CUSTOMER_DUE_STATUS:
-            return {...state, customerDueStatus: payload.target.value}
+            return {...state, customerDueStatus: payload}
         case ACTIONS.CUSTOMER_DUE_AMOUNT:
             return {...state, customerDueAmount: payload.target.value}
         case ACTIONS.RRJ_DUE_STATUS:
-            return {...state, RRJDueStatus: payload.target.value}
+            return {...state, rrjDueStatus: payload}
         case ACTIONS.RRJ_DUE_AMOUNT:
-            return {...state, RRJDueStatus: payload.target.value}
+            return {...state, rrjDueAmount: payload.target.value}
         case ACTIONS.PAYMENT_REMARKS:
             return {...state, paymentRemarks: payload.target.value}
         case ACTIONS.PAYMENT_TYPE:
-            return {...state, paymentType: payload.target.value}
+            return {...state, paymentType: payload}
         case ACTIONS.PAYMENT_RECEIVED_BY:
             return {...state, paymentReceivedBy: payload.target.value}
+        case ACTIONS.SHOW1:
+            return {...state, show1: payload}
+        case ACTIONS.SHOW2:
+            return {...state, show2: payload}
+        case ACTIONS.PAYMENT_DATE:
+            return {...state, paymentDate: String(payload.target.value)}
         default:
             return state
     }
 }
 
-const PaymentDetails = ({date}) => {
+const PaymentDetails = ({navigate}) => {
     
     const [newState, dispatch] = useReducer(reducer, initialState)
+    const handleClose1 = () => dispatch({type:ACTIONS.SHOW1, payload: false})
+    const handleClose2 = () => dispatch({type:ACTIONS.SHOW2, payload: false})
 
     const SubmitHandler = () => {
         axios.post("http://localhost:8080/PaymentInfo/add", newState)
-        .then((res) => {
-            dispatch({type:ACTIONS.TABLE_SHOW, payload: false})
-            dispatch({type:ACTIONS.PAYMENT_INFO_STATUS, payload: "Details saved Successfully!"})
-        })
-        .catch(err => console.log(err))
+        .then(() => {
+                dispatch({type:ACTIONS.TABLE_SHOW, payload: false})
+                dispatch({type:ACTIONS.PAYMENT_INFO_STATUS, payload: "Details saved Successfully!"})
+            }).catch(err => console.log(err))
+
     }
 
     const Validate = () => {
         axios.post("http://localhost:8080/OrderTaking/check", newState)
         .then(res => {
             let arr = res.data
-            let val = arr[arr.length - 1]
-            dispatch({type: ACTIONS.PAYMENTID, payload: val})
+            if(arr[0] !== undefined){
+                dispatch({type:ACTIONS.SHOW2, payload: true})
+                dispatch({type:ACTIONS.ORDER_DETAILS, payload: arr.reverse()})
+            } else {
+                dispatch({type: ACTIONS.SHOW1, payload: true})
+            }
         })
         .catch(err => console.log(err))
     }
  
     return(
         <>
-        <Container>
-        <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-            <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
-            <li className="breadcrumb-item fw-bold"><a href="/infoentry">Information Entry</a></li>
-            <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Payment Details</li>
-            </ol>
-        </nav>
-            <Form>
-                <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.paymentInfoStatus}</h5></div>
-                <div className="row">
-                    <div className="col-3">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                            <Form.Control type="text" onChange={e => {
-                                dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e})
-                            }} />
-                            <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Id</Button>
-                        </Form.Group>
-                    </div>
-                    <div className="col">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e})}/>
-                        </Form.Group>
-                    </div>
-                    <div className="col-3">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Id</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.paymentId}/>
-                            <div className="d-flex flex-row justify-content-end">
-                                <Button className="btn btn-secondary mt-2" onClick={() => {
-                                    axios.post("http://localhost:8080/ItemInfo/getitemdetails", newState)
-                                        .then(res => {
-                                            if(res.data[0] !== undefined)
-                                            dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
-                                            dispatch({type:ACTIONS.ITEM_DETAILS, payload: res.data})
-                                        })
-                                        .catch(err => console.log(err))
-                                }}>Get Order Details</Button>
-                            </div>
-                        </Form.Group>
-                    </div>
+        <Modal show={newState.show1} onHide={handleClose1}>
+        <Modal.Header closeButton>
+          <Modal.Title>Order does not exist</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose1}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+        <Modal show={newState.show2} onHide={handleClose2} className="modal-lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Select Order Id</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <div className="row">
+                <div className="col-4">
+                    <Form.Select onChange={e => {
+                            dispatch({type:ACTIONS.ORDER_ID, payload: e.target.value})
+                        }}>
+                            <option value=""></option>
+                            {
+                            newState.orderDetails.map((id, index) => {
+                                return(
+                                    <option value={id} key={index}>{id}</option>
+                                )
+                            })
+                        }
+                    </Form.Select>
+                </div>
+                <div className="col">
+                    <Button className="btn btn-secondary" onClick={() => {
+                        axios.post("http://localhost:8080/ItemInfo/getitemdetails", newState)
+                            .then(res => { console.log(res)
+                                if(res.data[0] !== undefined)
+                                dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
+                                dispatch({type:ACTIONS.ITEM_DETAILS, payload: res.data})
+                            })
+                            .catch(err => console.log(err))
+                    }}>Get Order Details
+                    </Button>
                 </div>
                 <div className="m-3 d-flex justify-content-center">
-                    <Table className="table-hover w-75">
+                    <Table className="table-hover w-100 ">
                         <thead>
                             {
                                 newState.tableShow ? (
@@ -194,6 +224,99 @@ const PaymentDetails = ({date}) => {
                         </tbody>
                     </Table>
                 </div>
+            </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleClose2}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
+        <Container>
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb flex-nowrap">
+                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                    <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">PaymentDetails</li>
+                </ol>
+            </nav>
+            <Form>
+                <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.paymentInfoStatus}</h5></div>
+                <div className="row">
+                    <div className="col-3">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
+                            <Form.Control type="text" onChange={e => {
+                                dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e})
+                                dispatch({type:ACTIONS.ORDER_ID, payload: ""})
+                            }} />
+                            <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Id</Button>
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
+                            <Form.Control type="text" onChange={e => {
+                                dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e})
+                                dispatch({type:ACTIONS.ORDER_ID, payload: ""})
+                        }}/>
+                        </Form.Group>
+                    </div>
+                    <div className="col-3">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Order Id</Form.Label>
+                            <Form.Control type="text" defaultValue={newState.orderId} disabled/>
+                            <div className="d-flex flex-row justify-content-end">
+                                
+                            </div>
+                        </Form.Group>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Id</Form.Label>
+                            <Form.Control type="text" defaultValue={newState.paymentId} />
+                            <Button className="btn btn-secondary mt-2" onClick={() => {
+                                const temp = new Date()
+                                const time = String(temp.getFullYear()) + String(temp.getMonth() + 1).padStart(2, '0') + String(temp.getDate()).padStart(2, '0') + String(temp.getHours()).padStart(2, '0') + String(temp.getMinutes()).padStart(2, '0') + String(temp.getSeconds()).padStart(2, '0')
+                                dispatch({type:ACTIONS.PAYMENT_ID, payload: time})
+                            }}>Get Payment Id</Button>
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Purpose</Form.Label>
+                            <Form.Select onChange={e => {
+                                dispatch({type:ACTIONS.PAYMENT_PURPOSE, payload: e.target.value})
+                            }}>
+                                <option value=""></option>
+                                <option value="Order Related">Order Related</option>
+                                <option value="Gold Sale">Gold Sale</option>
+                                <option value="Silver Sale">Silver Sale</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Date</Form.Label>
+                            <Form.Control type="date" onChange={e => dispatch({type: ACTIONS.PAYMENT_DATE, payload: e})}/>
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Type</Form.Label>
+                            <Form.Select onChange={e => {
+                                dispatch({type:ACTIONS.PAYMENT_TYPE, payload: e.target.value})
+                            }}>
+                                <option value=""></option>
+                                <option value="Cash">Cash</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Account Transfer">Account Transfer</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col">
                         <Form.Group className="mt-3">
@@ -221,20 +344,6 @@ const PaymentDetails = ({date}) => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-2">
-                        <fieldset disabled>
-                            <Form.Group className="mt-3">
-                                <Form.Label className="fw-bold m-1">Payment Date</Form.Label>
-                                <Form.Control type="text" defaultValue={date} readOnly/>
-                            </Form.Group>
-                        </fieldset>
-                    </div>
-                    <div className="col">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Type</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_TYPE, payload: e})} />
-                        </Form.Group>
-                    </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Discount</Form.Label>
@@ -258,7 +367,13 @@ const PaymentDetails = ({date}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Due Status</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_STATUS, payload: e})} />
+                            <Form.Select onChange={e => {
+                                    dispatch({type:ACTIONS.CUSTOMER_DUE_STATUS, payload: e.target.value})
+                                }}>
+                                    <option value=""></option>
+                                    <option value="No Dues">No Dues</option>
+                                    <option value="Due">Due</option>
+                                </Form.Select>
                         </Form.Group>
                     </div>
                     <div className="col">
@@ -272,12 +387,18 @@ const PaymentDetails = ({date}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">RRJ Due Status</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_STATUS, payload: e})} />
+                            <Form.Select onChange={e => {
+                                    dispatch({type:ACTIONS.RRJ_DUE_STATUS, payload: e.target.value})
+                                }}>
+                                    <option value=""></option>
+                                    <option value="No Dues">No Dues</option>
+                                    <option value="Due">Due</option>
+                                </Form.Select>
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">RRJDueAmount</Form.Label>
+                            <Form.Label className="fw-bold m-1">RRJ Due Amount</Form.Label>
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_AMOUNT, payload: e})} />
                         </Form.Group>
                     </div>

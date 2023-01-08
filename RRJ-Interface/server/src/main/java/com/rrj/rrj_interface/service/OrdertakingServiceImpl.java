@@ -20,7 +20,11 @@ public class OrdertakingServiceImpl implements OrdertakingService {
 
     @Override
     public List<String> getOrderData(Ordertaking ordertaking) {
-        return ordertakingrepository.findByOrderId(ordertaking.getOrderId());
+        try {
+            return ordertakingrepository.findByOrderId(ordertaking.getOrderId());
+        } catch (Exception e) {
+            return List.of("undefined");
+        }
     }
 
     @Override

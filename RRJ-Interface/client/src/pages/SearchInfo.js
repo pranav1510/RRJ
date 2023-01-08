@@ -1,14 +1,14 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 
-const SearchInfo = () => {
+const SearchInfo = ({navigate}) => {
     return(
         <>
         <Container>
         <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-            <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
-            <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Search Information</li>
+            <ol className="breadcrumb flex-nowrap">
+            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+            <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">SearchInfo</li>
             </ol>
         </nav>
         </Container>

@@ -43,7 +43,7 @@ const reducer = (state, {type, payload}) => {
     }
 }
 
-const CustomerInfo = () => {
+const CustomerInfo = ({navigate}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const SubmitHandler = () => {
@@ -57,10 +57,10 @@ const CustomerInfo = () => {
         <>
         <Container>
         <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-            <li className="breadcrumb-item fw-bold"><a href="/homepage">Home</a></li>
-            <li className="breadcrumb-item fw-bold"><a href="/infoentry">Information Entry</a></li>
-            <li className="breadcrumb-item active text-white fw-bold" aria-current="page">Customer Information</li>
+            <ol className="breadcrumb flex-nowrap">
+                <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+                <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">CustomerInfo</li>
             </ol>
         </nav>
             <Row>
