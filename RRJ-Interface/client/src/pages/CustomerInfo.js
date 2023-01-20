@@ -2,15 +2,6 @@ import React, { useReducer } from "react";
 import { Col, Container, Form, Row, Button } from "react-bootstrap";
 import axios from "axios";
 
-const initialState = {
-    customerFullName: "",
-    customerMobile: "",
-    alternateMobileOne: "",
-    alternateMobileTwo: "",
-    address: "",
-    remarks: "",
-    status: ""
-}
 
 const ACTIONS = {
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
@@ -40,15 +31,26 @@ const reducer = (state, {type, payload}) => {
             return {...state, status: payload}
         default:
             return state
+        }
     }
-}
+                                
+const CustomerInfo = ({navigate, info}) => {
 
-const CustomerInfo = ({navigate}) => {
+    const initialState = {
+        customerFullName: (info === undefined) ? "" : info.customerFullName,
+        customerMobile: (info === undefined) ? "" : info.customerMobile,
+        alternateMobileOne: (info === undefined) ? "" : info.alternateMobileOne,
+        alternateMobileTwo: (info === undefined) ? "" : info.alternateMobileTwo,
+        address: (info === undefined) ? "" : info.address,
+        remarks: (info === undefined) ? "" : info.remarks,
+        status: ""
+    }
+
     const [newState, dispatch] = useReducer(reducer, initialState)
-
+    
     const SubmitHandler = () => {
         axios.post("http://localhost:8080/CustomerInfo/add", newState)
-        .then((response) => {dispatch({type: ACTIONS.STATUS, payload: response.data})})
+        .then(() => {dispatch({type: ACTIONS.STATUS, payload: "Details saved Successfully!"})})
         .catch(err => {dispatch({type: ACTIONS.STATUS, payload: err.message})});
 
     }
@@ -56,20 +58,24 @@ const CustomerInfo = ({navigate}) => {
     return(
         <>
         <Container>
-        <nav aria-label="breadcrumb">
-            <ol className="breadcrumb flex-nowrap">
-                <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
-                <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
-                <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">CustomerInfo</li>
-            </ol>
-        </nav>
+            {
+                (info === undefined) ? (
+                    <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb flex-nowrap">
+                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                            <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">CustomerInfo</li>
+                        </ol>
+                    </nav>
+                ) : (<></>)
+            }
             <Row>
                 <Col>
                     <Form>
                     <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.status}</h5></div>
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                            <Form.Control type="text"  onChange={e => {
+                            <Form.Control type="text" defaultValue={newState.customerFullName}  onChange={e => {
                                 dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})
                                 if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                 }}/>
@@ -78,7 +84,7 @@ const CustomerInfo = ({navigate}) => {
                             <div className="col">
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                                    <Form.Control type="text" onChange={e => {
+                                    <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => {
                                         dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
@@ -87,7 +93,7 @@ const CustomerInfo = ({navigate}) => {
                             <div className="col">
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Alternate Mobile 01</Form.Label>
-                                    <Form.Control type="text" onChange={e => {
+                                    <Form.Control type="text" defaultValue={newState.alternateMobileOne} onChange={e => {
                                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_ONE, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
@@ -96,7 +102,7 @@ const CustomerInfo = ({navigate}) => {
                             <div className="col">
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Alternate Mobile 02</Form.Label>
-                                    <Form.Control type="text" onChange={e => {
+                                    <Form.Control type="text" defaultValue={newState.alternateMobileTwo} onChange={e => {
                                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_TWO, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
@@ -107,7 +113,7 @@ const CustomerInfo = ({navigate}) => {
                             <div className="col-4">
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Address</Form.Label>
-                                    <Form.Control type="text" onChange={e => {
+                                    <Form.Control type="text" defaultValue={newState.address} onChange={e => {
                                         dispatch({type: ACTIONS.ADDRESS, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
@@ -116,7 +122,7 @@ const CustomerInfo = ({navigate}) => {
                             <div className="col">
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Remarks</Form.Label>
-                                    <Form.Control type="text" onChange={e => {
+                                    <Form.Control type="text" defaultValue={newState.remarks} onChange={e => {
                                         dispatch({type: ACTIONS.REMARKS, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
@@ -124,7 +130,18 @@ const CustomerInfo = ({navigate}) => {
                             </div>
                         </div>
                         <div className="d-flex justify-content-center m-3">
-                            <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit</Button>
+                            {
+                                (info === undefined) ? (
+                                    <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit</Button>
+                                ): (
+                                    <Button variant="primary" className="mt-3 mb-3" onClick={() => {
+                                        axios.put(`http://localhost:8080/CustomerInfo/customerupdate/${initialState.customerMobile}`, newState)
+                                            .then(() => {
+                                                dispatch({type:ACTIONS.STATUS, payload: "Updated Successfully!"})
+                                            }).catch(err => {console.log(err)})
+                                    }}>Modify</Button>
+                                )
+                            }
                         </div>
                     </Form>
                 </Col>

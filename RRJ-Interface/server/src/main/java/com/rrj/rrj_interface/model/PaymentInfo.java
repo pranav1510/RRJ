@@ -27,19 +27,20 @@ public class PaymentInfo{
     private String CustomerDueAmount;
     private String RrjDueStatus;
     private String RrjDueAmount;
-    private String PaymentRemarks;
+    private String PaymentDescription;
     private String PaymentType;
     private String PaymentReceivedBy;
-    private String TransactionName;
+    private String PaymentEnteredBy;
+    private String TransactionType;
     private String PaymentPurpose;
     private String Status;
 
-    public String getTransactionName() {
-        return TransactionName;
+    public String getTransactionType() {
+        return TransactionType;
     }
 
-    public void setTransactionName(String transactionName) {
-        TransactionName = transactionName;
+    public void setTransactionType(String transactionType) {
+        TransactionType = transactionType;
     }
 
     public String getPaymentId() {
@@ -170,12 +171,12 @@ public class PaymentInfo{
         RrjDueAmount = rrjDueAmount;
     }
 
-    public String getPaymentRemarks() {
-        return PaymentRemarks;
+    public String getPaymentDescription() {
+        return PaymentDescription;
     }
 
-    public void setPaymentRemarks(String paymentRemarks) {
-        PaymentRemarks = paymentRemarks;
+    public void setPaymentDescription(String paymentDescription) {
+        PaymentDescription = paymentDescription;
     }
 
     public String getPaymentType() {
@@ -208,5 +209,13 @@ public class PaymentInfo{
 
     public void setStatus(String status) {
         Status = status;
+    }
+
+    public String getPaymentEnteredBy() {
+        return PaymentEnteredBy;
+    }
+
+    public void setPaymentEnteredBy(String paymentEnteredBy) {
+        PaymentEnteredBy = paymentEnteredBy;
     }
 }

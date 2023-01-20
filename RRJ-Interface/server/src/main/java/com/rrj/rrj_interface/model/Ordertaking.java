@@ -8,7 +8,6 @@ public class Ordertaking {
 
     @Id
     private String OrderId;
-    private String Date;
     private String GoldCost;
     private String SilverCost;
     private String ExpectedDeliveryDate;
@@ -19,7 +18,7 @@ public class Ordertaking {
     private String OrderStatus;
     private String Gst;
     private String OrderReceivedBy;
-    private String OrderResponsibility;
+    private String OrderEnteredBy;
 
     public String getOrderId() {
         return OrderId;
@@ -27,14 +26,6 @@ public class Ordertaking {
 
     public void setOrderId(String orderId) {
         OrderId = orderId;
-    }
-
-    public String getDate() {
-        return Date;
-    }
-
-    public void setDate(String date) {
-        Date = date;
     }
 
     public String getGoldCost() {
@@ -117,20 +108,19 @@ public class Ordertaking {
         OrderReceivedBy = orderReceivedBy;
     }
 
-    public String getOrderResponsibility() {
-        return OrderResponsibility;
+    public String getOrderEnteredBy() {
+        return OrderEnteredBy;
     }
 
-    public void setOrderResponsibility(String orderResponsibility) {
-        OrderResponsibility = orderResponsibility;
+    public void setOrderEnteredBy(String orderEnteredBy) {
+        OrderEnteredBy = orderEnteredBy;
     }
 
     public Ordertaking() {
     }
 
-    public Ordertaking(String orderId, String date, String goldCost, String silverCost, String expectedDeliveryDate, String customerMobile, String customerFullName, String customerRemarks, String orderReceiverRemarks, String orderStatus, String gst, String orderReceivedBy, String orderResponsibility) {
+    public Ordertaking(String orderId, String goldCost, String silverCost, String expectedDeliveryDate, String customerMobile, String customerFullName, String customerRemarks, String orderReceiverRemarks, String orderStatus, String gst, String orderReceivedBy, String orderEnteredBy) {
         OrderId = orderId;
-        Date = date;
         GoldCost = goldCost;
         SilverCost = silverCost;
         ExpectedDeliveryDate = expectedDeliveryDate;
@@ -141,7 +131,7 @@ public class Ordertaking {
         OrderStatus = orderStatus;
         Gst = gst;
         OrderReceivedBy = orderReceivedBy;
-        OrderResponsibility = orderResponsibility;
+        OrderEnteredBy = orderEnteredBy;
     }
 }
 

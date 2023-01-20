@@ -14,15 +14,16 @@ public class TransactionInfo {
     public String Amount;
     public String GoldWeight;
     public String SilverWeight;
-    public String TransactionRemarks;
+    public String TransactionDescription;
     public String TransactionType;
-    public String TransactionSubject;
+    public String PaymentType;
     public String TransactionStatus;
-    public String TransactionName;
     public String CustomerDueStatus;
     public String CustomerDueAmount;
     public String RrjDueStatus;
     public String RrjDueAmount;
+    public String TransactionDoneBy;
+    public String TransactionEnteredBy;
 
     public String getTransactionId() {
         return TransactionId;
@@ -80,12 +81,12 @@ public class TransactionInfo {
         SilverWeight = silverWeight;
     }
 
-    public String getTransactionRemarks() {
-        return TransactionRemarks;
+    public String getTransactionDescription() {
+        return TransactionDescription;
     }
 
-    public void setTransactionRemarks(String transactionRemarks) {
-        TransactionRemarks = transactionRemarks;
+    public void setTransactionDescription(String transactionDescription) {
+        TransactionDescription = transactionDescription;
     }
 
     public String getTransactionType() {
@@ -96,12 +97,12 @@ public class TransactionInfo {
         TransactionType = transactionType;
     }
 
-    public String getTransactionSubject() {
-        return TransactionSubject;
+    public String getPaymentType() {
+        return PaymentType;
     }
 
-    public void setTransactionSubject(String transactionSubject) {
-        TransactionSubject = transactionSubject;
+    public void setPaymentType(String paymentType) {
+        PaymentType = paymentType;
     }
 
     public String getTransactionStatus() {
@@ -110,14 +111,6 @@ public class TransactionInfo {
 
     public void setTransactionStatus(String transactionStatus) {
         TransactionStatus = transactionStatus;
-    }
-
-    public String getTransactionName() {
-        return TransactionName;
-    }
-
-    public void setTransactionName(String transactionName) {
-        TransactionName = transactionName;
     }
 
     public String getCustomerDueStatus() {
@@ -152,10 +145,26 @@ public class TransactionInfo {
         RrjDueAmount = rrjDueAmount;
     }
 
+    public String getTransactionDoneBy() {
+        return TransactionDoneBy;
+    }
+
+    public void setTransactionDoneBy(String transactionDoneBy) {
+        TransactionDoneBy = transactionDoneBy;
+    }
+
+    public String getTransactionEnteredBy() {
+        return TransactionEnteredBy;
+    }
+
+    public void setTransactionEnteredBy(String transactionEnteredBy) {
+        TransactionEnteredBy = transactionEnteredBy;
+    }
+
     public TransactionInfo() {
     }
 
-    public TransactionInfo(String transactionId, String orderId, String fullName, String mobile, String amount, String goldWeight, String silverWeight, String transactionRemarks, String transactionType, String transactionSubject, String transactionStatus, String transactionName, String customerDueStatus, String customerDueAmount, String rrjDueStatus, String rrjDueAmount) {
+    public TransactionInfo(String transactionId, String orderId, String fullName, String mobile, String amount, String goldWeight, String silverWeight, String transactionDescription, String transactionType, String paymentType, String transactionStatus, String customerDueStatus, String customerDueAmount, String rrjDueStatus, String rrjDueAmount, String transactionDoneBy, String transactionEnteredBy) {
         TransactionId = transactionId;
         OrderId = orderId;
         FullName = fullName;
@@ -163,14 +172,15 @@ public class TransactionInfo {
         Amount = amount;
         GoldWeight = goldWeight;
         SilverWeight = silverWeight;
-        TransactionRemarks = transactionRemarks;
+        TransactionDescription = transactionDescription;
         TransactionType = transactionType;
-        TransactionSubject = transactionSubject;
+        PaymentType = paymentType;
         TransactionStatus = transactionStatus;
-        TransactionName = transactionName;
         CustomerDueStatus = customerDueStatus;
         CustomerDueAmount = customerDueAmount;
         RrjDueStatus = rrjDueStatus;
         RrjDueAmount = rrjDueAmount;
+        TransactionDoneBy = transactionDoneBy;
+        TransactionEnteredBy = transactionEnteredBy;
     }
 }

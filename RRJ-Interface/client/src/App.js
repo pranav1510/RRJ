@@ -11,6 +11,9 @@ import InfoEntry from '../src/pages/InfoEntry';
 import SearchInfo from '../src/pages/SearchInfo';
 import { useSelector } from 'react-redux';
 import TransactionEntry from './pages/TransactionEntry';
+import OrderInfo from './pages/OrderInfo';
+import TransactionInfo from './pages/TransactionInfo';
+import CustomerUpdate from './pages/CustomerUpdate';
 
 function App() {
 
@@ -69,6 +72,9 @@ function App() {
         <Route exact path='/infoentry' element={<InfoEntry navigate={navigate}/>}/>
         <Route exact path='/searchinfo' element={<SearchInfo navigate={navigate}/>}/>
         <Route exact path='/transactionentry' element={<TransactionEntry navigate={navigate} />} />
+        <Route exact path='/orderinfo' element={<OrderInfo navigate={navigate} />} />
+        <Route exact path='/transactioninfo' element={<TransactionInfo navigate={navigate} />} />
+        <Route exact path='/customerupdate' element={<CustomerUpdate navigate={navigate}/>} />
       </Routes>
     </div>
   );

@@ -22,18 +22,23 @@ const initialState = {
     customerDueAmount: "",
     rrjDueStatus: "",
     rrjDueAmount: "",
-    paymentRemarks: "",
+    paymentDescription: "",
     paymentType: "",
     paymentReceivedBy: "",
     show1: false,
     show2: false,
     paymentDate: "",
-    transactionName: "Order Related",
+    transactionType: "Order Related",
     paymentPurpose: "",
-    status: "Completed"
+    status: "",
+    paymentEnteredBy: "",
+    overallGold: "",
+    overallSilver: ""
 }
 
 const ACTIONS = {
+    OVERALL_GOLD: "OVERALL_GOLD",
+    OVERALL_SILVER: "OVERALL_SILVER",
     ORDER_ID: "ORDER_ID",
     PAYMENT_ID: "PAYMENT_ID",
     PAYMENT_INFO_STATUS: "PAYMENT_INFO_STATUS",
@@ -53,17 +58,27 @@ const ACTIONS = {
     CUSTOMER_DUE_AMOUNT: "CUSTOMER_DUE_AMOUNT",
     RRJ_DUE_STATUS: "RRJ_DUE_STATUS",
     RRJ_DUE_AMOUNT: "RRJ_DUE_AMOUNT",
-    PAYMENT_REMARKS: "PAYMENT_REMARKS",
+    PAYMENT_DESCRIPTION: "PAYMENT_DESCRIPTION",
     PAYMENT_TYPE: "PAYMENT_TYPE",
     PAYMENT_RECEIVED_BY: "PAYMENT_RECEIVED_BY",
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
+    STATUS: "STATUS",
     PAYMENT_DATE: "PAYMENT_DATE",
-    PAYMENT_PURPOSE: "PAYMENT_PURPOSE"
+    PAYMENT_PURPOSE: "PAYMENT_PURPOSE",
+    PAYMENT_ENTERED_BY: "PAYMENT_ENTERED_BY"
 }
 
 const reducer = (state, {type, payload}) => {
     switch(type) {
+        case ACTIONS.OVERALL_GOLD:
+            return {...state, overallGold: payload}
+        case ACTIONS.OVERALL_SILVER:
+            return {...state, overallSilver: payload}
+        case ACTIONS.STATUS:
+            return {...state, status: payload}
+        case ACTIONS.PAYMENT_ENTERED_BY:
+            return {...state, paymentEnteredBy: payload}
         case ACTIONS.PAYMENT_PURPOSE:
             return {...state, paymentPurpose: payload}
         case ACTIONS.ORDER_ID:
@@ -104,8 +119,8 @@ const reducer = (state, {type, payload}) => {
             return {...state, rrjDueStatus: payload}
         case ACTIONS.RRJ_DUE_AMOUNT:
             return {...state, rrjDueAmount: payload.target.value}
-        case ACTIONS.PAYMENT_REMARKS:
-            return {...state, paymentRemarks: payload.target.value}
+        case ACTIONS.PAYMENT_DESCRIPTION:
+            return {...state, paymentDescription: payload.target.value}
         case ACTIONS.PAYMENT_TYPE:
             return {...state, paymentType: payload}
         case ACTIONS.PAYMENT_RECEIVED_BY:
@@ -129,11 +144,32 @@ const PaymentDetails = ({navigate}) => {
 
     const SubmitHandler = () => {
         axios.post("http://localhost:8080/PaymentInfo/add", newState)
-        .then(() => {
-                dispatch({type:ACTIONS.TABLE_SHOW, payload: false})
-                dispatch({type:ACTIONS.PAYMENT_INFO_STATUS, payload: "Details saved Successfully!"})
-            }).catch(err => console.log(err))
+            .then(() => {
+                var cash = ""
+                var account = ""
+                if(newState.paymentType.includes("Cash")){
+                    cash += newState.amountReceived
+                }
+                if(newState.paymentType.includes("Transfer")){
+                    account += newState.amountReceived
+                }
+                const data = {
+                    id: newState.paymentId,
+                    cashIn: cash,
+                    cashOut: "",
+                    goldIn: newState.exchangeGoldWeight,
+                    goldOut: newState.overallGold,
+                    silverIn: newState.exchangeSilverWeight,
+                    silverOut: newState.overallSilver,
+                    accountIn: account,
+                    accountOut: ""
+                }
 
+                axios.post("http://localhost:8080/DayInfo/add", data)
+                    .then(() => {
+                        dispatch({type:ACTIONS.PAYMENT_INFO_STATUS, payload: "Details saved Successfully!"})
+                    }).catch(err => console.log(err))
+                }).catch(err => console.log(err))
     }
 
     const Validate = () => {
@@ -170,7 +206,28 @@ const PaymentDetails = ({navigate}) => {
             <div className="row">
                 <div className="col-4">
                     <Form.Select onChange={e => {
-                            dispatch({type:ACTIONS.ORDER_ID, payload: e.target.value})
+                            let val = {
+                                orderId: e.target.value
+                            }
+                            dispatch({type:ACTIONS.ORDER_ID, payload: val.orderId})
+                            axios.post("http://localhost:8080/ItemInfo/getweight", val)
+                                .then(res => {
+                                    let arr = res.data
+                                    var gold = 0
+                                    var silver = 0
+                                    if(arr.length !== 0){
+                                        arr.forEach(element => {
+                                            if(element[0].includes("Gold")){
+                                                gold += Number(element[1])
+                                            } else {
+                                                silver += Number(element[1])
+                                            }
+                                        });
+                                        dispatch({type:ACTIONS.OVERALL_GOLD, payload: String(gold)})
+                                        dispatch({type:ACTIONS.OVERALL_SILVER, payload: String(silver)})
+                                    }
+                                })
+                                .catch(err => console.log(err))
                         }}>
                             <option value=""></option>
                             {
@@ -185,7 +242,7 @@ const PaymentDetails = ({navigate}) => {
                 <div className="col">
                     <Button className="btn btn-secondary" onClick={() => {
                         axios.post("http://localhost:8080/ItemInfo/getitemdetails", newState)
-                            .then(res => { console.log(res)
+                            .then(res => {
                                 if(res.data[0] !== undefined)
                                 dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
                                 dispatch({type:ACTIONS.ITEM_DETAILS, payload: res.data})
@@ -311,7 +368,12 @@ const PaymentDetails = ({navigate}) => {
                             }}>
                                 <option value=""></option>
                                 <option value="Cash">Cash</option>
-                                <option value="UPI">UPI</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Gold and Cash">Gold and Cash</option>
+                                <option value="Gold and Acnt Transfer">Gold and Acnt Transfer</option>
+                                <option value="Silver and Cash">Silver and Cash</option>
+                                <option value="Silver and Acnt Transfer">Gold and Acnt Transfer</option>
+                                <option value="Silver">Silver</option>
                                 <option value="Account Transfer">Account Transfer</option>
                             </Form.Select>
                         </Form.Group>
@@ -354,6 +416,19 @@ const PaymentDetails = ({navigate}) => {
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Amount Received</Form.Label>
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.AMOUNT_RECEIVED, payload: e})} />
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Status</Form.Label>
+                            <Form.Select onChange={e => {
+                                    dispatch({type:ACTIONS.STATUS, payload: e.target.value})
+                                }}>
+                                    <option value=""></option>
+                                    <option value="In Progress">Pending</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </Form.Select>
                         </Form.Group>
                     </div>
                 </div>
@@ -402,6 +477,12 @@ const PaymentDetails = ({navigate}) => {
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_AMOUNT, payload: e})} />
                         </Form.Group>
                     </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Entered By</Form.Label>
+                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_ENTERED_BY, payload: e})} />
+                        </Form.Group>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="col-3">
@@ -412,8 +493,8 @@ const PaymentDetails = ({navigate}) => {
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Remarks</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_REMARKS, payload: e})} />
+                            <Form.Label className="fw-bold m-1">Payment Description</Form.Label>
+                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_DESCRIPTION, payload: e})} />
                         </Form.Group>
                     </div>
                 </div>

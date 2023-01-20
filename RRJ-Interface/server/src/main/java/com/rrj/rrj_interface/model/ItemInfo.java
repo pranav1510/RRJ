@@ -13,7 +13,7 @@ public class ItemInfo {
     private String ItemType;
     private String CustomerComments;
     private String OrderReceiverComments;
-    private String ItemResponsibility;
+    private String ItemEnteredBy;
     private String ItemStatus;
     private String ItemPrice;
     private String ItemDeliveryDate;
@@ -21,10 +21,14 @@ public class ItemInfo {
     private String ItemGrossWeight;
     private String ItemNetWeight;
     private String Wastage;
-    private String BeadsWeight;
-    private String StoneWeight;
-    private String BeadsCost;
-    private String StoneCost;
+    private String PearlsWeight;
+    private String OverallStoneWeight;
+    private String StonesType;
+    private String CzCost;
+    private String EmeraldCost;
+    private String RubyCost;
+    private String PearlsCost;
+    private String OverallStoneCost;
 
     public String getItemId() {
         return ItemId;
@@ -74,12 +78,12 @@ public class ItemInfo {
         OrderReceiverComments = orderReceiverComments;
     }
 
-    public String getItemResponsibility() {
-        return ItemResponsibility;
+    public String getItemEnteredBy() {
+        return ItemEnteredBy;
     }
 
-    public void setItemResponsibility(String itemResponsibility) {
-        ItemResponsibility = itemResponsibility;
+    public void setItemEnteredBy(String itemEnteredBy) {
+        ItemEnteredBy = itemEnteredBy;
     }
 
     public String getItemStatus() {
@@ -138,49 +142,81 @@ public class ItemInfo {
         Wastage = wastage;
     }
 
-    public String getBeadsWeight() {
-        return BeadsWeight;
+    public String getPearlsWeight() {
+        return PearlsWeight;
     }
 
-    public void setBeadsWeight(String beadsWeight) {
-        BeadsWeight = beadsWeight;
+    public void setPearlsWeight(String pearlsWeight) {
+        PearlsWeight = pearlsWeight;
     }
 
-    public String getStoneWeight() {
-        return StoneWeight;
+    public String getOverallStoneWeight() {
+        return OverallStoneWeight;
     }
 
-    public void setStoneWeight(String stoneWeight) {
-        StoneWeight = stoneWeight;
+    public void setOverallStoneWeight(String overallStoneWeight) {
+        OverallStoneWeight = overallStoneWeight;
     }
 
-    public String getBeadsCost() {
-        return BeadsCost;
+    public String getStonesType() {
+        return StonesType;
     }
 
-    public void setBeadsCost(String beadsCost) {
-        BeadsCost = beadsCost;
+    public void setStonesType(String stonesType) {
+        StonesType = stonesType;
     }
 
-    public String getStoneCost() {
-        return StoneCost;
+    public String getCzCost() {
+        return CzCost;
     }
 
-    public void setStoneCost(String stoneCost) {
-        StoneCost = stoneCost;
+    public void setCzCost(String czCost) {
+        CzCost = czCost;
+    }
+
+    public String getEmeraldCost() {
+        return EmeraldCost;
+    }
+
+    public void setEmeraldCost(String emeraldCost) {
+        EmeraldCost = emeraldCost;
+    }
+
+    public String getRubyCost() {
+        return RubyCost;
+    }
+
+    public void setRubyCost(String rubyCost) {
+        RubyCost = rubyCost;
+    }
+
+    public String getPearlsCost() {
+        return PearlsCost;
+    }
+
+    public void setPearlsCost(String pearlsCost) {
+        PearlsCost = pearlsCost;
+    }
+
+    public String getOverallStoneCost() {
+        return OverallStoneCost;
+    }
+
+    public void setOverallStoneCost(String overallStoneCost) {
+        OverallStoneCost = overallStoneCost;
     }
 
     public ItemInfo() {
     }
 
-    public ItemInfo(String itemId, String orderId, String itemName, String itemType, String customerComments, String orderReceiverComments, String itemResponsibility, String itemStatus, String itemPrice, String itemDeliveryDate, String makingCharges, String itemGrossWeight, String itemNetWeight, String wastage, String beadsWeight, String stoneWeight, String beadsCost, String stoneCost) {
+    public ItemInfo(String itemId, String orderId, String itemName, String itemType, String customerComments, String orderReceiverComments, String itemEnteredBy, String itemStatus, String itemPrice, String itemDeliveryDate, String makingCharges, String itemGrossWeight, String itemNetWeight, String wastage, String pearlsWeight, String overallStoneWeight, String stonesType, String czCost, String emeraldCost, String rubyCost, String pearlsCost, String overallStoneCost) {
         ItemId = itemId;
         OrderId = orderId;
         ItemName = itemName;
         ItemType = itemType;
         CustomerComments = customerComments;
         OrderReceiverComments = orderReceiverComments;
-        ItemResponsibility = itemResponsibility;
+        ItemEnteredBy = itemEnteredBy;
         ItemStatus = itemStatus;
         ItemPrice = itemPrice;
         ItemDeliveryDate = itemDeliveryDate;
@@ -188,9 +224,13 @@ public class ItemInfo {
         ItemGrossWeight = itemGrossWeight;
         ItemNetWeight = itemNetWeight;
         Wastage = wastage;
-        BeadsWeight = beadsWeight;
-        StoneWeight = stoneWeight;
-        BeadsCost = beadsCost;
-        StoneCost = stoneCost;
+        PearlsWeight = pearlsWeight;
+        OverallStoneWeight = overallStoneWeight;
+        StonesType = stonesType;
+        CzCost = czCost;
+        EmeraldCost = emeraldCost;
+        RubyCost = rubyCost;
+        PearlsCost = pearlsCost;
+        OverallStoneCost = overallStoneCost;
     }
 }
