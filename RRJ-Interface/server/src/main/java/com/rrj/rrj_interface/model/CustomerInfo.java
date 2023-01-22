@@ -1,18 +1,30 @@
 package com.rrj.rrj_interface.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class CustomerInfo {
 
-    private String CustomerFullName;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int CustomerId;
+    private String CustomerFullName;
     private String CustomerMobile;
     private String AlternateMobileOne;
     private String AlternateMobileTwo;
     private String Address;
     private String Remarks;
+
+    public int getCustomerId() {
+        return CustomerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        CustomerId = customerId;
+    }
 
     public String getCustomerFullName() {
         return CustomerFullName;
@@ -65,7 +77,8 @@ public class CustomerInfo {
     public CustomerInfo() {
     }
 
-    public CustomerInfo(String customerFullName, String customerMobile, String alternateMobileOne, String alternateMobileTwo, String address, String remarks) {
+    public CustomerInfo(int customerId, String customerFullName, String customerMobile, String alternateMobileOne, String alternateMobileTwo, String address, String remarks) {
+        CustomerId = customerId;
         CustomerFullName = customerFullName;
         CustomerMobile = customerMobile;
         AlternateMobileOne = alternateMobileOne;

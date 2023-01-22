@@ -10,7 +10,8 @@ const ACTIONS = {
     ALTERNATE_MOBILE_TWO: "ALTERNATE_MOBILETWO",
     ADDRESS: "ADDRESS",
     REMARKS: "REMARKS",
-    STATUS: "STATUS"
+    STATUS: "STATUS",
+    ERR: "ERR"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -29,6 +30,8 @@ const reducer = (state, {type, payload}) => {
             return {...state, remarks: payload.target.value}
         case ACTIONS.STATUS:
             return {...state, status: payload}
+        case ACTIONS.ERR:
+            return {...state, err: payload}
         default:
             return state
         }
@@ -43,15 +46,19 @@ const CustomerInfo = ({navigate, info}) => {
         alternateMobileTwo: (info === undefined) ? "" : info.alternateMobileTwo,
         address: (info === undefined) ? "" : info.address,
         remarks: (info === undefined) ? "" : info.remarks,
-        status: ""
+        status: "",
+        err: ""
     }
 
     const [newState, dispatch] = useReducer(reducer, initialState)
     
     const SubmitHandler = () => {
         axios.post("http://localhost:8080/CustomerInfo/add", newState)
-        .then(() => {dispatch({type: ACTIONS.STATUS, payload: "Details saved Successfully!"})})
-        .catch(err => {dispatch({type: ACTIONS.STATUS, payload: err.message})});
+        .then((res) => {
+            (res.data === "Customer already exists!") ?
+            dispatch({type:ACTIONS.ERR, payload: res.data}) : dispatch({type: ACTIONS.STATUS, payload: res.data})
+        })
+        .catch(err => console.log(err));
 
     }
 
@@ -73,11 +80,13 @@ const CustomerInfo = ({navigate, info}) => {
                 <Col>
                     <Form>
                     <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.status}</h5></div>
+                    <div className="row"><h5 className="text-danger d-flex flex-row justify-content-center">{newState.err}</h5></div>
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
                             <Form.Control type="text" defaultValue={newState.customerFullName}  onChange={e => {
                                 dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})
                                 if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                 }}/>
                         </Form.Group>
                         <div className="row">
@@ -87,6 +96,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => {
                                         dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                        if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
                                 </Form.Group>
                             </div>
@@ -96,6 +106,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Control type="text" defaultValue={newState.alternateMobileOne} onChange={e => {
                                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_ONE, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                        if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
                                 </Form.Group>
                             </div>
@@ -105,6 +116,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Control type="text" defaultValue={newState.alternateMobileTwo} onChange={e => {
                                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_TWO, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                        if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
                                 </Form.Group>
                             </div>
@@ -116,6 +128,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Control type="text" defaultValue={newState.address} onChange={e => {
                                         dispatch({type: ACTIONS.ADDRESS, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                        if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
                                 </Form.Group>
                             </div>
@@ -125,6 +138,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Control type="text" defaultValue={newState.remarks} onChange={e => {
                                         dispatch({type: ACTIONS.REMARKS, payload: e})
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                        if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
                                 </Form.Group>
                             </div>
@@ -135,10 +149,13 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit</Button>
                                 ): (
                                     <Button variant="primary" className="mt-3 mb-3" onClick={() => {
-                                        axios.put(`http://localhost:8080/CustomerInfo/customerupdate/${initialState.customerMobile}`, newState)
-                                            .then(() => {
-                                                dispatch({type:ACTIONS.STATUS, payload: "Updated Successfully!"})
-                                            }).catch(err => {console.log(err)})
+                                        axios.post("http://localhost:8080/CustomerInfo/getcustomerid", info)
+                                            .then((res) => {
+                                                axios.put(`http://localhost:8080/CustomerInfo/customerupdate/${res.data}`, newState)
+                                                    .then(() => {
+                                                        dispatch({type:ACTIONS.STATUS, payload: "Updated Successfully!"})
+                                                    }).catch(err => {console.log(err)})    
+                                            }).catch(err => console.log(err))
                                     }}>Modify</Button>
                                 )
                             }

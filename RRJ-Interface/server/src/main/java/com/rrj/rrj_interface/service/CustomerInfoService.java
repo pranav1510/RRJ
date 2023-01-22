@@ -11,5 +11,6 @@ public interface CustomerInfoService {
     public CustomerInfo save(CustomerInfo customerInfo);
     public List<String> getCustomerData(Ordertaking ordertaking);
     public List<CustomerInfo> findCustomer(CustomerInfo customerInfo);
-    public ResponseEntity<CustomerInfo> updateCustomer(CustomerInfo customerInfo, String CustomerMobile);
+    public ResponseEntity<CustomerInfo> updateCustomer(CustomerInfo customerInfo, int CustomerId);
+    public int findCustomerId(CustomerInfo customerInfo);
 }

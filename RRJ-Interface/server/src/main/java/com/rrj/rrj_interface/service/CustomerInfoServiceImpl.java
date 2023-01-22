@@ -21,7 +21,11 @@ public class CustomerInfoServiceImpl implements CustomerInfoService{
     @Override
     public CustomerInfo save(CustomerInfo customerInfo) {
 
-        if(customerInfoRepository.exists(customerInfo.getCustomerMobile()) || customerInfoRepository.existsById(customerInfo.getAlternateMobileOne()) || customerInfoRepository.existsById(customerInfo.getAlternateMobileTwo())) {
+        CustomerInfo customerMobileDetails = customerInfoRepository.existsByMobile(customerInfo.getCustomerMobile());
+        CustomerInfo alternateOneDetails = customerInfoRepository.existsByMobile(customerInfo.getAlternateMobileOne());
+        CustomerInfo alternateTwoDetails = customerInfoRepository.existsByMobile(customerInfo.getAlternateMobileTwo());
+
+        if(customerMobileDetails != null || alternateOneDetails != null || alternateTwoDetails != null) {
             throw new RuntimeException( "Customer already exists!");
         } else {
             return customerInfoRepository.save(customerInfo);
@@ -38,8 +42,13 @@ public class CustomerInfoServiceImpl implements CustomerInfoService{
     }
 
     @Override
-    public ResponseEntity<CustomerInfo> updateCustomer(CustomerInfo customerInfo, String CustomerMobile) {
-        CustomerInfo customerupdate = customerInfoRepository.findCustomerDetails(CustomerMobile);
+    public int findCustomerId(CustomerInfo customerInfo) {
+        return customerInfoRepository.findCustomerId(customerInfo.getCustomerMobile());
+    }
+
+    @Override
+    public ResponseEntity<CustomerInfo> updateCustomer(CustomerInfo customerInfo, int CustomerId) {
+        CustomerInfo customerupdate = customerInfoRepository.findCustomerDetails(CustomerId);
 
         customerupdate.setCustomerFullName(customerInfo.getCustomerFullName());
         customerupdate.setCustomerMobile(customerInfo.getCustomerMobile());

@@ -21,7 +21,7 @@ public class CustomerInfoController {
     public String add(@RequestBody CustomerInfo customerInfo) {
         try {
             customerInfoService.save(customerInfo);
-            return "Customer Information Saved Successfully";
+            return "Details saved Successfully";
         }
         catch (Exception ex1){
             return ex1.getMessage();
@@ -38,8 +38,13 @@ public class CustomerInfoController {
         return  customerInfoService.findCustomer(customerInfo);
     }
 
-    @PutMapping("/customerupdate/{CustomerMobile}")
-    public ResponseEntity<CustomerInfo> customerupdate(@RequestBody CustomerInfo customerInfo, @PathVariable String CustomerMobile){
-        return customerInfoService.updateCustomer(customerInfo, CustomerMobile);
+    @PostMapping("getcustomerid")
+    public int getcustomerid(@RequestBody CustomerInfo customerInfo){
+        return customerInfoService.findCustomerId(customerInfo);
+    }
+
+    @PutMapping("/customerupdate/{CustomerId}")
+    public ResponseEntity<CustomerInfo> customerupdate(@RequestBody CustomerInfo customerInfo, @PathVariable int CustomerId){
+        return customerInfoService.updateCustomer(customerInfo, CustomerId);
     }
 }
