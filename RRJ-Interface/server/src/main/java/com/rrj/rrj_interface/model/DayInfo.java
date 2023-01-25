@@ -8,6 +8,7 @@ public class DayInfo {
 
     @Id
     public String Id;
+    public String Date;
     public String CashIn;
     public String CashOut;
     public String GoldIn;
@@ -23,6 +24,14 @@ public class DayInfo {
 
     public void setId(String id) {
         Id = id;
+    }
+
+    public String getDate() {
+        return Date;
+    }
+
+    public void setDate(String date) {
+        Date = date;
     }
 
     public String getCashIn() {
@@ -92,8 +101,9 @@ public class DayInfo {
     public DayInfo() {
     }
 
-    public DayInfo(String id, String cashIn, String cashOut, String goldIn, String goldOut, String silverIn, String silverOut, String accountIn, String accountOut) {
+    public DayInfo(String id, String date, String cashIn, String cashOut, String goldIn, String goldOut, String silverIn, String silverOut, String accountIn, String accountOut) {
         Id = id;
+        Date = date;
         CashIn = cashIn;
         CashOut = cashOut;
         GoldIn = goldIn;

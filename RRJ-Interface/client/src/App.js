@@ -14,6 +14,8 @@ import TransactionEntry from './pages/TransactionEntry';
 import OrderInfo from './pages/OrderInfo';
 import TransactionInfo from './pages/TransactionInfo';
 import CustomerUpdate from './pages/CustomerUpdate';
+import ValidationPage from './pages/ValidationPage';
+import Closing from './pages/Closing';
 
 function App() {
 
@@ -75,6 +77,8 @@ function App() {
         <Route exact path='/orderinfo' element={<OrderInfo navigate={navigate} />} />
         <Route exact path='/transactioninfo' element={<TransactionInfo navigate={navigate} />} />
         <Route exact path='/customerupdate' element={<CustomerUpdate navigate={navigate}/>} />
+        <Route exact path='/validation' element={<ValidationPage navigate={navigate} />} />
+        <Route exact path='/closing' element={<Closing />} />
       </Routes>
     </div>
   );

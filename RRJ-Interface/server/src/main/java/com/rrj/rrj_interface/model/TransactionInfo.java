@@ -11,6 +11,7 @@ public class TransactionInfo {
     public String OrderId;
     public String FullName;
     public String Mobile;
+    public String TransactionDate;
     public String Amount;
     public String GoldWeight;
     public String SilverWeight;
@@ -59,6 +60,14 @@ public class TransactionInfo {
 
     public String getAmount() {
         return Amount;
+    }
+
+    public String getTransactionDate() {
+        return TransactionDate;
+    }
+
+    public void setTransactionDate(String transactionDate) {
+        TransactionDate = transactionDate;
     }
 
     public void setAmount(String amount) {
@@ -164,11 +173,12 @@ public class TransactionInfo {
     public TransactionInfo() {
     }
 
-    public TransactionInfo(String transactionId, String orderId, String fullName, String mobile, String amount, String goldWeight, String silverWeight, String transactionDescription, String transactionType, String paymentType, String transactionStatus, String customerDueStatus, String customerDueAmount, String rrjDueStatus, String rrjDueAmount, String transactionDoneBy, String transactionEnteredBy) {
+    public TransactionInfo(String transactionId, String orderId, String fullName, String mobile, String transactionDate, String amount, String goldWeight, String silverWeight, String transactionDescription, String transactionType, String paymentType, String transactionStatus, String customerDueStatus, String customerDueAmount, String rrjDueStatus, String rrjDueAmount, String transactionDoneBy, String transactionEnteredBy) {
         TransactionId = transactionId;
         OrderId = orderId;
         FullName = fullName;
         Mobile = mobile;
+        TransactionDate = transactionDate;
         Amount = amount;
         GoldWeight = goldWeight;
         SilverWeight = silverWeight;

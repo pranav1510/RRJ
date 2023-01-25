@@ -19,7 +19,7 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     @Override
     public PaymentInfo save(PaymentInfo paymentInfo) {
-        TransactionInfo transactionInfo = new TransactionInfo(paymentInfo.getPaymentId(), paymentInfo.getOrderId(), paymentInfo.getCustomerFullName(), paymentInfo.getCustomerMobile(), paymentInfo.getAmountReceived(), paymentInfo.getExchangeGoldWeight(), paymentInfo.getExchangeSilverWeight(), paymentInfo.getPaymentDescription(), paymentInfo.getTransactionType(), paymentInfo.getPaymentType(), paymentInfo.getStatus(), paymentInfo.getCustomerDueStatus(), paymentInfo.getCustomerDueAmount(), paymentInfo.getRrjDueStatus(), paymentInfo.getRrjDueAmount(), paymentInfo.getPaymentReceivedBy(), paymentInfo.getPaymentEnteredBy());
+        TransactionInfo transactionInfo = new TransactionInfo(paymentInfo.getPaymentId(), paymentInfo.getOrderId(), paymentInfo.getCustomerFullName(), paymentInfo.getCustomerMobile(), paymentInfo.getPaymentDate(), paymentInfo.getAmountReceived(), paymentInfo.getExchangeGoldWeight(), paymentInfo.getExchangeSilverWeight(), paymentInfo.getPaymentDescription(), paymentInfo.getTransactionType(), paymentInfo.getPaymentType(), paymentInfo.getStatus(), paymentInfo.getCustomerDueStatus(), paymentInfo.getCustomerDueAmount(), paymentInfo.getRrjDueStatus(), paymentInfo.getRrjDueAmount(), paymentInfo.getPaymentReceivedBy(), paymentInfo.getPaymentEnteredBy());
         transactionInfoRepository.save(transactionInfo);
         return paymentInfoRepository.save(paymentInfo);
     }

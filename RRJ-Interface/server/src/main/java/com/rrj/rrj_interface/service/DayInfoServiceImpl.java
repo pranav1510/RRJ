@@ -5,6 +5,8 @@ import com.rrj.rrj_interface.repository.DayInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DayInfoServiceImpl implements DayInfoService{
 
@@ -14,5 +16,10 @@ public class DayInfoServiceImpl implements DayInfoService{
     @Override
     public DayInfo save(DayInfo dayInfo) {
         return dayInfoRepository.save(dayInfo);
+    }
+
+    @Override
+    public List<DayInfo> getdetails(DayInfo dayInfo) {
+        return dayInfoRepository.getdetails(dayInfo.getDate());
     }
 }

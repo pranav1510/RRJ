@@ -22,7 +22,17 @@ const initialState = {
     message: "",
     transactionDoneBy: "",
     transactionEnteredBy: "",
-    transactionDate: ""
+    transactionDate: "",
+    cashIn: "",
+    cashOut: "",
+    goldIn: "",
+    goldOut: "",
+    silverIn: "",
+    silverOut: "",
+    accountIn: "",
+    accountOut: "",
+    receiveOptions: [],
+    sentOptions: []
 }
 
 const ACTIONS = {
@@ -45,7 +55,17 @@ const ACTIONS = {
     CUSTOMER_DUE_AMOUNT: "CUSTOMER_DUE_AMOUNT",
     TRANSACTION_DONE_BY: "TRANSACTION_DONE_BY",
     TRANSACTION_ENTERED_BY: "TRANSACTION_ENTERED_BY",
-    RECEIVED_TYPE: "RECEIVED_TYPE"
+    RECEIVED_TYPE: "RECEIVED_TYPE",
+    CASH_IN: "CASH_IN",
+    CASH_OUT: "CASH_OUT",
+    GOLD_IN: "GOLD_IN",
+    GOLD_OUT: "GOLD_OUT",
+    SILVER_IN: "SILVER_IN",
+    SILVER_OUT: "SILVER_OUT",
+    ACCOUNT_IN: "ACCOUNT_IN",
+    ACCOUNT_OUT: "ACCOUNT_OUT",
+    RECEIVE_OPTIONS : "RECEIVE_OPTIONS",
+    SENT_OPTIONS: "SENT_OPTIONS"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -88,6 +108,26 @@ const reducer = (state, {type, payload}) => {
             return {...state, transactionStatus: payload}
         case ACTIONS.MESSAGE:
             return {...state, message: payload}
+        case ACTIONS.CASH_IN:
+            return {...state, cashIn: payload}
+        case ACTIONS.CASH_OUT:
+            return {...state, cashOut: payload}
+        case ACTIONS.GOLD_IN:
+            return {...state, goldIn: payload}
+        case ACTIONS.GOLD_OUT:
+            return {...state, goldOut: payload}
+        case ACTIONS.SILVER_IN:
+            return {...state, silverIn: payload}
+        case ACTIONS.SILVER_OUT:
+            return {...state, silverOut: payload}
+        case ACTIONS.ACCOUNT_IN:
+            return {...state, accountIn: payload}
+        case ACTIONS.ACCOUNT_OUT:
+            return {...state, accountOut: payload}
+        case ACTIONS.RECEIVE_OPTIONS:
+            return {...state, receiveOptions: payload}
+        case ACTIONS.SENT_OPTIONS:
+            return {...state, sentOptions: payload}
         default:
             return state
     }
@@ -96,11 +136,208 @@ const reducer = (state, {type, payload}) => {
 const TransactionEntry = ({navigate}) => {
 
     const [newState, dispatch] = useReducer(reducer, initialState)
+    const options1 = ["Gold", "Silver"]
+    const options2 = ["Cash", "Acnt Transfer"]
+    const options3 = ["Cash", "Gold", "Gold and Cash", "Gold and Acnt Transfer", "Silver", "Silver and Cash", "Silver and Acnt Transfer", "Acnt Transfer"]
 
     const SubmitHandler = () => {
+        if(newState.transactionType === "Buying"){
+            if(newState.receivedType === "Gold" && newState.paymentType === "Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashOut: newState.amount,
+                    goldIn: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Silver" && newState.paymentType === "Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashOut: newState.amount,
+                    silverIn: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Gold" && newState.paymentType === "Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountOut: newState.amount,
+                    goldIn: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Silver" && newState.paymentType === "Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountOut: newState.amount,
+                    silverIn: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }}
+        if(newState.transactionType === "Selling"){
+            if(newState.receivedType === "Cash" && newState.paymentType === "Gold"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashIn: newState.amount,
+                    goldOut: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Acnt Transfer" && newState.paymentType === "Gold"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountIn: newState.amount,
+                    goldOut: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Cash" && newState.paymentType === "Silver"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashIn: newState.amount,
+                    silverOut: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Acnt Transfer" && newState.paymentType === "Silver"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountIn: newState.amount,
+                    silverOut: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }}
+        if(newState.transactionType === "Borrowing" || newState.transactionType === "Lended Repaying"){
+            if(newState.receivedType === "Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashIn: newState.amount,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.receivedType === "Gold"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    goldIn: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.receivedType === "Silver"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    silverIn: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.receivedType === "Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountIn: newState.amount,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.receivedType === "Gold and Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashIn: newState.amount,
+                    goldIn: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Gold and Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountIn: newState.amount,
+                    goldIn: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Silver and Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashIn: newState.amount,
+                    silverIn: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.receivedType === "Silver and Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountIn: newState.amount,
+                    silverIn: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }}
+        if(newState.transactionType === "Lending" || newState.transactionType === "Repaying Borrowed" || newState.transactionType === "General Expenses"){
+            if(newState.paymentType === "Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashOut: newState.amount,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.paymentType === "Gold"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    goldOut: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.paymentType === "Silver"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    silverOut: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.paymentType === "Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountOut: newState.amount,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+            else if(newState.paymentType === "Gold and Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashOut: newState.amount,
+                    goldOut: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.paymentType === "Gold and Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountOut: newState.amount,
+                    goldOut: newState.goldWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.paymentType === "Silver and Cash"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashOut: newState.amount,
+                    silverOut: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.paymentType === "Silver and Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    accountOut: newState.amount,
+                    silverOut: newState.silverWeight,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }}
+        if(newState.transactionType === "Self Transfer"){
+            if(newState.paymentType === "Cash" && newState.receivedType === "Acnt Transfer"){
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashOut: newState.amount,
+                    accountIn: newState.amount,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.paymentType === "Acnt Transfer" && newState.receivedType === "Cash") {
+                axios.post("http://localhost:8080/DayInfo/add", {
+                    cashIn: newState.amount,
+                    accountOut: newState.amount,
+                    id: newState.transactionId,
+                    date: newState.transactionDate
+                }).then(() => { console.log("saved")}).catch(err => console.log(err))
+            }
+        }
         axios.post("http://localhost:8080/TransactionInfo/add", newState)
-            .then(() => dispatch({type:ACTIONS.MESSAGE, payload: "Transaction saved Successfully!"}))
-            .catch(err => console.log(err))
+            .then(() => {
+                dispatch({type:ACTIONS.MESSAGE, payload: "Transaction saved Successfully!"})
+            }).catch(err => console.log(err))
     }
 
     return(
@@ -152,6 +389,22 @@ const TransactionEntry = ({navigate}) => {
                             <Form.Label className="fw-bold m-1">Transaction Type</Form.Label>
                             <Form.Select onChange={e => {
                                 dispatch({type:ACTIONS.TRANSACTION_TYPE, payload: e.target.value})
+                                if(e.target.value === "Buying"){
+                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options1})    
+                                } else if(e.target.value === "Selling"){
+                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: options1})
+                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                } else if(e.target.value === "Borrowing" || e.target.value === "Lended Repaying"){
+                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
+                                } else if(e.target.value === "Lending" || e.target.value === "Repaying Borrowed"){
+                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
+                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                } else if(e.target.value === "Self Transfer"){
+                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                }
                             }}>
                                 <option value=""></option>
                                 <option value="Buying">Buying</option>
@@ -161,24 +414,24 @@ const TransactionEntry = ({navigate}) => {
                                 <option value="Lending">Lending</option>
                                 <option value="Lended Repaying">Lended Repaying</option>
                                 <option value="General Expenses">General Expenses</option>
+                                <option value="Self Transfer">Self Transfer</option>
                             </Form.Select>
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Type</Form.Label>
+                            <Form.Label className="fw-bold m-1">Sent Type</Form.Label>
                             <Form.Select onChange={e => {
                                 dispatch({type:ACTIONS.PAYMENT_TYPE, payload: e.target.value})
                             }}>
                                 <option value=""></option>
-                                <option value="Cash">Cash</option>
-                                <option value="Gold">Gold</option>
-                                <option value="Gold and Cash">Gold and Cash</option>
-                                <option value="Gold and Acnt Transfer">Gold and Acnt Transfer</option>
-                                <option value="Silver">Silver</option>
-                                <option value="Silver and Cash">Silver and Cash</option>
-                                <option value="Silver and Acnt Transfer">Silver and Acnt Transfer</option>
-                                <option value="Account Transfer">Account Transfer</option>
+                                {
+                                    newState.sentOptions.map((val, index) => {
+                                        return(
+                                            <option key={index} value={val}>{val}</option>
+                                        )
+                                    })
+                                }
                             </Form.Select>
                         </Form.Group>
                     </div>
@@ -189,14 +442,13 @@ const TransactionEntry = ({navigate}) => {
                                 dispatch({type:ACTIONS.RECEIVED_TYPE, payload: e.target.value})
                             }}>
                                 <option value=""></option>
-                                <option value="Cash">Cash</option>
-                                <option value="Gold">Gold</option>
-                                <option value="Gold and Cash">Gold and Cash</option>
-                                <option value="Gold and Acnt Transfer">Gold and Acnt Transfer</option>
-                                <option value="Silver">Silver</option>
-                                <option value="Silver and Cash">Silver and Cash</option>
-                                <option value="Silver and Acnt Transfer">Silver and Acnt Transfer</option>
-                                <option value="Account Transfer">Account Transfer</option>
+                                {
+                                    newState.receiveOptions.map((val, index) => {
+                                        return(
+                                            <option key={index} value={val}>{val}</option>
+                                        )
+                                    })
+                                }
                             </Form.Select>
                         </Form.Group>
                     </div>
@@ -277,14 +529,14 @@ const TransactionEntry = ({navigate}) => {
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_AMOUNT, payload: e})} />
                         </Form.Group>
                     </div>
-                </div>
-                <div className="row">
                     <div className="col-3">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Transaction Done By</Form.Label>
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.TRANSACTION_DONE_BY, payload: e})} />
                         </Form.Group>
                     </div>
+                </div>
+                <div className="row">
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Transaction Description</Form.Label>

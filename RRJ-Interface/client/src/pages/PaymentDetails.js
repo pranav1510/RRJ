@@ -145,23 +145,24 @@ const PaymentDetails = ({navigate}) => {
     const SubmitHandler = () => {
         axios.post("http://localhost:8080/PaymentInfo/add", newState)
             .then(() => {
-                var cash = ""
-                var account = ""
+                var cash = 0
+                var account = 0
                 if(newState.paymentType.includes("Cash")){
-                    cash += newState.amountReceived
+                    cash += Number(newState.amountReceived)
                 }
                 if(newState.paymentType.includes("Transfer")){
-                    account += newState.amountReceived
+                    account += Number(newState.amountReceived)
                 }
                 const data = {
                     id: newState.paymentId,
-                    cashIn: cash,
+                    date: newState.paymentDate,
+                    cashIn: cash.toString(),
                     cashOut: "",
                     goldIn: newState.exchangeGoldWeight,
                     goldOut: newState.overallGold,
                     silverIn: newState.exchangeSilverWeight,
                     silverOut: newState.overallSilver,
-                    accountIn: account,
+                    accountIn: account.toString(),
                     accountOut: ""
                 }
 
@@ -374,8 +375,21 @@ const PaymentDetails = ({navigate}) => {
                                 <option value="Silver and Cash">Silver and Cash</option>
                                 <option value="Silver and Acnt Transfer">Gold and Acnt Transfer</option>
                                 <option value="Silver">Silver</option>
-                                <option value="Account Transfer">Account Transfer</option>
+                                <option value="Acnt Transfer">Account Transfer</option>
                             </Form.Select>
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Payment Status</Form.Label>
+                            <Form.Select onChange={e => {
+                                    dispatch({type:ACTIONS.STATUS, payload: e.target.value})
+                                }}>
+                                    <option value=""></option>
+                                    <option value="In Progress">Pending</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </Form.Select>
                         </Form.Group>
                     </div>
                 </div>
@@ -408,6 +422,12 @@ const PaymentDetails = ({navigate}) => {
                 <div className="row">
                     <div className="col">
                         <Form.Group className="mt-3">
+                            <Form.Label className="fw-bold m-1">Total Order Price</Form.Label>
+                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ORDER_PRICE, payload: e})} />
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Discount</Form.Label>
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.DISCOUNT, payload: e})} />
                         </Form.Group>
@@ -420,25 +440,12 @@ const PaymentDetails = ({navigate}) => {
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Status</Form.Label>
-                            <Form.Select onChange={e => {
-                                    dispatch({type:ACTIONS.STATUS, payload: e.target.value})
-                                }}>
-                                    <option value=""></option>
-                                    <option value="In Progress">Pending</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Cancelled">Cancelled</option>
-                                </Form.Select>
+                            <Form.Label className="fw-bold m-1">Payment Entered By</Form.Label>
+                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_ENTERED_BY, payload: e})} />
                         </Form.Group>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Total Order Price</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ORDER_PRICE, payload: e})} />
-                        </Form.Group>
-                    </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Due Status</Form.Label>
@@ -457,8 +464,6 @@ const PaymentDetails = ({navigate}) => {
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_AMOUNT, payload: e})} />
                         </Form.Group>
                     </div>
-                </div>
-                <div className="row">
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">RRJ Due Status</Form.Label>
@@ -477,20 +482,14 @@ const PaymentDetails = ({navigate}) => {
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_AMOUNT, payload: e})} />
                         </Form.Group>
                     </div>
-                    <div className="col">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Entered By</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_ENTERED_BY, payload: e})} />
-                        </Form.Group>
-                    </div>
-                </div>
-                <div className="row">
                     <div className="col-3">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Received By</Form.Label>
                             <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_RECEIVED_BY, payload: e})} />
                         </Form.Group>
                     </div>
+                </div>
+                <div className="row">
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Description</Form.Label>

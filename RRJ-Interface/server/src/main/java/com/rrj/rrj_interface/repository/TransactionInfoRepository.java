@@ -1,10 +1,13 @@
 package com.rrj.rrj_interface.repository;
 
-import com.rrj.rrj_interface.model.PaymentInfo;
 import com.rrj.rrj_interface.model.TransactionInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface TransactionInfoRepository extends JpaRepository<TransactionInfo, String> {
 
-    public TransactionInfo save(TransactionInfo transactionInfo);
+    @Query("select e FROM TransactionInfo e WHERE e.TransactionDate =?1")
+    public List<TransactionInfo> getDetailsByDate(String TransactionDate);
 }
