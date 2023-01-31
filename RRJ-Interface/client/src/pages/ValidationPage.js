@@ -1,16 +1,21 @@
 import axios from "axios";
 import React, { useReducer } from "react";
 import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
+import TransactionEntry from "./TransactionEntry";
 
 const date1 = new Date();
 const val = date1.getFullYear().toString() + "-" + (date1.getMonth() + 1).toString().padStart(2, "0") + "-" + date1.getDate().toString().padStart(2, "0")
 
 const initialState = {
     todayDate : String(val),
+    transin: {},
     details: [],
     show1: false,
     show2: false,
     show3: false,
+    show4: false,
+    show5: false,
+    show6: false,
     overallCashIn: "",
     overallCashOut: "",
     overallGoldIn: "",
@@ -28,10 +33,14 @@ const initialState = {
 
 const ACTIONS = {
     TODAY_DATE : "TODAY_DATE",
+    TRANS_IN: "TRANS_IN",
     DETAILS: "DETAILS",
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
     SHOW3: "SHOW3",
+    SHOW4: "SHOW4",
+    SHOW5: "SHOW5",
+    SHOW6: "SHOW6",
     OVERALL_CASH_IN: "OVERALL_CASH_IN",
     OVERALL_CASH_OUT: "OVERALL_CASH_OUT",
     OVERALL_GOLD_IN: "OVERALL_GOLD_IN",
@@ -51,6 +60,8 @@ const reducer = (state, {type, payload}) => {
     switch(type){
         case ACTIONS.TODAY_DATE:
             return {...state, todayDate: payload}
+        case ACTIONS.TRANS_IN:
+            return {...state, transin: payload}
         case ACTIONS.DETAILS:
             return {...state, details: payload}
         case ACTIONS.SHOW1:
@@ -59,6 +70,12 @@ const reducer = (state, {type, payload}) => {
             return {...state, show2: payload}
         case ACTIONS.SHOW3:
             return {...state, show3: payload}
+        case ACTIONS.SHOW4:
+            return {...state, show4: payload}
+        case ACTIONS.SHOW5:
+            return {...state, show5: payload}
+        case ACTIONS.SHOW6:
+            return {...state, show6: payload}
         case ACTIONS.OVERALL_CASH_IN:
             return {...state, cashIn: payload}
         case ACTIONS.OVERALL_CASH_OUT:
@@ -95,10 +112,217 @@ const ValidationPage = ({navigate}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const handleClose1 = () => {dispatch({type:ACTIONS.SHOW1, payload: false})}
+    const handleClose2 = () => {dispatch({type:ACTIONS.SHOW2, payload: false})}
     const handleClose3 = () => {dispatch({type:ACTIONS.SHOW3, payload: false})}
+    const handleClose4 = () => {dispatch({type:ACTIONS.SHOW4, payload: false})}
+    const handleClose5 = () => {dispatch({type:ACTIONS.SHOW5, payload: false})}
+    const handleClose6 = () => {dispatch({type:ACTIONS.SHOW6, payload: false})}
 
     return(
         <>
+        <Modal show={newState.show6} onHide={handleClose6} className="modal-xl">
+            <Modal.Header closeButton>
+                <Modal.Title>Transaction Update</Modal.Title>
+            </Modal.Header>
+            <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
+                <TransactionEntry transin = {newState.transin}/>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose6}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        <Modal show={newState.show5} onHide={handleClose5}>
+            <Modal.Header closeButton>
+            <Modal.Title>Transaction Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
+            <Table className="table-hover w-100 mt-1 small">
+                <tbody>
+                    <tr>
+                        <th>Transaction Id</th>
+                        <td>{newState.transin.transactionId}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Id</th>
+                        <td>{newState.transin.orderId}</td>
+                    </tr>
+                    <tr>
+                        <th>Customer Name</th>
+                        <td>{newState.transin.customerFullName}</td>
+                    </tr>
+                    <tr>
+                        <th>Customer Mobile</th>
+                        <td>{newState.transin.customerMobile}</td>
+                    </tr>
+                    <tr>
+                        <th>Transaction Date</th>
+                        <td>{newState.transin.transactionDate}</td>
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td>{newState.transin.amount}</td>
+                    </tr>
+                    <tr>
+                        <th>Gold Weight</th>
+                        <td>{newState.transin.goldWeight}</td>
+                    </tr>
+                    <tr>
+                        <th>Silver Weight</th>
+                        <td>{newState.transin.silverWeight}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{newState.transin.transactionDescription}</td>
+                    </tr>
+                    <tr>
+                        <th>Transaction Type</th>
+                        <td>{newState.transin.transactionType}</td>
+                    </tr>
+                    <tr>
+                        <th>Sent Type</th>
+                        <td>{newState.transin.paymentType}</td>
+                    </tr>
+                    <tr>
+                        <th>Received Type</th>
+                        <td>{newState.transin.receivedType}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{newState.transin.transactionStatus}</td>
+                    </tr>
+                    <tr>
+                        <th>Customer Due Status</th>
+                        <td>{newState.transin.customerDueStatus}</td>
+                    </tr>
+                    <tr>
+                        <th>Customer Due Amount</th>
+                        <td>{newState.transin.customerDueAmount}</td>
+                    </tr>
+                    <tr>
+                        <th>RRJ Due Status</th>
+                        <td>{newState.transin.rrjDueStatus}</td>
+                    </tr>
+                    <tr>
+                        <th>RRJ Due Amount</th>
+                        <td>{newState.transin.rrjDueAmount}</td>
+                    </tr>
+                    <tr>
+                        <th>Transaction Done By</th>
+                        <td>{newState.transin.transactionDoneBy}</td>
+                    </tr>
+                    <tr>
+                        <th>Transaction Entered By</th>
+                        <td>{newState.transin.transactionEnteredBy}</td>
+                    </tr>
+                </tbody>
+            </Table>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose5}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={() => {
+                    dispatch({type:ACTIONS.SHOW5, payload: false})
+                    dispatch({type:ACTIONS.SHOW2, payload: false})
+                    dispatch({type:ACTIONS.SHOW6, payload: true})
+                }}>
+                    Modify
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        <Modal show={newState.show2} onHide={handleClose2} className="modal-xl">
+            <Modal.Header closeButton>
+                <Modal.Title>Today's Transactions</Modal.Title>
+            </Modal.Header>
+            <Modal.Body  style={{height: "400px", overflow: "hidden", overflowY: "auto"}}>
+                <Table className="table-hover w-100 mt-1">
+                    <thead>
+                        <tr>
+                            <th scope="col">Transaction Id</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Done By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            newState.details.map((info, index) => {
+                                return(
+                                    <tr key={index} style={{cursor: "pointer"}} onClick={() => {
+                                        dispatch({type:ACTIONS.TRANS_IN, payload: info})
+                                        dispatch({type:ACTIONS.SHOW5, payload: true})
+                                    }}>
+                                        <td>{info.transactionId}</td>
+                                        <td>{info.customerFullName}</td>
+                                        <td>{info.transactionType}</td>
+                                        <td>{info.transactionDescription}</td>
+                                        <td>{info.transactionStatus}</td>
+                                        <td>{info.transactionDoneBy}</td>
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </Table>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose2}>
+                    Close
+                </Button>
+                <Button variant="primary" onClick={() => {
+                    axios.post("http://localhost:8080/DayInfo/getdetails", {date: newState.todayDate})
+                    .then(res => {
+                        dispatch({type:ACTIONS.SHOW2, payload: false})
+                        dispatch({type:ACTIONS.SHOW1, payload: true})
+
+                            let cashin = 0
+                            let cashout = 0
+                            let goldin = 0
+                            let goldout = 0
+                            let silverin = 0
+                            let silverout = 0
+                            let acntin = 0
+                            let acntout = 0
+                            
+                            res.data.forEach(element => {
+                                if (element.cashIn !== ""){cashin += Number(element.cashIn)}
+                                if (element.cashOut !== ""){cashout += Number(element.cashOut)}
+                                if (element.goldIn !== ""){goldin += Number(element.goldIn)}
+                                if (element.goldOut !== ""){goldout += Number(element.goldOut)}
+                                if (element.silverIn !== ""){silverin += Number(element.silverIn)}
+                                if (element.silverOut !== ""){silverout += Number(element.silverOut)}
+                                if (element.accountIn !== ""){acntin += Number(element.accountIn)}
+                                if (element.accountOut !== ""){acntout += Number(element.accountOut)}
+                            });
+
+                            
+                            dispatch({type:ACTIONS.OVERALL_CASH_IN , payload: String(cashin)})
+                            dispatch({type:ACTIONS.OVERALL_CASH_OUT , payload: String(cashout)})
+                            dispatch({type:ACTIONS.OVERALL_GOLD_IN , payload: String(goldin)})
+                            dispatch({type:ACTIONS.OVERALL_GOLD_OUT , payload: String(goldout)})
+                            dispatch({type:ACTIONS.OVERALL_SILVER_IN , payload: String(silverin)})
+                            dispatch({type:ACTIONS.OVERALL_SILVER_OUT , payload: String(silverout)})
+                            dispatch({type:ACTIONS.OVERALL_ACCOUNT_IN , payload: String(acntin)})
+                            dispatch({type:ACTIONS.OVERALL_ACCOUNT_OUT , payload: String(acntout)})
+                        })
+                        .catch(err => console.log(err))
+                }} >Validate Transactions</Button>
+            </Modal.Footer>
+        </Modal>
+        <Modal show={newState.show4} onHide={handleClose4} >
+        <Modal.Header closeButton>
+          <Modal.Title>Transactions not found!</Modal.Title>
+        </Modal.Header>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose4}>
+            Close
+          </Button>
+        </Modal.Footer>
+        </Modal>
         <Modal show={newState.show1} onHide={handleClose1} >
         <Modal.Header closeButton>
           <Modal.Title>Confirm to Validate the Transactions</Modal.Title>
@@ -108,8 +332,10 @@ const ValidationPage = ({navigate}) => {
             Close
           </Button>
           <Button variant="primary" onClick={() => {
-            axios.get("http://localhost:8080/ClosingInfo/getdetails")
-                .then(res => {
+              axios.get("http://localhost:8080/ClosingInfo/getdetails")
+              .then(res => {
+                    dispatch({type:ACTIONS.SHOW1, payload: false})
+                    dispatch({type:ACTIONS.SHOW3, payload: true})
                     const val = res.data[0]
                     dispatch({type:ACTIONS.OPENING, payload: val})
                     dispatch({type:ACTIONS.CLOSING_CASH, payload: String(Number(val[1]) + Number(newState.cashIn) - Number(newState.cashOut))})
@@ -118,9 +344,6 @@ const ValidationPage = ({navigate}) => {
                     dispatch({type:ACTIONS.CLOSING_ACCOUNT, payload: String(Number(val[4]) + Number(newState.accountIn) - Number(newState.accountOut))})
                 })
                 .catch(err => console.log(err))
-                
-                dispatch({type:ACTIONS.SHOW1, payload: false})
-                dispatch({type:ACTIONS.SHOW3, payload:true})
           }}>
             Confirm
           </Button>
@@ -130,7 +353,7 @@ const ValidationPage = ({navigate}) => {
         <Modal.Header closeButton>
           <Modal.Title>Transaction Summary</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body  style={{height: "520px", overflow: "hidden", overflowY: "auto"}}>
             <h5 className="text-decoration-underline">Opening Balance:</h5>
             <Table  className="table-hover w-100 mt-1">
                 <thead>
@@ -247,8 +470,12 @@ const ValidationPage = ({navigate}) => {
                                     <Button className="mt-3" variant="primary" onClick={() => {
                                         axios.post("http://localhost:8080/TransactionInfo/getdetails", {transactionDate: newState.todayDate})
                                             .then((res) => {
-                                                dispatch({type:ACTIONS.DETAILS, payload: res.data})
-                                                dispatch({type:ACTIONS.SHOW2, payload: true})
+                                                if(res.data[0] === undefined){
+                                                    dispatch({type:ACTIONS.SHOW4, payload: true})
+                                                } else {
+                                                    dispatch({type:ACTIONS.DETAILS, payload: res.data})
+                                                    dispatch({type:ACTIONS.SHOW2, payload: true})
+                                                }
                                             })
                                             .catch(err => console.log(err))
                                     }}>Get Transaction Details</Button>
@@ -258,74 +485,6 @@ const ValidationPage = ({navigate}) => {
                     </Card>
                 </div>
             </div>
-            <Table className="table-hover w-100 mt-4">
-                <thead>
-                    <tr>
-                        <th scope="col">Transaction Id</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Done By</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        newState.details.map((info, index) => {
-                            return(
-                                <tr key={index}>
-                                    <td>{info.transactionId}</td>
-                                    <td>{info.fullName}</td>
-                                    <td>{info.transactionType}</td>
-                                    <td>{info.transactionDescription}</td>
-                                    <td>{info.transactionStatus}</td>
-                                    <td>{info.transactionDoneBy}</td>
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </Table>
-            {
-                newState.show2 ? (
-                    <Button variant="info" onClick={() => {
-                        dispatch({type:ACTIONS.SHOW1, payload: true})
-                        axios.post("http://localhost:8080/DayInfo/getdetails", {date: newState.todayDate})
-                            .then(res => {
-                                let cashin = 0
-                                let cashout = 0
-                                let goldin = 0
-                                let goldout = 0
-                                let silverin = 0
-                                let silverout = 0
-                                let acntin = 0
-                                let acntout = 0
-                                
-                                res.data.forEach(element => {
-                                    if (element.cashIn !== ""){cashin += Number(element.cashIn)}
-                                    if (element.cashOut !== ""){cashout += Number(element.cashOut)}
-                                    if (element.goldIn !== ""){goldin += Number(element.goldIn)}
-                                    if (element.goldOut !== ""){goldout += Number(element.goldOut)}
-                                    if (element.silverIn !== ""){silverin += Number(element.silverIn)}
-                                    if (element.silverOut !== ""){silverout += Number(element.silverOut)}
-                                    if (element.accountIn !== ""){acntin += Number(element.accountIn)}
-                                    if (element.accountOut !== ""){acntout += Number(element.accountOut)}
-                                });
-
-                                
-                                dispatch({type:ACTIONS.OVERALL_CASH_IN , payload: String(cashin)})
-                                dispatch({type:ACTIONS.OVERALL_CASH_OUT , payload: String(cashout)})
-                                dispatch({type:ACTIONS.OVERALL_GOLD_IN , payload: String(goldin)})
-                                dispatch({type:ACTIONS.OVERALL_GOLD_OUT , payload: String(goldout)})
-                                dispatch({type:ACTIONS.OVERALL_SILVER_IN , payload: String(silverin)})
-                                dispatch({type:ACTIONS.OVERALL_SILVER_OUT , payload: String(silverout)})
-                                dispatch({type:ACTIONS.OVERALL_ACCOUNT_IN , payload: String(acntin)})
-                                dispatch({type:ACTIONS.OVERALL_ACCOUNT_OUT , payload: String(acntout)})
-                            })
-                            .catch(err => console.log(err))
-                    }} >Validate Transactions</Button>
-                ) : <></>
-            }
         </Container>
         </>
     )

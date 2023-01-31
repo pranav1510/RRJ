@@ -26,7 +26,7 @@ public class ItemInfoServiceImpl implements ItemInfoService {
     }
 
     @Override
-    public List<Object[]> getItemNameAndPrice(PaymentInfo paymentInfo) {
+    public List<ItemInfo> getItemNameAndPrice(PaymentInfo paymentInfo) {
         return itemInfoRepository.getItemNameAndItemPrice(paymentInfo.getOrderId());
     }
 
@@ -68,5 +68,10 @@ public class ItemInfoServiceImpl implements ItemInfoService {
         itemInfoRepository.save(updateitem);
 
         return ResponseEntity.ok(updateitem);
+    }
+
+    @Override
+    public ItemInfo findByItemId(ItemInfo itemInfo) {
+        return itemInfoRepository.findByItemId(itemInfo.getItemId());
     }
 }

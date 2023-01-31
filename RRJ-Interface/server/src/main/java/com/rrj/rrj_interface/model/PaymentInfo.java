@@ -14,6 +14,7 @@ public class PaymentInfo{
     private String PaymentId;
     private String PaymentDate;
     private String OrderId;
+    private int CustomerId;
     private String CustomerMobile;
     private String CustomerFullName;
     private String AmountReceived;
@@ -65,6 +66,14 @@ public class PaymentInfo{
 
     public void setOrderId(String orderId) {
         OrderId = orderId;
+    }
+
+    public int getCustomerId() {
+        return CustomerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        CustomerId = customerId;
     }
 
     public String getCustomerMobile() {

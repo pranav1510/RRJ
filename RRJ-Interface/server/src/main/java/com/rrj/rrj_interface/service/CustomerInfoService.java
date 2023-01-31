@@ -9,8 +9,9 @@ import java.util.List;
 public interface CustomerInfoService {
 
     public CustomerInfo save(CustomerInfo customerInfo);
-    public List<String> getCustomerData(Ordertaking ordertaking);
+    public List<Object[]> getCustomerData(Ordertaking ordertaking);
     public List<CustomerInfo> findCustomer(CustomerInfo customerInfo);
     public ResponseEntity<CustomerInfo> updateCustomer(CustomerInfo customerInfo, int CustomerId);
-    public int findCustomerId(CustomerInfo customerInfo);
+
+    public int getCustomerId(CustomerInfo customerInfo);
 }

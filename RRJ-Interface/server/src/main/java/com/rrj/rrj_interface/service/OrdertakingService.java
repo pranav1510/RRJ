@@ -12,7 +12,10 @@ public interface OrdertakingService {
 
     public Ordertaking save(Ordertaking ordertaking);
     public List<String> getOrderData(Ordertaking ordertaking);
-    public List<String> getOrderInfoAtPayment(PaymentInfo paymentInfo);
+    public List<Object[]> getOrderInfoAtPayment(PaymentInfo paymentInfo);
     public List<Ordertaking> getOrderDetails(Ordertaking ordertaking);
     public ResponseEntity<Ordertaking> updateOrder(Ordertaking ordertaking, String OrderId);
+    public List<Object[]> getCustomerId(Ordertaking ordertaking);
+
+    public List<Ordertaking> getOrdersByCustomerId(Ordertaking ordertaking);
 }

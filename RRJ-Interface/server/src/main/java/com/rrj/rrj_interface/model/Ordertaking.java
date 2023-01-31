@@ -11,6 +11,7 @@ public class Ordertaking {
     private String GoldCost;
     private String SilverCost;
     private String ExpectedDeliveryDate;
+    private int CustomerId;
     private String CustomerMobile;
     private String CustomerFullName;
     private String CustomerRemarks;
@@ -50,6 +51,14 @@ public class Ordertaking {
 
     public void setExpectedDeliveryDate(String expectedDeliveryDate) {
         ExpectedDeliveryDate = expectedDeliveryDate;
+    }
+
+    public int getCustomerId() {
+        return CustomerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        CustomerId = customerId;
     }
 
     public String getCustomerMobile() {
@@ -119,11 +128,12 @@ public class Ordertaking {
     public Ordertaking() {
     }
 
-    public Ordertaking(String orderId, String goldCost, String silverCost, String expectedDeliveryDate, String customerMobile, String customerFullName, String customerRemarks, String orderReceiverRemarks, String orderStatus, String gst, String orderReceivedBy, String orderEnteredBy) {
+    public Ordertaking(String orderId, String goldCost, String silverCost, String expectedDeliveryDate, int customerId, String customerMobile, String customerFullName, String customerRemarks, String orderReceiverRemarks, String orderStatus, String gst, String orderReceivedBy, String orderEnteredBy) {
         OrderId = orderId;
         GoldCost = goldCost;
         SilverCost = silverCost;
         ExpectedDeliveryDate = expectedDeliveryDate;
+        CustomerId = customerId;
         CustomerMobile = customerMobile;
         CustomerFullName = customerFullName;
         CustomerRemarks = customerRemarks;

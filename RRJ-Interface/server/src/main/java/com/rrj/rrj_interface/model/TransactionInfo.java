@@ -9,8 +9,9 @@ public class TransactionInfo {
     @Id
     public String TransactionId;
     public String OrderId;
-    public String FullName;
-    public String Mobile;
+    public int CustomerId;
+    public String CustomerFullName;
+    public String CustomerMobile;
     public String TransactionDate;
     public String Amount;
     public String GoldWeight;
@@ -18,6 +19,7 @@ public class TransactionInfo {
     public String TransactionDescription;
     public String TransactionType;
     public String PaymentType;
+    public String ReceivedType;
     public String TransactionStatus;
     public String CustomerDueStatus;
     public String CustomerDueAmount;
@@ -42,20 +44,28 @@ public class TransactionInfo {
         OrderId = orderId;
     }
 
-    public String getFullName() {
-        return FullName;
+    public int getCustomerId() {
+        return CustomerId;
     }
 
-    public void setFullName(String fullName) {
-        FullName = fullName;
+    public void setCustomerId(int customerId) {
+        CustomerId = customerId;
     }
 
-    public String getMobile() {
-        return Mobile;
+    public String getCustomerFullName() {
+        return CustomerFullName;
     }
 
-    public void setMobile(String mobile) {
-        Mobile = mobile;
+    public void setCustomerFullName(String customerFullName) {
+        CustomerFullName = customerFullName;
+    }
+
+    public String getCustomerMobile() {
+        return CustomerMobile;
+    }
+
+    public void setCustomerMobile(String customerMobile) {
+        CustomerMobile = customerMobile;
     }
 
     public String getAmount() {
@@ -112,6 +122,14 @@ public class TransactionInfo {
 
     public void setPaymentType(String paymentType) {
         PaymentType = paymentType;
+    }
+
+    public String getReceivedType() {
+        return ReceivedType;
+    }
+
+    public void setReceivedType(String receivedType) {
+        ReceivedType = receivedType;
     }
 
     public String getTransactionStatus() {
@@ -173,11 +191,12 @@ public class TransactionInfo {
     public TransactionInfo() {
     }
 
-    public TransactionInfo(String transactionId, String orderId, String fullName, String mobile, String transactionDate, String amount, String goldWeight, String silverWeight, String transactionDescription, String transactionType, String paymentType, String transactionStatus, String customerDueStatus, String customerDueAmount, String rrjDueStatus, String rrjDueAmount, String transactionDoneBy, String transactionEnteredBy) {
+    public TransactionInfo(String transactionId, String orderId, int customerId, String customerFullName, String customerMobile, String transactionDate, String amount, String goldWeight, String silverWeight, String transactionDescription, String transactionType, String paymentType, String receivedType, String transactionStatus, String customerDueStatus, String customerDueAmount, String rrjDueStatus, String rrjDueAmount, String transactionDoneBy, String transactionEnteredBy) {
         TransactionId = transactionId;
         OrderId = orderId;
-        FullName = fullName;
-        Mobile = mobile;
+        CustomerId = customerId;
+        CustomerFullName = customerFullName;
+        CustomerMobile = customerMobile;
         TransactionDate = transactionDate;
         Amount = amount;
         GoldWeight = goldWeight;
@@ -185,6 +204,7 @@ public class TransactionInfo {
         TransactionDescription = transactionDescription;
         TransactionType = transactionType;
         PaymentType = paymentType;
+        ReceivedType = receivedType;
         TransactionStatus = transactionStatus;
         CustomerDueStatus = customerDueStatus;
         CustomerDueAmount = customerDueAmount;

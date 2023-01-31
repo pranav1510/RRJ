@@ -28,7 +28,7 @@ public class OrdertakingController {
     }
 
     @PostMapping("/check")
-    public List<String> getOrderAtPayment(@RequestBody PaymentInfo paymentInfo){
+    public List<Object[]> getOrderAtPayment(@RequestBody PaymentInfo paymentInfo){
         return ordertakingservice.getOrderInfoAtPayment(paymentInfo);
     }
 
@@ -40,5 +40,15 @@ public class OrdertakingController {
     @PutMapping("/orderupdate/{OrderId}")
     public ResponseEntity<Ordertaking> orderupdate(@RequestBody Ordertaking ordertaking, @PathVariable String OrderId){
         return ordertakingservice.updateOrder(ordertaking,OrderId);
+    }
+
+    @PostMapping("getcustomerinfo")
+    public List<Object[]> getCustomerId(@RequestBody Ordertaking ordertaking){
+        return ordertakingservice.getCustomerId(ordertaking);
+    }
+
+    @PostMapping("getorders")
+    public List<Ordertaking> getOrderByCustomerId(@RequestBody Ordertaking ordertaking){
+        return ordertakingservice.getOrdersByCustomerId(ordertaking);
     }
 }

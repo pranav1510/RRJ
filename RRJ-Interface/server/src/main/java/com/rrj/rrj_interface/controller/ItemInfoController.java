@@ -29,7 +29,7 @@ public class ItemInfoController {
     }
 
     @PostMapping("/getitemdetails")
-    public List<Object[]> getItemPriceAndName(@RequestBody PaymentInfo paymentInfo){
+    public List<ItemInfo> getItemPriceAndName(@RequestBody PaymentInfo paymentInfo){
         return itemInfoService.getItemNameAndPrice(paymentInfo);
     }
 
@@ -46,5 +46,10 @@ public class ItemInfoController {
     @PutMapping("/itemupdate/{ItemId}")
     public ResponseEntity<ItemInfo> itemupdate(@RequestBody ItemInfo itemInfo, @PathVariable String ItemId){
         return itemInfoService.updateItem(itemInfo, ItemId);
+    }
+
+    @PostMapping("getitem")
+    public ItemInfo getItemInfo(@RequestBody ItemInfo itemInfo){
+        return itemInfoService.findByItemId(itemInfo);
     }
 }

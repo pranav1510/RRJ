@@ -29,7 +29,7 @@ public class OrdertakingServiceImpl implements OrdertakingService {
     }
 
     @Override
-    public List<String> getOrderInfoAtPayment(PaymentInfo paymentInfo) {
+    public List<Object[]> getOrderInfoAtPayment(PaymentInfo paymentInfo) {
         return ordertakingrepository.findByCustomerMobile(paymentInfo.getCustomerMobile(), paymentInfo.getCustomerFullName());
     }
 
@@ -42,9 +42,6 @@ public class OrdertakingServiceImpl implements OrdertakingService {
     public ResponseEntity<Ordertaking> updateOrder(Ordertaking ordertaking, String OrderId) {
         Ordertaking updateorder = ordertakingrepository.findByOrderId(OrderId);
 
-        updateorder.setGoldCost(ordertaking.getGoldCost());
-        updateorder.setCustomerFullName(ordertaking.getCustomerFullName());
-        updateorder.setSilverCost(ordertaking.getSilverCost());
         updateorder.setExpectedDeliveryDate(ordertaking.getExpectedDeliveryDate());
         updateorder.setOrderStatus(ordertaking.getOrderStatus());
         updateorder.setGST(ordertaking.getGst());
@@ -52,10 +49,20 @@ public class OrdertakingServiceImpl implements OrdertakingService {
         updateorder.setOrderReceivedBy(ordertaking.getOrderReceivedBy());
         updateorder.setCustomerRemarks(ordertaking.getCustomerRemarks());
         updateorder.setOrderReceiverRemarks(ordertaking.getOrderReceiverRemarks());
-        updateorder.setCustomerMobile(ordertaking.getCustomerMobile());
+        updateorder.setCustomerId(ordertaking.getCustomerId());
 
         ordertakingrepository.save(updateorder);
 
         return ResponseEntity.ok(updateorder);
+    }
+
+    @Override
+    public List<Object[]> getCustomerId(Ordertaking ordertaking) {
+        return ordertakingrepository.getCustomerId(ordertaking.getOrderId());
+    }
+
+    @Override
+    public List<Ordertaking> getOrdersByCustomerId(Ordertaking ordertaking) {
+        return ordertakingrepository.ordersbycustomerid(ordertaking.getCustomerId());
     }
 }

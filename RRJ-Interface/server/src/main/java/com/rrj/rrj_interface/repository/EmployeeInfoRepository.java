@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface EmployeeInfoRepository extends JpaRepository<EmployeeInfo, Integer> {
 
-    @Query("select e.EmployeeUsername, e.Password FROM EmployeeInfo e")
+    @Query("select e.EmployeeUsername, e.Password, e.EmployeeName, e.Role FROM EmployeeInfo e")
     public List<Object[]> getLoginInfo(EmployeeInfo employeeInfo);
 }

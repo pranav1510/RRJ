@@ -1,42 +1,13 @@
 import axios from "axios";
 import React, { useReducer } from "react";
 import { Container, Form, Button, Table, Modal } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-const initialState = {
-    orderId: "",
-    paymentId: "",
-    paymentInfoStatus: "",
-    itemDetails: [],
-    orderDetails: [],
-    tableShow: false,
-    customerFullName: "",
-    customerMobile: "",
-    exchangeGoldWeight: "",
-    exchangeGoldCost: "",
-    exchangeSilverWeight: "",
-    exchangeSilverCost: "",
-    orderPrice: "",
-    discounut: "",
-    amountReceived: "",
-    customerDueStatus: "",
-    customerDueAmount: "",
-    rrjDueStatus: "",
-    rrjDueAmount: "",
-    paymentDescription: "",
-    paymentType: "",
-    paymentReceivedBy: "",
-    show1: false,
-    show2: false,
-    paymentDate: "",
-    transactionType: "Order Related",
-    paymentPurpose: "",
-    status: "",
-    paymentEnteredBy: "",
-    overallGold: "",
-    overallSilver: ""
-}
+
 
 const ACTIONS = {
+    CUSTOMER_ID: "CUSTOMER_ID",
+    FULL_ITEM_DETAILS: "FULL_ITEM_DETAILS",
     OVERALL_GOLD: "OVERALL_GOLD",
     OVERALL_SILVER: "OVERALL_SILVER",
     ORDER_ID: "ORDER_ID",
@@ -63,6 +34,7 @@ const ACTIONS = {
     PAYMENT_RECEIVED_BY: "PAYMENT_RECEIVED_BY",
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
+    SHOW3: "SHOW3",
     STATUS: "STATUS",
     PAYMENT_DATE: "PAYMENT_DATE",
     PAYMENT_PURPOSE: "PAYMENT_PURPOSE",
@@ -71,14 +43,16 @@ const ACTIONS = {
 
 const reducer = (state, {type, payload}) => {
     switch(type) {
+        case ACTIONS.CUSTOMER_ID:
+            return {...state, customerId: payload}
+        case ACTIONS.FULL_ITEM_DETAILS:
+            return {...state, fullItemDetails: payload}
         case ACTIONS.OVERALL_GOLD:
             return {...state, overallGold: payload}
         case ACTIONS.OVERALL_SILVER:
             return {...state, overallSilver: payload}
         case ACTIONS.STATUS:
             return {...state, status: payload}
-        case ACTIONS.PAYMENT_ENTERED_BY:
-            return {...state, paymentEnteredBy: payload}
         case ACTIONS.PAYMENT_PURPOSE:
             return {...state, paymentPurpose: payload}
         case ACTIONS.ORDER_ID:
@@ -94,9 +68,9 @@ const reducer = (state, {type, payload}) => {
         case ACTIONS.ORDER_DETAILS:
             return {...state, orderDetails: payload}
         case ACTIONS.CUSTOMER_MOBILE:
-            return {...state, customerMobile: payload.target.value}
+            return {...state, customerMobile: payload}
         case ACTIONS.CUSTOMER_FULL_NAME:
-            return {...state, customerFullName: payload.target.value}
+            return {...state, customerFullName: payload.toLowerCase()}
         case ACTIONS.EXCHANGE_GOLD_WEIGHT:
             return {...state, exchangeGoldWeight: payload.target.value}
         case ACTIONS.EXCHANGE_GOLD_COST:
@@ -120,15 +94,17 @@ const reducer = (state, {type, payload}) => {
         case ACTIONS.RRJ_DUE_AMOUNT:
             return {...state, rrjDueAmount: payload.target.value}
         case ACTIONS.PAYMENT_DESCRIPTION:
-            return {...state, paymentDescription: payload.target.value}
+            return {...state, paymentDescription: payload.target.value.toLowerCase()}
         case ACTIONS.PAYMENT_TYPE:
             return {...state, paymentType: payload}
         case ACTIONS.PAYMENT_RECEIVED_BY:
-            return {...state, paymentReceivedBy: payload.target.value}
+            return {...state, paymentReceivedBy: payload}
         case ACTIONS.SHOW1:
             return {...state, show1: payload}
         case ACTIONS.SHOW2:
             return {...state, show2: payload}
+        case ACTIONS.SHOW3:
+            return {...state, show3: payload}
         case ACTIONS.PAYMENT_DATE:
             return {...state, paymentDate: String(payload.target.value)}
         default:
@@ -138,11 +114,52 @@ const reducer = (state, {type, payload}) => {
 
 const PaymentDetails = ({navigate}) => {
     
+    const myName = useSelector(state => state.LoginPage.employeeName)
+
+    const initialState = {
+        orderId: "",
+        customerId: 0,
+        paymentId: "",
+        paymentInfoStatus: "",
+        fullItemDetails: [],
+        itemDetails: [],
+        orderDetails: [],
+        tableShow: false,
+        customerFullName: "",
+        customerMobile: "",
+        exchangeGoldWeight: "",
+        exchangeGoldCost: "",
+        exchangeSilverWeight: "",
+        exchangeSilverCost: "",
+        orderPrice: "",
+        discounut: "",
+        amountReceived: "",
+        customerDueStatus: "",
+        customerDueAmount: "",
+        rrjDueStatus: "",
+        rrjDueAmount: "",
+        paymentDescription: "",
+        paymentType: "",
+        paymentReceivedBy: "",
+        show1: false,
+        show2: false,
+        show3: false,
+        paymentDate: "",
+        transactionType: "Order Related",
+        paymentPurpose: "",
+        status: "",
+        paymentEnteredBy: myName,
+        overallGold: "",
+        overallSilver: ""
+    }
+
     const [newState, dispatch] = useReducer(reducer, initialState)
     const handleClose1 = () => dispatch({type:ACTIONS.SHOW1, payload: false})
     const handleClose2 = () => dispatch({type:ACTIONS.SHOW2, payload: false})
+    const handleClose3 = () => dispatch({type:ACTIONS.SHOW3, payload: false})
 
     const SubmitHandler = () => {
+        console.log(newState)
         axios.post("http://localhost:8080/PaymentInfo/add", newState)
             .then(() => {
                 var cash = 0
@@ -189,6 +206,106 @@ const PaymentDetails = ({navigate}) => {
  
     return(
         <>
+        <Modal show={newState.show3} onHide={handleClose3}>
+        <Modal.Header closeButton>
+          <Modal.Title>Item Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
+        <Table className="table-hover w-100 mt-1 small">
+                <tbody>
+                    <tr>
+                        <th>Item Id</th>
+                        <td>{newState.fullItemDetails.itemId}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Name</th>
+                        <td>{newState.fullItemDetails.itemName}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Type</th>
+                        <td>{newState.fullItemDetails.itemType}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Delivery Date</th>
+                        <td>{newState.fullItemDetails.itemDeliveryDate}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Price</th>
+                        <td>{newState.fullItemDetails.itemPrice}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Status</th>
+                        <td>{newState.fullItemDetails.itemStatus}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Entered By</th>
+                        <td>{newState.fullItemDetails.itemEnteredBy}</td>
+                    </tr>
+                    <tr>
+                        <th>Customer Comments</th>
+                        <td>{newState.fullItemDetails.customerComments}</td>
+                    </tr>
+                    <tr>
+                        <th>Order Receiver Comments</th>
+                        <td>{newState.fullItemDetails.orderReceiverComments}</td>
+                    </tr>
+                    <tr>
+                        <th>Making Charges</th>
+                        <td>{newState.fullItemDetails.makingCharges}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Gross Weight</th>
+                        <td>{newState.fullItemDetails.itemGrossWeight}</td>
+                    </tr>
+                    <tr>
+                        <th>Item Net Weight</th>
+                        <td>{newState.fullItemDetails.itemNetWeight}</td>
+                    </tr>
+                    <tr>
+                        <th>Wastage</th>
+                        <td>{newState.fullItemDetails.wastage}</td>
+                    </tr>
+                    <tr>
+                        <th>Pearls Weight</th>
+                        <td>{newState.fullItemDetails.pearlsWeight}</td>
+                    </tr>
+                    <tr>
+                        <th>Pearls Cost</th>
+                        <td>{newState.fullItemDetails.pearlsCost}</td>
+                    </tr>
+                    <tr>
+                        <th>Stones Type</th>
+                        <td>{newState.fullItemDetails.stonesType}</td>
+                    </tr>
+                    <tr>
+                        <th>Cz Cost</th>
+                        <td>{newState.fullItemDetails.czCost}</td>
+                    </tr>
+                    <tr>
+                        <th>Emerald Cost</th>
+                        <td>{newState.fullItemDetails.emeraldCost}</td>
+                    </tr>
+                    <tr>
+                        <th>Ruby Cost</th>
+                        <td>{newState.fullItemDetails.rubyCost}</td>
+                    </tr>
+                    <tr>
+                        <th>Overall Stone Weight</th>
+                        <td>{newState.fullItemDetails.overallStoneWeight}</td>
+                    </tr>
+                    <tr>
+                        <th>Overall Stone Cost</th>
+                        <td>{newState.fullItemDetails.overallStoneCost}</td>
+                    </tr>
+                </tbody>
+            </Table>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose3}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
         <Modal show={newState.show1} onHide={handleClose1}>
         <Modal.Header closeButton>
           <Modal.Title>Order does not exist</Modal.Title>
@@ -203,13 +320,22 @@ const PaymentDetails = ({navigate}) => {
         <Modal.Header closeButton>
           <Modal.Title>Select Order Id</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body  style={{height: "400px", overflow: "hidden", overflowY: "auto"}}>
             <div className="row">
                 <div className="col-4">
                     <Form.Select onChange={e => {
                             let val = {
                                 orderId: e.target.value
                             }
+                            axios.post("http://localhost:8080/OrderTaking/getcustomerinfo", val)
+                                .then((res) => {
+                                    const info = res.data[0]
+                                    if(info !== undefined){
+                                        dispatch({type:ACTIONS.CUSTOMER_ID, payload: info[0]})
+                                        dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload:info[1]})
+                                        dispatch({type:ACTIONS.CUSTOMER_MOBILE, payload: info[2]})
+                                    }
+                                }).catch(err => console.log(err))
                             dispatch({type:ACTIONS.ORDER_ID, payload: val.orderId})
                             axios.post("http://localhost:8080/ItemInfo/getweight", val)
                                 .then(res => {
@@ -232,9 +358,9 @@ const PaymentDetails = ({navigate}) => {
                         }}>
                             <option value=""></option>
                             {
-                            newState.orderDetails.map((id, index) => {
+                            newState.orderDetails.map((info, index) => {
                                 return(
-                                    <option value={id} key={index}>{id}</option>
+                                    <option value={info[0]} key={index}>{info[0]}</option>
                                 )
                             })
                         }
@@ -270,11 +396,14 @@ const PaymentDetails = ({navigate}) => {
                         {
                             newState.itemDetails.map((item, index) => {
                                 return(
-                                    <tr key={index+1}>
+                                    <tr style={{cursor:"pointer"}} onClick={() => {
+                                        dispatch({type:ACTIONS.FULL_ITEM_DETAILS, payload: item})
+                                        dispatch({type:ACTIONS.SHOW3, payload: true})
+                                    }} key={index+1}>
                                         <th scope="row">{index + 1}</th>
-                                        <td>{item[0]}</td>
-                                        <td>{item[1]}</td>
-                                        <td>{item[2]}</td>
+                                        <td>{item.itemId}</td>
+                                        <td>{item.itemName}</td>
+                                        <td>{item.itemPrice}</td>
                                     </tr>
                                 )
                             })
@@ -304,9 +433,10 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col-3">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                            <Form.Control type="text" onChange={e => {
-                                dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e})
-                                dispatch({type:ACTIONS.ORDER_ID, payload: ""})
+                            <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => {
+                                dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                                if(newState.orderId !== ""){dispatch({type:ACTIONS.ORDER_ID, payload: ""})}
+                                if(newState.customerFullName !== ""){dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: ""})}
                             }} />
                             <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Id</Button>
                         </Form.Group>
@@ -314,19 +444,13 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                            <Form.Control type="text" onChange={e => {
-                                dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e})
-                                dispatch({type:ACTIONS.ORDER_ID, payload: ""})
-                        }}/>
+                            <Form.Control type="text" defaultValue={newState.customerFullName} disabled/>
                         </Form.Group>
                     </div>
                     <div className="col-3">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Order Id</Form.Label>
                             <Form.Control type="text" defaultValue={newState.orderId} disabled/>
-                            <div className="d-flex flex-row justify-content-end">
-                                
-                            </div>
                         </Form.Group>
                     </div>
                 </div>
@@ -363,7 +487,7 @@ const PaymentDetails = ({navigate}) => {
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Type</Form.Label>
+                            <Form.Label className="fw-bold m-1">Payment Received Type</Form.Label>
                             <Form.Select onChange={e => {
                                 dispatch({type:ACTIONS.PAYMENT_TYPE, payload: e.target.value})
                             }}>
@@ -441,7 +565,7 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Entered By</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_ENTERED_BY, payload: e})} />
+                            <Form.Control type="text" defaultValue={newState.paymentEnteredBy} disabled/>
                         </Form.Group>
                     </div>
                 </div>
@@ -485,7 +609,12 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col-3">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Received By</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_RECEIVED_BY, payload: e})} />
+                            <Form.Select onChange={e => dispatch({type: ACTIONS.PAYMENT_RECEIVED_BY, payload: e.target.value})}>
+                                    <option value=""></option>
+                                    <option value="LAXMINARSAIAH YEDULAPURAM">LAXMINARSAIAH YEDULAPURAM</option>
+                                    <option value="RAVI KUMAR RANGU">RAVI KUMAR RANGU</option>
+                                    <option value="SRAVAN KUMAR RANGU">SRAVAN KUMAR RANGU</option>
+                            </Form.Select>
                         </Form.Group>
                     </div>
                 </div>

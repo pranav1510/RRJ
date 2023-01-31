@@ -2,10 +2,12 @@ import React, { useReducer, useState } from "react";
 import { Container, Form, Button, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import ItemUpdate from "./ItemUpdate";
 
-
-const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
+const OrderTaking = ({order, navigate}) => {
     
+    const myName = useSelector(state => state.LoginPage.employeeName)
+
     const goldprice = useSelector(state => state.DailyPrice.goldPrice)
     const silverprice = useSelector(state => state.DailyPrice.silverPrice)
 
@@ -20,7 +22,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
         orderStatus:  (order === undefined)? "" : order.orderStatus,
         gst: (order === undefined)? "" : order.gst,
         orderReceivedBy:  (order === undefined)? "" : order.orderReceivedBy,
-        orderEnteredBy:  (order === undefined)? "" : order.orderEnteredBy,
+        orderEnteredBy:  (order === undefined)? myName : order.orderEnteredBy,
         customerFullName:  (order === undefined)? "" : order.customerFullName,
         customerFullNameOne: "",
         customerInfoStatus: "",
@@ -28,6 +30,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
         itemInfoStatus: "",
         alternateMobileOne: "",
         alternateMobileTwo: "",
+        customerId: (order === undefined)? 0 : order.customerId,
         address: "",
         remarks: "",
         itemId: "",
@@ -54,14 +57,18 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
         show2: false,
         show3: false,
         show4: true,
+        show5: false,
         generateShow: true,
+        editVal: {}
     }
 
     const ACTIONS = {
-        SHOW1: "SHOW1",
-        SHOW2: "SHOW2",
+        EDIT_VAL: "EDIT_VAL",
+        SHOW01: "SHOW1",
+        SHOW02: "SHOW2",
         SHOW3: "SHOW3",
         SHOW4: "SHOW4",
+        SHOW5: "SHOW5",
         GENERATESHOW: "GENERATESHOW",
         ORDER_ID: "ORDER_ID",
         CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
@@ -82,6 +89,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
         ITEM_INFO_STATUS: "ITEM_INFO_STATUS",
         ALTERNATE_MOBILE_ONE: "ALTERNATE_MOBILEONE",
         ALTERNATE_MOBILE_TWO: "ALTERNATE_MOBILETWO",
+        CUSTOMER_ID: "CUSTOMER_ID",
         ADDRESS: "ADDRESS",
         REMARKS: "REMARKS",
         ITEM_ID: "ITEM_ID",
@@ -112,6 +120,8 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
     
     const reducer = (state, {type, payload}) => {
         switch(type){
+            case ACTIONS.EDIT_VAL:
+                return {...state, editVal: payload}
             case ACTIONS.ITEM_PRICE:
                 return {...state, itemPrice: payload.target.value}
             case ACTIONS.OVERALL_STONE_COST:
@@ -138,54 +148,50 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                 return {...state, itemGrossWeight: payload.target.value}
             case ACTIONS.MAKING_CHARGES:
                 return {...state, makingCharges: payload.target.value}
-            case ACTIONS.ITEM_ENTERED_BY:
-                return {...state, itemEnteredBy: payload.target.value}
             case ACTIONS.ITEM_STATUS:
                 return {...state, itemStatus: payload}
             case ACTIONS.ORDER_RECEIVER_COMMENTS:
-                return {...state, orderReceiverComments: payload.target.value}
+                return {...state, orderReceiverComments: payload.target.value.toLowerCase()}
             case ACTIONS.CUSTOMER_COMMENTS:
-                return {...state, customerComments: payload.target.value}
+                return {...state, customerComments: payload.target.value.toLowerCase()}
             case ACTIONS.ITEM_DELIVERY_DATE:
                 return {...state, itemDeliveryDate: String(payload.target.value)}
             case ACTIONS.ITEM_NAME:
-                return {...state, itemName: payload.target.value}
+                return {...state, itemName: payload.target.value.toLowerCase()}
             case ACTIONS.ITEM_TYPE:
                 return {...state, itemType: payload}
             case ACTIONS.ITEM_ID:
                 return {...state, itemId: payload}
-            case ACTIONS.INITIAL:
-                return initialState
             case ACTIONS.ORDER_ID:
                 return {...state, orderId: payload}
             case ACTIONS.ALTERNATE_MOBILE_ONE:
                 return {...state, alternateMobileOne: payload.target.value}
             case ACTIONS.ALTERNATE_MOBILE_TWO:
                 return {...state, alternateMobileTwo: payload.target.value}
+            case ACTIONS.CUSTOMER_ID:
+                return {...state, customerId: payload}
             case ACTIONS.ADDRESS:
-                return {...state, address: payload.target.value}
+                return {...state, address: payload.target.value.toLowerCase()}
             case ACTIONS.REMARKS:
-                return {...state, remarks: payload.target.value}
+                return {...state, remarks: payload.target.value.toLowerCase()}
             case ACTIONS.CUSTOMER_INFO_STATUS:
                 return {...state, customerInfoStatus: payload}
             case ACTIONS.ORDERTAKING_STATUS:
                 return {...state, orderTakingStatus: payload}
             case ACTIONS.ITEM_INFO_STATUS:
                 return {...state, itemInfoStatus: payload}
-            case ACTIONS.SUBMISSION:
-                return initialState
             case ACTIONS.CUSTOMER_FULL_NAME:
-                return {...state, customerFullName: payload}
+                return {...state, customerFullName: payload.toLowerCase()}
             case ACTIONS.CUSTOMER_FULL_NAME_ONE:
-                return {...state, customerFullNameOne: payload.target.value}
+                return {...state, customerFullNameOne: payload.target.value.toLowerCase()}
             case ACTIONS.EXPECTED_DELIVERY_DATE:
                 return {...state, expectedDeliveryDate: payload}
             case ACTIONS.CUSTOMER_MOBILE:
                 return {...state, customerMobile: payload}
             case ACTIONS.CUSTOMER_REMARKS:
-                return {...state, customerRemarks: payload}
+                return {...state, customerRemarks: payload.toLowerCase()}
             case ACTIONS.ORDER_REVCEIVER_REMARKS:
-                return {...state, orderReceiverRemarks: payload}
+                return {...state, orderReceiverRemarks: payload.toLowerCase()}
             case ACTIONS.GOLD_COST:
                 return {...state, goldCost: payload}
             case ACTIONS.SILVER_COST:
@@ -222,9 +228,9 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                     overallStoneCost:"",
                     itemPrice: ""
                 }
-            case ACTIONS.SHOW1:
+            case ACTIONS.SHOW01:
                 return {...state, show1: payload}
-            case ACTIONS.SHOW2:
+            case ACTIONS.SHOW02:
                 return {...state, show2: payload}
             case ACTIONS.SHOW3:
                 return {...state, show3: payload}
@@ -236,12 +242,15 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                 return {...state, prevItemOrderIdPattern: payload}
             case ACTIONS.SHOW4:
                 return {...state, show4: payload}
+            case ACTIONS.SHOW5:
+                return {...state, show5: payload}
             default:
                 return state
         }
     }
-    const handleClose1 = () => dispatch({type:ACTIONS.SHOW1, payload: false})
-    const handleClose2 = () => dispatch({type:ACTIONS.SHOW2, payload: false})
+    const handleClose1 = () => dispatch({type:ACTIONS.SHOW01, payload: false})
+    const handleClose2 = () => dispatch({type:ACTIONS.SHOW02, payload: false})
+    const handleClose5 = () => dispatch({type:ACTIONS.SHOW5, payload: false})
     const handleClose3 = () => {
         dispatch({type:ACTIONS.SHOW3, payload: false})
         dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
@@ -273,7 +282,6 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
     }
 
     const SubmitHandler = (e) => {
-        e.preventDefault()
         axios.post("http://localhost:8080/OrderTaking/add", newState)
             .then(() => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
             .catch(err => console.log(err));
@@ -282,11 +290,13 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
     const Validate = () => {
         axios.post("http://localhost:8080/CustomerInfo/check", newState)
         .then(res => {
-            if(res.data[0] === undefined) {
-                dispatch({type:ACTIONS.SHOW1, payload: true})
+            var val = res.data[0]
+            if(val === undefined) {
+                dispatch({type:ACTIONS.SHOW01, payload: true})
             }
             else{
-                dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: res.data[0]})
+                dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: val[0]})
+                dispatch({type: ACTIONS.CUSTOMER_ID, payload: val[1]})
             }
         })
         .catch(err => console.log(err));
@@ -295,6 +305,19 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
 
     return (
         <>
+        <Modal show={newState.show5} onHide={handleClose5} className="modal-xl">
+        <Modal.Header closeButton>
+          <Modal.Title>Update Item Information</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
+            <ItemUpdate item={newState.editVal} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose5}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
         <Modal show={newState.show1} onHide={handleClose1}>
         <Modal.Header closeButton>
           <Modal.Title>Customer does not exist</Modal.Title>
@@ -305,8 +328,8 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
             Close
           </Button>
           <Button variant="primary" onClick={() => {
-            dispatch({type:ACTIONS.SHOW1, payload: false})
-            dispatch({type:ACTIONS.SHOW2, payload: true})
+            dispatch({type:ACTIONS.SHOW01, payload: false})
+            dispatch({type:ACTIONS.SHOW02, payload: true})
           }}>
             Add New Customer
           </Button>
@@ -316,7 +339,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
         <Modal.Header closeButton>
           <Modal.Title>Enter Customer Details</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{height: "550px", overflow: "hidden", overflowY: "auto"}}>
             <Form>
             <div className="row"><h5 className="text-dark d-flex flex-row justify-content-center">{newState.customerInfoStatus}</h5></div>
             <Form.Group className="mt-3">
@@ -360,7 +383,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
             Close
           </Button>
           <Button variant="primary" onClick={() => {
-            dispatch({type:ACTIONS.SHOW2, payload: false})
+            dispatch({type:ACTIONS.SHOW02, payload: false})
             const customerData = {
                 customerFullName: newState.customerFullNameOne,
                 customerMobile: newState.customerMobile,
@@ -371,9 +394,16 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
             }
             axios.post("http://localhost:8080/CustomerInfo/add",customerData)
             .then((response) => {
-                dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: response.data})
-                dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: customerData.customerFullName})
-                // setTimeout(() => {dispatch({type:ACTIONS.SHOW2, payload: false})},2000)
+                axios.post("http://localhost:8080/CustomerInfo/getcustomerid", customerData)
+                    .then(res => {
+                        dispatch({type:ACTIONS.CUSTOMER_ID, payload: res.data})
+                        dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: response.data})
+                        dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: customerData.customerFullName})
+                    })
+                setTimeout(() => {
+                    dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: ""})
+                    dispatch({type:ACTIONS.SHOW02, payload: false})
+                },1200)
             })
             .catch(err => console.log(err.message));
           }}>
@@ -385,7 +415,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
         <Modal.Header closeButton>
             <Modal.Title>Enter Item Information</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
             <div className="row">
             <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.itemInfoStatus}</h5></div>
                 <div className="col">
@@ -467,7 +497,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Entered By</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.ITEM_ENTERED_BY, payload: e})} />
+                        <Form.Control type="text" defaultValue={myName} disabled />
                     </Form.Group>
                 </div>
                 <div className="col">
@@ -575,16 +605,16 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
           </Button>
           <Button variant="primary" onClick={() => {
             axios.post("http://localhost:8080/ItemInfo/add", newState)
-                .then(res => {
+                .then(() => {
                     dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: "Item saved Successfully!"})
-                    setFormfields([...formfields, newState.itemName])
+                    setFormfields([...formfields, [newState.itemName, newState.itemId]])
                 })
                 .catch(err => console.log(err))
             dispatch({type:ACTIONS.ITEM_INFO_INITIAL_STATE})
-            // setTimeout(() => {
-            //     dispatch({type:ACTIONS.SHOW3, payload: false})
-            //     dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
-            // }, 1000)
+            setTimeout(() => {
+                dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
+                dispatch({type:ACTIONS.SHOW3, payload: false})
+            }, 1200)
           }}>Add New Item</Button>
         </Modal.Footer>
       </Modal>
@@ -609,7 +639,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                                 <div>
                                     <Form.Group className="mt-3">
                                         <Form.Label className="fw-bold m-1">Order Id</Form.Label>
-                                        <Form.Control type="text" defaultValue={newState.orderId} required/>
+                                        <Form.Control type="text" defaultValue={newState.orderId} disabled/>
                                     </Form.Group>
                                 </div>
                                 {
@@ -629,7 +659,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                             <Form.Group>
                                 <Form.Label className="fw-bold mt-3">Gold Cost</Form.Label>
                                 <div className="d-flex flex-row">
-                                <Form.Control type="text" defaultValue={newState.goldCost} onChange={e => dispatch({type:ACTIONS.GOLD_COST, payload: e.target.value})}/>
+                                <Form.Control type="text" defaultValue={newState.goldCost} onChange={e => dispatch({type:ACTIONS.GOLD_COST, payload: e.target.value})} disabled/>
                                 <span className="input-group-text fw-bold p-1">/10 gms</span>
                                 </div>    
                             </Form.Group>
@@ -638,7 +668,7 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                             <Form.Group>
                                 <Form.Label className="fw-bold mt-3">Silver Cost</Form.Label>
                                 <div className="d-flex flex-row">
-                                <Form.Control type="text" defaultValue={newState.silverCost} onChange={e => dispatch({type:ACTIONS.SILVER_COST, payload: e.target.value})}/>
+                                <Form.Control type="text" defaultValue={newState.silverCost} onChange={e => dispatch({type:ACTIONS.SILVER_COST, payload: e.target.value})} disabled/>
                                 <span className="input-group-text fw-bold p-1">/10 gms</span>
                                 </div>    
                             </Form.Group>
@@ -667,11 +697,16 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                                     <div key={index}>
                                         <div className="row m-1">
                                             <div className="col-4">
-                                                <Form.Control type="text" defaultValue={data}
+                                                <Form.Control type="text" defaultValue={data[0]}
                                                 />
                                             </div>
-                                            <div className="col-1"><Button variant="dark">Edit</Button></div>
-                                            <div className="col-1"><Button variant="danger">Delete</Button></div>
+                                            <div className="col-1"><Button variant="dark" onClick={() => {
+                                                axios.post("http://localhost:8080/ItemInfo/getitem",{itemId: data[1]})
+                                                .then(res => {
+                                                    dispatch({type:ACTIONS.EDIT_VAL, payload: res.data})
+                                                    dispatch({type:ACTIONS.SHOW5, payload: true})
+                                                    }).catch(err => console.log(err))
+                                            }}>Edit</Button></div>
                                         </div>
                                     </div>
                                 )
@@ -735,19 +770,21 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Order Entered By</Form.Label>
-                                <Form.Control type="text" defaultValue={newState.orderEnteredBy} onChange={e => {
-                                    dispatch({type: ACTIONS.ORDER_ENTERED_BY, payload: e.target.value})
-                                    if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
-                                }} />
+                                <Form.Control type="text" defaultValue={newState.orderEnteredBy} disabled/>
                             </Form.Group>
                         </div>
-                        <div className="col-3">
+                        <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Order Received By</Form.Label>
-                                <Form.Control type="text" defaultValue={newState.orderReceivedBy} onChange={e => {
+                                <Form.Select defaultValue={newState.orderReceivedBy} onChange={e => {
                                     dispatch({type: ACTIONS.ORDER_RECEIVED_BY, payload: e.target.value})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
-                                }} />
+                                }}>
+                                    <option value=""></option>
+                                    <option value="LAXMINARSAIAH YEDULAPURAM">LAXMINARSAIAH YEDULAPURAM</option>
+                                    <option value="RAVI KUMAR RANGU">RAVI KUMAR RANGU</option>
+                                    <option value="SRAVAN KUMAR RANGU">SRAVAN KUMAR RANGU</option>
+                                </Form.Select>
                             </Form.Group>
                         </div>
                     </div>
@@ -773,21 +810,33 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                     </div>
                     <div className="row">
                         <div className="col-3">
-                            <Form.Group className="mt-3">
+                            {
+                                (order === undefined)? <>
+                                <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
                                 <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => {
-                                    dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                    if(newState.customerFullName !== ""){dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: ""})}
+                                    dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
                                 }} />
                                 <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Mobile</Button>
                             </Form.Group>
+                                </> : <>
+                                <Form.Group className="mt-3">
+                                <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
+                                <Form.Control type="text" defaultValue={newState.customerMobile} disabled />
+                            </Form.Group>
+                                </>
+                            }
                         </div>
                         <div className="col">
                             <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customers Full Name</Form.Label>
                             <Form.Control type="text" defaultValue={newState.customerFullName} disabled/>
                             <div className="d-flex flex-row justify-content-end">
-                                <a href="/paymentdetails"><Button className="btn btn-info mt-2">Click here to proceed for Payment</Button></a>
+                                {
+                                    (order === undefined) ? (<Button className="btn btn-info mt-2" onClick={() => {navigate("/paymentdetails")}}>Click here to proceed for Payment</Button>) : <></>
+                                }
                             </div>
                             </Form.Group>
                         </div>
@@ -801,9 +850,6 @@ const OrderTaking = ({order, navigate, action, dispatch1, showman}) => {
                             axios.put(`http://localhost:8080/OrderTaking/orderupdate/${newState.orderId}`, newState)
                             .then(() =>{
                                 dispatch({type:ACTIONS.ORDERTAKING_STATUS, payload: "Order Updated Successfully"})
-                                setTimeout(() => {
-                                    dispatch1({type:action.SHOW2, payload: true})
-                                },1500)
                             })
                             .catch(err => console.log(err))
                         }}>Modify Order</Button>)

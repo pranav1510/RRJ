@@ -1,7 +1,7 @@
 import './App.css';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import LoginPage from '../src/pages/LoginPage';
+import LoginPage from './features/LoginPage/LoginPage';
 import HomePage from '../src/pages/Homepage';
 import OrderTaking from '../src/pages/OrderTaking';
 import CustomerInfo from '../src/pages/CustomerInfo';
@@ -16,10 +16,11 @@ import TransactionInfo from './pages/TransactionInfo';
 import CustomerUpdate from './pages/CustomerUpdate';
 import ValidationPage from './pages/ValidationPage';
 import Closing from './pages/Closing';
+import AddEmployee from './pages/AddEmployee';
 
 function App() {
 
-  const title = "RRJ";
+  const title = "Rangu Rajaiah Jewellers";
   const date = String(new Date().getDate()).padStart(2, '0') + '-' + String(new Date().getMonth() + 1).padStart(2, '0') + '-' + String(new Date().getDate());
   const path = useLocation();
   const navigate = useNavigate();
@@ -34,26 +35,26 @@ function App() {
           <>
           <Navbar bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand className='title'>{title}</Navbar.Brand>
+                <Navbar.Brand className='title me-5'>{title}</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav show">
                   <Nav className="d-flex">
                     <div className="d-flex me-auto">
-                      <Nav.Link href="/homepage">Home</Nav.Link>
+                      <Nav.Link href="/homepage" className="mt-1">Home</Nav.Link>
                     </div>
                     <div className="d-flex ms-auto">
                       <Nav.Link disabled>
                         <div className="d-flex">
-                        <p className="text-white m-0 ms-5">Gold :</p>
-                        <p className="text-white m-0 ms-1">{goldprice}</p>
-                        <p className="small m-0 ms-1 mt-1 text-secondary">/ 10gms</p>
+                        <p style={{fontSize: "20px"}} className="text-white m-0 ms-5">Gold :</p>
+                        <p style={{fontSize: "20px"}} className="text-white m-0 ms-1">{goldprice}</p>
+                        <p className="small m-0 ms-1 mt-2 text-secondary">/ 10gms</p>
                         </div>
                       </Nav.Link>
                       <Nav.Link>
                         <div className="d-flex">
-                          <p className="text-white m-0 ms-2">Silver :</p>
-                          <p className="text-white m-0 ms-1">{silverprice}</p>
-                          <p className="small m-0 ms-1 mt-1 text-secondary">/ 10gms</p>
+                          <p style={{fontSize: "20px"}} className="text-white m-0 ms-2">Silver :</p>
+                          <p style={{fontSize: "20px"}} className="text-white m-0 ms-1">{silverprice}</p>
+                          <p className="small m-0 ms-1 mt-2 text-secondary">/ 10gms</p>
                         </div>
                       </Nav.Link>
                     </div>
@@ -79,6 +80,7 @@ function App() {
         <Route exact path='/customerupdate' element={<CustomerUpdate navigate={navigate}/>} />
         <Route exact path='/validation' element={<ValidationPage navigate={navigate} />} />
         <Route exact path='/closing' element={<Closing />} />
+        <Route exact path='/addemployee' element={<AddEmployee />} />
       </Routes>
     </div>
   );

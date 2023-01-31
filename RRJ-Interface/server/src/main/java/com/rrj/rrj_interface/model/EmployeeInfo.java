@@ -16,7 +16,6 @@ public class EmployeeInfo {
     public String EmployeeName;
     public String EmployeeMobile;
     public String Role;
-    public String Status;
 
     public int getEmployeeId() {
         return EmployeeId;
@@ -66,24 +65,15 @@ public class EmployeeInfo {
         Role = role;
     }
 
-    public String getStatus() {
-        return Status;
-    }
-
-    public void setStatus(String status) {
-        Status = status;
-    }
-
     public EmployeeInfo() {
     }
 
-    public EmployeeInfo(int employeeId, String employeeUsername, String password, String employeeName, String employeeMobile, String role, String status) {
+    public EmployeeInfo(int employeeId, String employeeUsername, String password, String employeeName, String employeeMobile, String role) {
         EmployeeId = employeeId;
         EmployeeUsername = employeeUsername;
         Password = password;
         EmployeeName = employeeName;
         EmployeeMobile = employeeMobile;
         Role = role;
-        Status = status;
     }
 }

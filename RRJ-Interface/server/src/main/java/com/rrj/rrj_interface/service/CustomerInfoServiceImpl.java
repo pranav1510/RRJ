@@ -32,18 +32,13 @@ public class CustomerInfoServiceImpl implements CustomerInfoService{
         }
     }
 
-    public List<String> getCustomerData(Ordertaking ordertaking){
+    public List<Object[]> getCustomerData(Ordertaking ordertaking){
         return customerInfoRepository.findByCustomerMobile(ordertaking.getCustomerMobile());
     }
 
     @Override
     public List<CustomerInfo> findCustomer(CustomerInfo customerInfo) {
         return customerInfoRepository.findCustomer(customerInfo.getCustomerMobile(), customerInfo.getCustomerFullName());
-    }
-
-    @Override
-    public int findCustomerId(CustomerInfo customerInfo) {
-        return customerInfoRepository.findCustomerId(customerInfo.getCustomerMobile());
     }
 
     @Override
@@ -60,5 +55,10 @@ public class CustomerInfoServiceImpl implements CustomerInfoService{
         customerInfoRepository.save(customerupdate);
 
         return ResponseEntity.ok(customerupdate);
+    }
+
+    @Override
+    public int getCustomerId(CustomerInfo customerInfo) {
+        return customerInfoRepository.getCustomerId(customerInfo.getCustomerMobile());
     }
 }

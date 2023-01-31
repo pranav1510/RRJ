@@ -29,7 +29,7 @@ public class CustomerInfoController {
     }
 
     @PostMapping("/check")
-    public List<String> getCustomer(@RequestBody Ordertaking ordertaking){
+    public List<Object[]> getCustomer(@RequestBody Ordertaking ordertaking){
         return customerInfoService.getCustomerData(ordertaking);
     }
 
@@ -38,13 +38,14 @@ public class CustomerInfoController {
         return  customerInfoService.findCustomer(customerInfo);
     }
 
-    @PostMapping("getcustomerid")
-    public int getcustomerid(@RequestBody CustomerInfo customerInfo){
-        return customerInfoService.findCustomerId(customerInfo);
-    }
-
     @PutMapping("/customerupdate/{CustomerId}")
     public ResponseEntity<CustomerInfo> customerupdate(@RequestBody CustomerInfo customerInfo, @PathVariable int CustomerId){
         return customerInfoService.updateCustomer(customerInfo, CustomerId);
     }
+
+    @PostMapping("/getcustomerid")
+    public int getCustomerId(@RequestBody CustomerInfo customerInfo){
+        return customerInfoService.getCustomerId(customerInfo);
+    }
+
 }
