@@ -12,7 +12,8 @@ const initialState = {
     transin: {},
     show1: false,
     show2: false,
-    show3: false
+    show3: false,
+    val: true
 }
 
 const ACTIONS = {
@@ -24,7 +25,8 @@ const ACTIONS = {
     TRANS_IN: "TRANS_IN",
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
-    SHOW3: "SHOW3"
+    SHOW3: "SHOW3",
+    VAL: "VAL"
 }
 
 const reducer = (state, {type,payload}) => {
@@ -47,6 +49,8 @@ const reducer = (state, {type,payload}) => {
             return {...state, show2: payload}
         case ACTIONS.SHOW3:
             return {...state, show3: payload}
+        case ACTIONS.VAL:
+            return {...state, val: payload}
         default:
             return state
     }
@@ -117,7 +121,7 @@ const TransactionInfo = ({navigate}) => {
                     <Modal.Title>Transaction Update</Modal.Title>
                 </Modal.Header>
                 <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
-                    <TransactionEntry transin = {newState.transin}/>
+                    <TransactionEntry transin = {newState.transin} show3={newState.val}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose2}>
@@ -228,6 +232,11 @@ const TransactionInfo = ({navigate}) => {
                     <Button variant="primary" onClick={() => {
                         dispatch({type:ACTIONS.SHOW1, payload: false})
                         dispatch({type:ACTIONS.SHOW2, payload: true})
+                        axios.post("http://localhost:8080/ClosingInfo/getdate",{date: newState.transin.transactionDate})
+                        .then(res => {
+                            dispatch({type:ACTIONS.VAL, payload: res.data})}
+                            )
+                        .catch(err => console.log(err))
                     }}>
                         Modify
                     </Button>

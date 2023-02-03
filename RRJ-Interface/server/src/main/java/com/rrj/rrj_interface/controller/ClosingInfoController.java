@@ -24,4 +24,9 @@ public class ClosingInfoController {
     public List<Object[]> getdetails(){
         return closingInfoService.getdetails();
     }
+
+    @PostMapping("getdate")
+    public boolean getdate(@RequestBody ClosingInfo closingInfo){
+        return closingInfoService.getDate(closingInfo);
+    }
 }

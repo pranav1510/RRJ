@@ -148,7 +148,7 @@ const ItemUpdate = ({item}) => {
     }
 
     const myReducer1 = (state, {type, payload}) => {
-        switch({type}){
+        switch(type){
             case MY_ACTIONS1.ITEM_TYPE:
                 return {...state, itemType: payload}
             case MY_ACTIONS1.ITEM_NAME:
@@ -157,31 +157,31 @@ const ItemUpdate = ({item}) => {
                 return {...state, deliveryDate: payload}
             case MY_ACTIONS1.ITEM_STATUS:
                 return {...state, itemStatus: payload}
-            case MY_ACTIONS.MAKING_CHARGES:
+            case MY_ACTIONS1.MAKING_CHARGES:
                 return {...state, makingCharges: payload}
-            case MY_ACTIONS.ITEM_GROSS_WEIGHT:
+            case MY_ACTIONS1.ITEM_GROSS_WEIGHT:
                 return {...state, itemGrossWeight: payload}
-            case MY_ACTIONS.ITEM_NET_WEIGHT:
+            case MY_ACTIONS1.ITEM_NET_WEIGHT:
                 return {...state, itemNetWeight: payload}
-            case MY_ACTIONS.WASTAGE:
+            case MY_ACTIONS1.WASTAGE:
                 return {...state, wastage: payload}
-            case MY_ACTIONS.OVERALL_STONE_COST:
+            case MY_ACTIONS1.OVERALL_STONE_COST:
                 return {...state, overallStoneCost: payload}
-            case MY_ACTIONS.OVERALL_STONE_WEIGHT:
+            case MY_ACTIONS1.OVERALL_STONE_WEIGHT:
                 return {...state, overallStoneWeight: payload}
-            case MY_ACTIONS.STONES_TYPE:
+            case MY_ACTIONS1.STONES_TYPE:
                 return {...state, stonesType: payload}
-            case MY_ACTIONS.CZ_COST:
+            case MY_ACTIONS1.CZ_COST:
                 return {...state, czCost: payload}
-            case MY_ACTIONS.EMERALD_COST:
+            case MY_ACTIONS1.EMERALD_COST:
                 return {...state, emeraldCost: payload}
-            case MY_ACTIONS.RUBY_COST:
+            case MY_ACTIONS1.RUBY_COST:
                 return {...state, rubyCost: payload}
-            case MY_ACTIONS.PEARLS_COST:
+            case MY_ACTIONS1.PEARLS_COST:
                 return {...state, pearlsCost: payload}
-            case MY_ACTIONS.PEARLS_WEIGHT:
+            case MY_ACTIONS1.PEARLS_WEIGHT:
                 return {...state, pearlsWeight: payload}
-            case MY_ACTIONS.ITEM_PRICE:
+            case MY_ACTIONS1.ITEM_PRICE:
                 return {...state, itemPrice: payload}
             default:
                 return state
@@ -477,10 +477,25 @@ const ItemUpdate = ({item}) => {
                     else if(myNewState.itemName === "" || !(/[a-zA-Z\s]*/.test(myNewState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
                     else if(myNewState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
                     else if(myNewState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
-                    axios.put(`http://localhost:8080/ItemInfo/itemupdate/${item.itemId}`, myNewState)
-                        .then(() => {
-                            myDispatch({type:MY_ACTIONS.ITEM_INFO_STATUS, payload: "Item Updated Successfully!"})
-                        }).catch(err => {console.log(err)})
+                    else if(!(/[\d]*/.test(myNewState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
+                    else if(myNewState.stonesType === ""){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: true})}
+                    else if(myNewState.stonesType.includes("CZ") && (myNewState.czCost === "" || !(/[\d]*/.test(myNewState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
+                    else if(myNewState.stonesType.includes("Emerald") && (myNewState.emeraldCost === "" || !(/[\d]*/.test(myNewState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
+                    else if(myNewState.stonesType.includes("Ruby") && (myNewState.rubyCost === "" || !(/[\d]*/.test(myNewState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
+                    else if(!(/[\d]*/.test(myNewState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
+                    else if(!(/[\d]*/.test(myNewState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
+                    else if(!(/[\d]*/.test(myNewState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
+                    else {
+                        axios.put(`http://localhost:8080/ItemInfo/itemupdate/${item.itemId}`, myNewState)
+                            .then(() => {
+                                myDispatch({type:MY_ACTIONS.ITEM_INFO_STATUS, payload: "Item Updated Successfully!"})
+                            }).catch(err => {console.log(err)})        
+                    }
                 }}>Modify Details</Button>
             </div>
         </>

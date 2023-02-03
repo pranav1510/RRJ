@@ -10,4 +10,5 @@ public interface ClosingInfoRepository extends JpaRepository<ClosingInfo, String
 
     @Query("select e.Date, e.Cash, e.Gold, e.Silver, e.Account FROM ClosingInfo e ORDER BY e.Date DESC LIMIT 1")
     public List<Object[]> getdetails();
+
 }

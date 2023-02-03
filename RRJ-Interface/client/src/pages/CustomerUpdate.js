@@ -29,7 +29,8 @@ const initialState = {
     itemDetails: [],
     itemin: {},
     transDetails: [],
-    transin: {}
+    transin: {},
+    val: true
 }
 
 const ACTIONS = {
@@ -55,7 +56,8 @@ const ACTIONS = {
     ITEM_DETAILS: "ITEM_DETAILS",
     ITEM_IN: "ITEM_IN",
     TRANS_DETAILS: "TRANS_DETAILS",
-    TRANS_IN: "TRANS_IN"
+    TRANS_IN: "TRANS_IN",
+    VAL: "VAL"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -106,6 +108,8 @@ const reducer = (state, {type, payload}) => {
             return {...state, transDetails: payload}
         case ACTIONS.TRANS_IN:
             return {...state, transin: payload}
+        case ACTIONS.VAL:
+            return {...state, val: payload}
         default:
             return state
     }
@@ -148,7 +152,7 @@ const CustomerUpdate = ({navigate}) => {
                     <Modal.Title>Transaction Update</Modal.Title>
                 </Modal.Header>
                 <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
-                    <TransactionEntry transin = {newState.transin}/>
+                    <TransactionEntry transin = {newState.transin} show3={newState.val}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose12}>
@@ -249,6 +253,11 @@ const CustomerUpdate = ({navigate}) => {
                     <Button variant="primary" onClick={() => {
                         dispatch({type:ACTIONS.SHOW12, payload: true})
                         dispatch({type:ACTIONS.SHOW11, payload: false})
+                        axios.post("http://localhost:8080/ClosingInfo/getdate",{date: newState.transin.transactionDate})
+                        .then(res => {
+                            dispatch({type:ACTIONS.VAL, payload: res.data})}
+                            )
+                        .catch(err => console.log(err))
                     }}>
                         Modify
                     </Button>

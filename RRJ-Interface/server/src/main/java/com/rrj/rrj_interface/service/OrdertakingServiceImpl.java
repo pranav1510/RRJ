@@ -45,7 +45,6 @@ public class OrdertakingServiceImpl implements OrdertakingService {
         updateorder.setExpectedDeliveryDate(ordertaking.getExpectedDeliveryDate());
         updateorder.setOrderStatus(ordertaking.getOrderStatus());
         updateorder.setGST(ordertaking.getGst());
-        updateorder.setOrderEnteredBy(ordertaking.getOrderEnteredBy());
         updateorder.setOrderReceivedBy(ordertaking.getOrderReceivedBy());
         updateorder.setCustomerRemarks(ordertaking.getCustomerRemarks());
         updateorder.setOrderReceiverRemarks(ordertaking.getOrderReceiverRemarks());

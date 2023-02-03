@@ -12,6 +12,5 @@ public interface CustomerInfoService {
     public List<Object[]> getCustomerData(Ordertaking ordertaking);
     public List<CustomerInfo> findCustomer(CustomerInfo customerInfo);
     public ResponseEntity<CustomerInfo> updateCustomer(CustomerInfo customerInfo, int CustomerId);
-
     public int getCustomerId(CustomerInfo customerInfo);
 }

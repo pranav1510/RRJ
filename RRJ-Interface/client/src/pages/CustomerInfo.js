@@ -90,7 +90,7 @@ const CustomerInfo = ({navigate, info}) => {
     const [newState1, dispatch1] = useReducer(reducer1, initialState1)
     
     const SubmitHandler = () => {
-        if(newState.customerFullName === "" || !(/[a-zA-Z\s]*/.test(newState.customerFullName))){
+        if(newState.customerFullName === "" || !(/^[a-zA-Z]+$/.test(newState.customerFullName))){
             dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
         } else if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
             dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})

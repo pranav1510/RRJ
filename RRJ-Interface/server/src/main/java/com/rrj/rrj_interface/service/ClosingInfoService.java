@@ -8,4 +8,6 @@ public interface ClosingInfoService {
 
     public ClosingInfo save(ClosingInfo closingInfo);
     public List<Object[]> getdetails();
+
+    public boolean getDate(ClosingInfo closingInfo);
 }

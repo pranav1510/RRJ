@@ -135,11 +135,11 @@ const AddEmployee = () => {
                 </Form>
                 <div className="d-flex justify-content-center m-3">
                     <Button variant="primary" onClick={() => {
-                        if(newState.employeeUsername === "" || !(/[a-zA-Z\S0-9]*/.test(newState.employeeUsername))){
+                        if(newState.employeeUsername === "" || !(/^[a-zA-Z0-9]*$/.test(newState.employeeUsername))){
                             dispatch1({type:ACTIONS1.EMPLOYEE_USERNAME, payload: true})
-                        } else if(newState.password === "" || !(/[a-zA-Z\S0-9]*/.test(newState.password))){
+                        } else if(newState.password === "" || !(/^[a-zA-Z0-9]*$/.test(newState.password))){
                             dispatch1({type:ACTIONS1.PASSWORD, payload: true})
-                        } else if(newState.employeeName === "" || !(/[A-Z\s]*/.test(newState.employeeName))){
+                        } else if(newState.employeeName === "" || !(/^[a-zA-Z]+$/.test(newState.employeeName))){
                             dispatch1({type:ACTIONS1.EMPLOYEE_NAME, payload: true})
                         } else if(newState.employeeMobile === "" || !(/^(\d){10}$/.test(newState.employeeMobile))){
                             dispatch1({type:ACTIONS1.EMPLOYEE_MOBILE, payload: true})

@@ -24,7 +24,6 @@ const OrderTaking = ({order, navigate}) => {
         orderReceivedBy:  (order === undefined)? "" : order.orderReceivedBy,
         orderEnteredBy:  (order === undefined)? myName : order.orderEnteredBy,
         customerFullName:  (order === undefined)? "" : order.customerFullName,
-        customerFullNameOne: "",
         customerInfoStatus: "",
         orderTakingStatus: "",
         itemInfoStatus: "",
@@ -72,7 +71,6 @@ const OrderTaking = ({order, navigate}) => {
         GENERATESHOW: "GENERATESHOW",
         ORDER_ID: "ORDER_ID",
         CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
-        CUSTOMER_FULL_NAME_ONE: "CUSTOMER_FULL_NAME_ONE",
         EXPECTED_DELIVERY_DATE: "EXPECTED_DELIVERY_DATE",
         CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
         CUSTOMER_REMARKS: "CUSTOMER_REMARKS",
@@ -182,8 +180,6 @@ const OrderTaking = ({order, navigate}) => {
                 return {...state, itemInfoStatus: payload}
             case ACTIONS.CUSTOMER_FULL_NAME:
                 return {...state, customerFullName: payload.toLowerCase()}
-            case ACTIONS.CUSTOMER_FULL_NAME_ONE:
-                return {...state, customerFullNameOne: payload.target.value.toLowerCase()}
             case ACTIONS.EXPECTED_DELIVERY_DATE:
                 return {...state, expectedDeliveryDate: payload}
             case ACTIONS.CUSTOMER_MOBILE:
@@ -259,6 +255,7 @@ const OrderTaking = ({order, navigate}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const GenerateId = () => {
+        myDispatch1({type:MY_ACTIONS1.ORDER_ID, payload: false})
         axios.get("http://localhost:8080/OrderTaking/orderid")
             .then(res => {
                 let newIdPattern = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, "0") + new Date().getDate().toString().padStart(2, "0")
@@ -281,27 +278,163 @@ const OrderTaking = ({order, navigate}) => {
         dispatch({type:ACTIONS.SHOW4, payload: false})
     }
 
-    const SubmitHandler = (e) => {
-        axios.post("http://localhost:8080/OrderTaking/add", newState)
-            .then(() => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
-            .catch(err => console.log(err));
+    const SubmitHandler = () => {
+        if(newState.orderId === ""){myDispatch1({type:MY_ACTIONS1.ORDER_ID, payload: true})}
+        else if(newState.expectedDeliveryDate === ""){myDispatch1({type:MY_ACTIONS1.EXPECTED_DELIVERY_DATE, payload: true})}
+        else if(newState.orderStatus === ""){myDispatch1({type:MY_ACTIONS1.ORDER_STATUS, payload: true})}
+        else if(newState.gst === ""){myDispatch1({type:MY_ACTIONS1.GST, payload: true})}
+        else if(newState.orderReceivedBy === ""){myDispatch1({type:MY_ACTIONS1.ORDER_RECEIVED_BY, payload: true})}
+        else if(newState.customerMobile === ""){myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: true})}
+        else if(newState.customerFullName === ""){myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: true})}
+        else {
+            axios.post("http://localhost:8080/OrderTaking/add", newState)
+                .then(() => dispatch({type: ACTIONS.ORDERTAKING_STATUS, payload: "Order saved Successfully!"}))
+                .catch(err => console.log(err));
+        }
     }
 
     const Validate = () => {
-        axios.post("http://localhost:8080/CustomerInfo/check", newState)
-        .then(res => {
-            var val = res.data[0]
-            if(val === undefined) {
-                dispatch({type:ACTIONS.SHOW01, payload: true})
-            }
-            else{
-                dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: val[0]})
-                dispatch({type: ACTIONS.CUSTOMER_ID, payload: val[1]})
-            }
-        })
-        .catch(err => console.log(err));
+        if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
+            myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: true})
+        } else {
+            myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})
+            axios.post("http://localhost:8080/CustomerInfo/check", newState)
+            .then(res => {
+                var val = res.data[0]
+                if(val === undefined) {
+                    dispatch({type:ACTIONS.SHOW01, payload: true})
+                }
+                else{
+                    dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: val[0]})
+                    dispatch({type: ACTIONS.CUSTOMER_ID, payload: val[1]})
+                }
+            })
+            .catch(err => console.log(err));
+        }
     }
 
+    const myInitialState1 = {
+        orderId: false,
+        expectedDeliveryDate: false,
+        orderStatus: false,
+        gst: false,
+        orderReceivedBy: false,
+        customerMobile: false,
+        customerFullName: false,
+        alternateMobileOne: false,
+        alternateMobileTwo: false,
+        address: false,
+        itemType: false,
+        itemName: false,
+        deliveryDate: false,
+        itemStatus: false,
+        makingCharges: false,
+        itemGrossWeight: false,
+        itemNetWeight: false,
+        wastage: false,
+        stonesType: false,
+        czCost: false,
+        emeraldCost: false,
+        rubyCost: false,
+        pearlsWeight: false,
+        pearlsCost: false,
+        overallStoneWeight: false,
+        overallStoneCost: false,
+        itemPrice: false
+    }
+
+    const MY_ACTIONS1 = {
+        ORDER_ID: "ORDER_ID",
+        EXPECTED_DELIVERY_DATE: "EXPECTED_DELIVERY_DATE",
+        ORDER_STATUS: "ORDER_STATUS",
+        GST: "GST",
+        ORDER_RECEIVED_BY: "ORDER_RECEIVED_BY",
+        CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
+        CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
+        ALTERNATE_MOBILE_ONE: "ALTERNATE_MOBILE_ONE",
+        ALTERNATE_MOBILE_TWO: "ALTERNATE_MOBILE_TWO",
+        ADDRESS: "ADDRESS",
+        ITEM_TYPE: "ITEM_TYPE",
+        ITEM_NAME: "ITEM_NAME",
+        DELIVERY_DATE: "DELIVERY_DATE",
+        ITEM_STATUS: "ITEM_STATUS",
+        MAKING_CHARGES: "MAKING_CHARGES",
+        ITEM_GROSS_WEIGHT: "ITEM_GROSS_WEIGHT",
+        ITEM_NET_WEIGHT: "ITEM_NET_WEIGHT",
+        WASTAGE: "WASTAGE",
+        STONES_TYPE: "STONE_TYPE",
+        CZ_COST: "CZ_COST",
+        EMERALD_COST: "EMERALD_COST",
+        RUBY_COST: "RUBY_COST",
+        PEARLS_WEIGHT: "PEARLS_WEIGHT",
+        PEARLS_COST: "PEARLS_COST",
+        OVERALL_STONE_WEIGHT: "OVERALL_STONE_WEIGHT",
+        OVERALL_STONE_COST: "OVERALL_STONE_COST",
+        ITEM_PRICE: "ITEM_PRICE"
+    }
+
+    const myReducer1 = (state, {type, payload}) => {
+        switch(type){
+            case MY_ACTIONS1.ORDER_ID:
+                return {...state, orderId: payload}
+            case MY_ACTIONS1.EXPECTED_DELIVERY_DATE:
+                return {...state, expectedDeliveryDate: payload}
+            case MY_ACTIONS1.ORDER_STATUS:
+                return {...state, orderStatus: payload}
+            case MY_ACTIONS1.GST:
+                return {...state, gst: payload}
+            case MY_ACTIONS1.ORDER_RECEIVED_BY:
+                return {...state, orderReceivedBy: payload}
+            case MY_ACTIONS1.CUSTOMER_MOBILE:
+                return {...state, customerMobile: payload}
+            case MY_ACTIONS1.CUSTOMER_FULL_NAME:
+                return {...state, customerFullName: payload}
+            case MY_ACTIONS1.ALTERNATE_MOBILE_ONE:
+                return {...state, alternateMobileOne: payload}
+            case MY_ACTIONS1.ALTERNATE_MOBILE_TWO:
+                return {...state, alternateMobileTwo: payload}
+            case MY_ACTIONS1.ADDRESS:
+                return {...state, address: payload}
+            case MY_ACTIONS1.ITEM_TYPE:
+                return {...state, itemType: payload}
+            case MY_ACTIONS1.ITEM_NAME:
+                return {...state, itemName: payload}
+            case MY_ACTIONS1.DELIVERY_DATE:
+                return {...state, deliveryDate: payload}
+            case MY_ACTIONS1.ITEM_STATUS:
+                return {...state, itemStatus: payload}
+            case MY_ACTIONS1.MAKING_CHARGES:
+                return {...state, makingCharges: payload}
+            case MY_ACTIONS1.ITEM_GROSS_WEIGHT:
+                return {...state, itemGrossWeight: payload}
+            case MY_ACTIONS1.ITEM_NET_WEIGHT:
+                return {...state, itemNetWeight: payload}
+            case MY_ACTIONS1.WASTAGE:
+                return {...state, wastage: payload}
+            case MY_ACTIONS1.OVERALL_STONE_COST:
+                return {...state, overallStoneCost: payload}
+            case MY_ACTIONS1.OVERALL_STONE_WEIGHT:
+                return {...state, overallStoneWeight: payload}
+            case MY_ACTIONS1.STONES_TYPE:
+                return {...state, stonesType: payload}
+            case MY_ACTIONS1.CZ_COST:
+                return {...state, czCost: payload}
+            case MY_ACTIONS1.EMERALD_COST:
+                return {...state, emeraldCost: payload}
+            case MY_ACTIONS1.RUBY_COST:
+                return {...state, rubyCost: payload}
+            case MY_ACTIONS1.PEARLS_COST:
+                return {...state, pearlsCost: payload}
+            case MY_ACTIONS1.PEARLS_WEIGHT:
+                return {...state, pearlsWeight: payload}
+            case MY_ACTIONS1.ITEM_PRICE:
+                return {...state, itemPrice: payload}
+            default:
+                return state
+        }
+    }
+
+    const [myNewState1, myDispatch1] = useReducer(myReducer1, myInitialState1)
 
     return (
         <>
@@ -344,30 +477,60 @@ const OrderTaking = ({order, navigate}) => {
             <div className="row"><h5 className="text-dark d-flex flex-row justify-content-center">{newState.customerInfoStatus}</h5></div>
             <Form.Group className="mt-3">
                 <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                <Form.Control type="text"  onChange={e => dispatch({type: ACTIONS.CUSTOMER_FULL_NAME_ONE, payload: e})} required/>
+                <Form.Control type="text" style={{border: myNewState1.customerFullName ? "3px solid red" : ""}} onChange={e => {
+                    dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})
+                    myDispatch1({type: MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})
+                }}/>
+                {
+                    myNewState1.customerFullName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                }
             </Form.Group>
             <div className="row">
                 <Form.Group className="mt-3">
                     <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                    <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})}/>
+                    <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: myNewState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
+                        dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                        myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: false})
+                    }}/>
+                    {
+                        myNewState1.customerMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                    }
                 </Form.Group>
             </div>
             <div className="row">
                 <Form.Group className="mt-3">
                     <Form.Label className="fw-bold m-1">Alternate Mobile 01</Form.Label>
-                    <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ALTERNATE_MOBILE_ONE, payload: e})} />
+                    <Form.Control type="text" style={{border: myNewState1.alternateMobileOne ? "3px solid red" : ""}} onChange={e => {
+                        dispatch({type: ACTIONS.ALTERNATE_MOBILE_ONE, payload: e})
+                        myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_ONE, payload: false})
+                    }} />
+                    {
+                        myNewState1.alternateMobileOne ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                    }
                 </Form.Group>
             </div>
             <div className="row">
                 <Form.Group className="mt-3">
                     <Form.Label className="fw-bold m-1">Alternate Mobile 02</Form.Label>
-                    <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ALTERNATE_MOBILE_TWO, payload: e})} />
+                    <Form.Control type="text" style={{border: myNewState1.alternateMobileTwo ? "3px solid red" : ""}} onChange={e => {
+                        dispatch({type: ACTIONS.ALTERNATE_MOBILE_TWO, payload: e})
+                        myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_TWO, payload: false})
+                    }} />
+                    {
+                        myNewState1.alternateMobileTwo ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                    }
                 </Form.Group>
             </div>   
             <div className="row">
                 <Form.Group className="mt-3">
                     <Form.Label className="fw-bold m-1">Address</Form.Label>
-                    <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ADDRESS, payload: e})} />
+                    <Form.Control type="text" style={{border: myNewState1.address ? "3px solid red" : ""}} onChange={e => {
+                        dispatch({type: ACTIONS.ADDRESS, payload: e})
+                        myDispatch1({type:MY_ACTIONS1.ADDRESS, payload: false})
+                    }} />
+                    {
+                        myNewState1.address ? (<p className="text-danger m-1 small fw-bold">Enter valid address!</p>) : <></>
+                    }
                 </Form.Group>
             </div>
             <div className="col">
@@ -383,29 +546,39 @@ const OrderTaking = ({order, navigate}) => {
             Close
           </Button>
           <Button variant="primary" onClick={() => {
-            dispatch({type:ACTIONS.SHOW02, payload: false})
-            const customerData = {
-                customerFullName: newState.customerFullNameOne,
-                customerMobile: newState.customerMobile,
-                alternateMobileOne: newState.alternateMobileOne,
-                alternateMobileTwo: newState.alternateMobileTwo,
-                address: newState.address,
-                remarks: newState.remarks
-            }
-            axios.post("http://localhost:8080/CustomerInfo/add",customerData)
-            .then((response) => {
-                axios.post("http://localhost:8080/CustomerInfo/getcustomerid", customerData)
-                    .then(res => {
-                        dispatch({type:ACTIONS.CUSTOMER_ID, payload: res.data})
-                        dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: response.data})
-                        dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: customerData.customerFullName})
-                    })
-                setTimeout(() => {
-                    dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: ""})
-                    dispatch({type:ACTIONS.SHOW02, payload: false})
-                },1200)
-            })
-            .catch(err => console.log(err.message));
+              const customerData = {
+                  customerFullName: newState.customerFullName,
+                  customerMobile: newState.customerMobile,
+                  alternateMobileOne: newState.alternateMobileOne,
+                  alternateMobileTwo: newState.alternateMobileTwo,
+                  address: newState.address,
+                  remarks: newState.remarks
+                }
+                if(customerData.customerFullName === "" || !(/^[a-zA-Z]+$/.test(customerData.customerFullName))){
+                    myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
+                } else if(customerData.customerMobile === "" || !(/^(\d){10}$/.test(customerData.customerMobile))){
+                    myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: true})
+                } else if(customerData.alternateMobileOne === "" || !(/^(\d){10}$/.test(customerData.alternateMobileOne))){
+                    myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_ONE, payload: true})
+                } else if(customerData.alternateMobileTwo === "" || !(/^(\d){10}$/.test(customerData.alternateMobileTwo))){
+                    myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_TWO, payload: true})
+                } else if(customerData.address === ""){
+                    myDispatch1({type:MY_ACTIONS1.ADDRESS, payload: true})
+                } else {
+                    axios.post("http://localhost:8080/CustomerInfo/add",customerData)
+                    .then((response) => {
+                        axios.post("http://localhost:8080/CustomerInfo/getcustomerid", customerData)
+                        .then(res => {
+                            dispatch({type:ACTIONS.CUSTOMER_ID, payload: res.data})
+                            dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: response.data})
+                        })
+                    setTimeout(() => {
+                        dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: ""})
+                        dispatch({type:ACTIONS.SHOW02, payload: false})
+                    },1200)
+                })
+                .catch(err => console.log(err.message));
+                }
           }}>
             Save Customer
           </Button>
@@ -437,8 +610,9 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Type</Form.Label>
-                        <Form.Select onChange={e => {
+                        <Form.Select style={{border: myNewState1.itemType ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_TYPE, payload: e.target.value})
+                            myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: false})
                         }}>
                             <option value=""></option>
                             <option value="Gold Sale">Gold Sale</option>
@@ -448,6 +622,9 @@ const OrderTaking = ({order, navigate}) => {
                             <option value="Manufactured Silver Item">Manufactured Silver Item</option>
                             <option value="Readymade Silver Item">Readymade Silver Item</option>
                         </Form.Select>
+                        {
+                            myNewState1.itemType ? (<p className="text-danger m-1 small fw-bold">Enter valid type!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -455,13 +632,25 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Name</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.ITEM_NAME, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.itemName ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_NAME, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: false})
+                        }} />
+                        {
+                            myNewState1.itemName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col-4">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Delivery Date</Form.Label>
-                        <Form.Control type="date" onChange={e => dispatch({type:ACTIONS.ITEM_DELIVERY_DATE, payload: e})}/>
+                        <Form.Control type="date" style={{border: myNewState1.deliveryDate ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_DELIVERY_DATE, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: false})
+                        }}/>
+                        {
+                            myNewState1.deliveryDate ? (<p className="text-danger m-1 small fw-bold">Enter valid date!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -483,8 +672,9 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Status</Form.Label>
-                        <Form.Select onChange={e => {
+                        <Form.Select style={{border: myNewState1.itemStatus ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_STATUS, payload: e.target.value})
+                            myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: false})
                         }}>
                             <option value=""></option>
                             <option value="In Progress">In Progress</option>
@@ -492,6 +682,9 @@ const OrderTaking = ({order, navigate}) => {
                             <option value="Delivered">Delivered</option>
                             <option value="Cancelled">Cancelled</option>
                         </Form.Select>
+                        {
+                            myNewState1.itemStatus ? (<p className="text-danger m-1 small fw-bold">Enter valid status!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
@@ -503,7 +696,13 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Making Charges</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.MAKING_CHARGES, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.makingCharges ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.MAKING_CHARGES, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: false})
+                        }} />
+                        {
+                            myNewState1.makingCharges ? (<p className="text-danger m-1 small fw-bold">Enter valid value!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -511,19 +710,37 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Gross Weight</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.ITEM_GROSS_WEIGHT, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.itemGrossWeight ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_GROSS_WEIGHT, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: false})
+                        }} />
+                        {
+                            myNewState1.itemGrossWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Net Weight</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.ITEM_NET_WEIGHT, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.itemNetWeight ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_NET_WEIGHT, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: false})
+                        }} />
+                        {
+                            myNewState1.itemNetWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Wastage</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.WASTAGE, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.wastage ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.WASTAGE, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: false})
+                        }} />
+                        {
+                            myNewState1.wastage ? (<p className="text-danger m-1 small fw-bold">Enter valid value!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -531,8 +748,9 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Stones Type</Form.Label>
-                        <Form.Select onChange={e => {
+                        <Form.Select style={{border: myNewState1.stonesType ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.STONES_TYPE, payload: e.target.value})
+                            myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: false})
                         }}>
                             <option value=""></option>
                             <option value="CZ">CZ</option>
@@ -543,24 +761,45 @@ const OrderTaking = ({order, navigate}) => {
                             <option value="Emerald & Ruby">Emerald & Ruby</option>
                             <option value="CZ & Emerald & Ruby">CZ & Emerald & Ruby</option>
                         </Form.Select>
+                        {
+                            myNewState1.stonesType ? (<p className="text-danger m-1 small fw-bold">Enter valid type!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">CZ Cost</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.CZ_COST, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.czCost ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.CZ_COST, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: false})
+                        }} />
+                        {
+                            myNewState1.czCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Emerald Cost</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.EMERALD_COST, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.emeraldCost ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.EMERALD_COST, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: false})
+                        }} />
+                        {
+                            myNewState1.emeraldCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Ruby Cost</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.RUBY_COST, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.rubyCost ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.RUBY_COST, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: false})
+                        }} />
+                        {
+                            myNewState1.rubyCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -568,25 +807,49 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Pearls Weight</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.PEARLS_WEIGHT, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.pearlsWeight ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.PEARLS_WEIGHT, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: false})
+                        }} />
+                        {
+                            myNewState1.pearlsWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Pearls Cost</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.PEARLS_COST, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.pearlsCost ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.PEARLS_COST, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: false})
+                        }} />
+                        {
+                            myNewState1.pearlsCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Overall Stone Weight</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.OVERALL_STONE_WEIGHT, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.overallStoneWeight ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.OVERALL_STONE_WEIGHT, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: false})
+                        }} />
+                        {
+                            myNewState1.overallStoneWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
                 <div className="col">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Overall Stone Cost</Form.Label>
-                        <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.OVERALL_STONE_COST, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.overallStoneCost ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.OVERALL_STONE_COST, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: false})
+                        }} />
+                        {
+                            myNewState1.overallStoneCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -594,7 +857,13 @@ const OrderTaking = ({order, navigate}) => {
                 <div className="col-4">
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Item Price</Form.Label>
-                        <Form.Control type="text"  onChange={e => dispatch({type:ACTIONS.ITEM_PRICE, payload: e})} />
+                        <Form.Control type="text" style={{border: myNewState1.itemPrice ? "3px solid red" : ""}} onChange={e => {
+                            dispatch({type:ACTIONS.ITEM_PRICE, payload: e})
+                            myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: false})
+                        }} />
+                        {
+                            myNewState1.itemPrice ? (<p className="text-danger m-1 small fw-bold">Enter valid price!</p>) : <></>
+                        }
                     </Form.Group>
                 </div>
             </div>
@@ -604,17 +873,36 @@ const OrderTaking = ({order, navigate}) => {
             Close
           </Button>
           <Button variant="primary" onClick={() => {
-            axios.post("http://localhost:8080/ItemInfo/add", newState)
-                .then(() => {
-                    dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: "Item saved Successfully!"})
-                    setFormfields([...formfields, [newState.itemName, newState.itemId]])
-                })
-                .catch(err => console.log(err))
-            dispatch({type:ACTIONS.ITEM_INFO_INITIAL_STATE})
-            setTimeout(() => {
-                dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
-                dispatch({type:ACTIONS.SHOW3, payload: false})
-            }, 1200)
+            if(newState.itemType === ""){myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: true})}
+            else if(newState.itemName === "" || !(/^[a-zA-Z]+$/.test(newState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
+            else if(newState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
+            else if(newState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
+            else if(!(/[\d]*/.test(newState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
+            else if(newState.stonesType === ""){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: true})}
+            else if(newState.stonesType.includes("CZ") && (newState.czCost === "" || !(/[\d]*/.test(newState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
+            else if(newState.stonesType.includes("Emerald") && (newState.emeraldCost === "" || !(/[\d]*/.test(newState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
+            else if(newState.stonesType.includes("Ruby") && (newState.rubyCost === "" || !(/[\d]*/.test(newState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
+            else if(!(/[\d]*/.test(newState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
+            else if(!(/[\d]*/.test(newState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
+            else if(!(/[\d]*/.test(newState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
+            else {
+                axios.post("http://localhost:8080/ItemInfo/add", newState)
+                    .then(() => {
+                        dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: "Item saved Successfully!"})
+                        setFormfields([...formfields, [newState.itemName, newState.itemId]])
+                    })
+                    .catch(err => console.log(err))
+                dispatch({type:ACTIONS.ITEM_INFO_INITIAL_STATE})
+                setTimeout(() => {
+                    dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: ""})
+                    dispatch({type:ACTIONS.SHOW3, payload: false})
+                }, 1200)
+            }
           }}>Add New Item</Button>
         </Modal.Footer>
       </Modal>
@@ -639,7 +927,10 @@ const OrderTaking = ({order, navigate}) => {
                                 <div>
                                     <Form.Group className="mt-3">
                                         <Form.Label className="fw-bold m-1">Order Id</Form.Label>
-                                        <Form.Control type="text" defaultValue={newState.orderId} disabled/>
+                                        <Form.Control type="text" style={{border: myNewState1.orderId ? "3px solid red" : ""}} defaultValue={newState.orderId} disabled/>
+                                        {
+                                            myNewState1.orderId ? (<p className="text-danger m-1 small fw-bold">Enter valid Id!</p>) : <></>
+                                        }
                                     </Form.Group>
                                 </div>
                                 {
@@ -661,7 +952,7 @@ const OrderTaking = ({order, navigate}) => {
                                 <div className="d-flex flex-row">
                                 <Form.Control type="text" defaultValue={newState.goldCost} onChange={e => dispatch({type:ACTIONS.GOLD_COST, payload: e.target.value})} disabled/>
                                 <span className="input-group-text fw-bold p-1">/10 gms</span>
-                                </div>    
+                                </div>
                             </Form.Group>
                         </div>
                         <div className="col">
@@ -670,16 +961,20 @@ const OrderTaking = ({order, navigate}) => {
                                 <div className="d-flex flex-row">
                                 <Form.Control type="text" defaultValue={newState.silverCost} onChange={e => dispatch({type:ACTIONS.SILVER_COST, payload: e.target.value})} disabled/>
                                 <span className="input-group-text fw-bold p-1">/10 gms</span>
-                                </div>    
+                                </div>
                             </Form.Group>
                         </div>
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Expected Delivery Date</Form.Label>
-                                <Form.Control type="date" defaultValue={newState.expectedDeliveryDate} onChange={e => {
+                                <Form.Control type="date" style={{border: myNewState1.expectedDeliveryDate ? "3px solid red" : ""}} defaultValue={newState.expectedDeliveryDate} onChange={e => {
                                     dispatch({type: ACTIONS.EXPECTED_DELIVERY_DATE, payload: String(e.target.value)})
+                                    myDispatch1({type:MY_ACTIONS1.EXPECTED_DELIVERY_DATE, payload: false})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
+                                    {
+                                        myNewState1.expectedDeliveryDate ? (<p className="text-danger m-1 small fw-bold">Enter valid date!</p>) : <></>
+                                    }
                             </Form.Group>
                         </div>
                     </div>
@@ -742,8 +1037,9 @@ const OrderTaking = ({order, navigate}) => {
                         <div className="col-3">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Order Status</Form.Label>
-                                <Form.Select defaultValue={newState.orderStatus} onChange={e => {
+                                <Form.Select defaultValue={newState.orderStatus} style={{border: myNewState1.orderStatus ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.ORDER_STATUS, payload: e.target.value})
+                                    myDispatch1({type:MY_ACTIONS1.ORDER_STATUS, payload: false})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                 }}>
                                     <option value=""></option>
@@ -752,19 +1048,26 @@ const OrderTaking = ({order, navigate}) => {
                                     <option value="Delivered">Delivered</option>
                                     <option value="Cancelled">Cancelled</option>
                                 </Form.Select>
+                                {
+                                    myNewState1.orderStatus ? (<p className="text-danger m-1 small fw-bold">Enter valid status!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                         <div className="col-1">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">GST</Form.Label>
-                                <Form.Select defaultValue={newState.gst} onChange={e => {
+                                <Form.Select defaultValue={newState.gst} style={{border: myNewState1.gst ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.GST, payload: e.target.value})
+                                    myDispatch1({type:MY_ACTIONS1.GST, payload: false})
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                 }}>
                                     <option value=""></option>
                                     <option value="No">No</option>
                                     <option value="Yes">Yes</option>
                                 </Form.Select>
+                                {
+                                    myNewState1.gst ? (<p className="text-danger m-1 small fw-bold">Enter valid value!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                         <div className="col">
@@ -776,15 +1079,25 @@ const OrderTaking = ({order, navigate}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Order Received By</Form.Label>
-                                <Form.Select defaultValue={newState.orderReceivedBy} onChange={e => {
-                                    dispatch({type: ACTIONS.ORDER_RECEIVED_BY, payload: e.target.value})
-                                    if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
-                                }}>
-                                    <option value=""></option>
-                                    <option value="LAXMINARSAIAH YEDULAPURAM">LAXMINARSAIAH YEDULAPURAM</option>
-                                    <option value="RAVI KUMAR RANGU">RAVI KUMAR RANGU</option>
-                                    <option value="SRAVAN KUMAR RANGU">SRAVAN KUMAR RANGU</option>
-                                </Form.Select>
+                                {
+                                    (order === undefined)? (
+                                        <Form.Select defaultValue={newState.orderReceivedBy} style={{border: myNewState1.orderReceivedBy ? "3px solid red" : ""}} onChange={e => {
+                                            dispatch({type: ACTIONS.ORDER_RECEIVED_BY, payload: e.target.value})
+                                            myDispatch1({type:MY_ACTIONS1.ORDER_RECEIVED_BY, payload: false})
+                                            if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
+                                        }}>
+                                            <option value=""></option>
+                                            <option value="LAXMINARSAIAH YEDULAPURAM">LAXMINARSAIAH YEDULAPURAM</option>
+                                            <option value="RAVI KUMAR RANGU">RAVI KUMAR RANGU</option>
+                                            <option value="SRAVAN KUMAR RANGU">SRAVAN KUMAR RANGU</option>
+                                        </Form.Select>
+                                    ) : (
+                                        <Form.Control defaultValue={newState.orderReceivedBy} disabled />
+                                    )
+                                }
+                                {
+                                    myNewState1.orderReceivedBy ? (<p className="text-danger m-1 small fw-bold">Enter valid input!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                     </div>
@@ -814,11 +1127,15 @@ const OrderTaking = ({order, navigate}) => {
                                 (order === undefined)? <>
                                 <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                                <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => {
+                                <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: myNewState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     if(newState.customerFullName !== ""){dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: ""})}
                                     dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                                    myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: false})
                                 }} />
+                                {
+                                    myNewState1.customerMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                                }
                                 <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Mobile</Button>
                             </Form.Group>
                                 </> : <>
@@ -832,7 +1149,10 @@ const OrderTaking = ({order, navigate}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customers Full Name</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.customerFullName} disabled/>
+                            <Form.Control type="text" style={{border: myNewState1.customerFullName ? "3px solid red" : ""}} defaultValue={newState.customerFullName} disabled/>
+                            {
+                                myNewState1.customerFullName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                            }
                             <div className="d-flex flex-row justify-content-end">
                                 {
                                     (order === undefined) ? (<Button className="btn btn-info mt-2" onClick={() => {navigate("/paymentdetails")}}>Click here to proceed for Payment</Button>) : <></>
@@ -847,11 +1167,16 @@ const OrderTaking = ({order, navigate}) => {
                         (order === undefined) ? (
                             <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Save Order</Button>
                         ) : (<Button variant="primary" className="mt-3 mb-3" onClick={() => {
-                            axios.put(`http://localhost:8080/OrderTaking/orderupdate/${newState.orderId}`, newState)
-                            .then(() =>{
-                                dispatch({type:ACTIONS.ORDERTAKING_STATUS, payload: "Order Updated Successfully"})
-                            })
-                            .catch(err => console.log(err))
+                            if(newState.expectedDeliveryDate === ""){myDispatch1({type:MY_ACTIONS1.EXPECTED_DELIVERY_DATE, payload: true})}
+                            else if(newState.orderStatus === ""){myDispatch1({type:MY_ACTIONS1.ORDER_STATUS, payload: true})}
+                            else if(newState.gst === ""){myDispatch1({type:MY_ACTIONS1.GST, payload: true})}
+                            else{
+                                axios.put(`http://localhost:8080/OrderTaking/orderupdate/${newState.orderId}`, newState)
+                                .then(() =>{
+                                    dispatch({type:ACTIONS.ORDERTAKING_STATUS, payload: "Order Updated Successfully"})
+                                })
+                                .catch(err => console.log(err))
+                            }
                         }}>Modify Order</Button>)
                     }
                 </div>

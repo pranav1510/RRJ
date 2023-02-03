@@ -22,4 +22,9 @@ public class ClosingInfoServiceImpl implements ClosingInfoService{
     public List<Object[]> getdetails() {
         return closingInfoRepository.getdetails();
     }
+
+    @Override
+    public boolean getDate(ClosingInfo closingInfo) {
+        return closingInfoRepository.existsById(closingInfo.getDate());
+    }
 }

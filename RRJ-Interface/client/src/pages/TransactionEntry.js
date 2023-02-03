@@ -124,7 +124,7 @@ const reducer = (state, {type, payload}) => {
     }
 }
 
-const TransactionEntry = ({navigate,transin}) => {
+const TransactionEntry = ({navigate,transin,show3}) => {
 
     const myName = useSelector(state => state.LoginPage.employeeName)
 
@@ -153,14 +153,6 @@ const TransactionEntry = ({navigate,transin}) => {
         transactionDoneBy: (transin === undefined) ? "" : transin.transactionDoneBy,
         transactionEnteredBy: (transin === undefined) ? myName : transin.transactionEnteredBy,
         transactionDate: (transin === undefined) ? "" : transin.transactionDate,
-        cashIn: "",
-        cashOut: "",
-        goldIn: "",
-        goldOut: "",
-        silverIn: "",
-        silverOut: "",
-        accountIn: "",
-        accountOut: "",
         receiveOptions: [],
         sentOptions: [],
         customerId: (transin === undefined) ? 0 : transin.customerId,
@@ -168,7 +160,8 @@ const TransactionEntry = ({navigate,transin}) => {
         show2: false,
         customerInfoStatus: ""
     }
-
+    
+    
     const [newState, dispatch] = useReducer(reducer, initialState)
     const options1 = ["Gold", "Silver"]
     const options2 = ["Cash", "Acnt Transfer"]
@@ -518,7 +511,7 @@ const TransactionEntry = ({navigate,transin}) => {
                     </div>
                     <div className="col">
                         {
-                            (transin === undefined) ? (
+                            (transin === undefined || !show3) ? (
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Mobile</Form.Label>
                                     <Form.Control type="text" defaultValue={newState.customerMobile} onChange={e => {
@@ -540,7 +533,7 @@ const TransactionEntry = ({navigate,transin}) => {
                     </div>
                     <div className="col">
                         {
-                            (transin === undefined) ? (
+                            (transin === undefined || !show3) ? (
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Transaction Date</Form.Label>
                                     <Form.Control type="date" defaultValue={newState.transactionDate} onChange={e => dispatch({type: ACTIONS.TRANSACTION_DATE, payload: e})}/>
@@ -557,7 +550,7 @@ const TransactionEntry = ({navigate,transin}) => {
                 <div className="row">
                     <div className="col">
                         {
-                            (transin === undefined) ? (
+                            (transin === undefined || !show3) ? (
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Transaction Type</Form.Label>
                                     <Form.Select defaultValue={newState.transactionType} onChange={e => {
@@ -577,6 +570,9 @@ const TransactionEntry = ({navigate,transin}) => {
                                         } else if(e.target.value === "Self Transfer"){
                                             dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
                                             dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                        } else if(e.target.value === "Order Related"){
+                                            dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                            dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
                                         }
                                     }}>
                                         <option value=""></option>
@@ -588,6 +584,7 @@ const TransactionEntry = ({navigate,transin}) => {
                                         <option value="Lended Repaying">Lended Repaying</option>
                                         <option value="General Expenses">General Expenses</option>
                                         <option value="Self Transfer">Self Transfer</option>
+                                        <option value="Order Related">Order Related</option>
                                     </Form.Select>
                                 </Form.Group>
                             ) : (
@@ -600,7 +597,7 @@ const TransactionEntry = ({navigate,transin}) => {
                     </div>
                     <div className="col">
                         {
-                            (transin === undefined) ? (
+                            (transin === undefined || !show3) ? (
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Sent Type</Form.Label>
                                     <Form.Select defaultValue={newState.paymentType} onChange={e => {
@@ -626,7 +623,7 @@ const TransactionEntry = ({navigate,transin}) => {
                     </div>
                     <div className="col">
                         {
-                            (transin === undefined)? (
+                            (transin === undefined || !show3)? (
                                 <Form.Group className="mt-3">
                                     <Form.Label className="fw-bold m-1">Received Type</Form.Label>
                                     <Form.Select defaultValue={newState.receivedType} onChange={e => {
@@ -669,7 +666,7 @@ const TransactionEntry = ({navigate,transin}) => {
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Amount</Form.Label>
                             {
-                                (transin === undefined) ? (
+                                (transin === undefined || !show3) ? (
                                     <Form.Control type="text" defaultValue={newState.amount} onChange={e => dispatch({type: ACTIONS.AMOUNT, payload: e})} />
                                 ) : (
                                     <Form.Control type="text" defaultValue={newState.amount} disabled/>
@@ -681,7 +678,7 @@ const TransactionEntry = ({navigate,transin}) => {
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Gold Weight</Form.Label>
                             {
-                                (transin === undefined) ? (
+                                (transin === undefined || !show3) ? (
                                     <Form.Control type="text" defaultValue={newState.goldWeight} onChange={e => dispatch({type: ACTIONS.GOLD_WEIGHT, payload: e})} />
                                 ) : (
                                     <Form.Control type="text" defaultValue={newState.goldWeight} disabled />
@@ -693,7 +690,7 @@ const TransactionEntry = ({navigate,transin}) => {
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Silver Weight</Form.Label>
                             {
-                                (transin === undefined) ? (
+                                (transin === undefined || !show3) ? (
                                     <Form.Control type="text" defaultValue={newState.silverWeight} onChange={e => dispatch({type: ACTIONS.SILVER_WEIGHT, payload: e})} />
                                 ) : (
                                     <Form.Control type="text" defaultValue={newState.silverWeight} disabled/>
@@ -771,6 +768,363 @@ const TransactionEntry = ({navigate,transin}) => {
                             <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit Transaction</Button>
                         ) : (
                             <Button variant="primary" className="mt-3 mb-3" onClick={() => {
+                                if(newState.transactionType === "Buying"){
+                                    if(newState.receivedType === "Gold" && newState.paymentType === "Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`,{
+                                            cashIn: "",
+                                            cashOut: newState.amount,
+                                            goldIn: newState.goldWeight,
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Silver" && newState.paymentType === "Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: newState.amount,
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: newState.silverWeight,
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Gold" && newState.paymentType === "Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: newState.goldWeight,
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: newState.amount,
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Silver" && newState.paymentType === "Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: newState.silverWeight,
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: newState.amount,
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }}
+                                if(newState.transactionType === "Selling"){
+                                    if(newState.receivedType === "Cash" && newState.paymentType === "Gold"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: newState.amount,
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: newState.goldWeight,
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Acnt Transfer" && newState.paymentType === "Gold"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: newState.goldWeight,
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: newState.amount,
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Cash" && newState.paymentType === "Silver"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: newState.amount,
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: newState.silverWeight,
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Acnt Transfer" && newState.paymentType === "Silver"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: newState.silverWeight,
+                                            accountIn: newState.amount,
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }}
+                                if(newState.transactionType === "Borrowing" || newState.transactionType === "Lended Repaying"){
+                                    if(newState.receivedType === "Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: newState.amount,
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.receivedType === "Gold"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: newState.goldWeight,
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.receivedType === "Silver"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: newState.silverWeight,
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.receivedType === "Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: newState.amount,
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.receivedType === "Gold and Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: newState.amount,
+                                            cashOut: "",
+                                            goldIn: newState.goldWeight,
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Gold and Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: newState.goldWeight,
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: newState.amount,
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Silver and Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: newState.amount,
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: newState.silverWeight,
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.receivedType === "Silver and Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: newState.silverWeight,
+                                            silverOut: "",
+                                            accountIn: newState.amount,
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }}
+                                if(newState.transactionType === "Lending" || newState.transactionType === "Repaying Borrowed" || newState.transactionType === "General Expenses"){
+                                    if(newState.paymentType === "Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: newState.amount,
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.paymentType === "Gold"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: newState.goldWeight,
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.paymentType === "Silver"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: newState.silverWeight,
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.paymentType === "Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: newState.amount,
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                    else if(newState.paymentType === "Gold and Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: newState.amount,
+                                            goldIn: "",
+                                            goldOut: newState.goldWeight,
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.paymentType === "Gold and Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: newState.goldWeight,
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: newState.amount,
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.paymentType === "Silver and Cash"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: newState.amount,
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: newState.silverWeight,
+                                            accountIn: "",
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.paymentType === "Silver and Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: newState.silverWeight,
+                                            accountIn: "",
+                                            accountOut: newState.amount,
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }}
+                                if(newState.transactionType === "Self Transfer"){
+                                    if(newState.paymentType === "Cash" && newState.receivedType === "Acnt Transfer"){
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: "",
+                                            cashOut: newState.amount,
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: newState.amount,
+                                            accountOut: "",
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    } else if(newState.paymentType === "Acnt Transfer" && newState.receivedType === "Cash") {
+                                        axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.transactionId}`, {
+                                            cashIn: newState.amount,
+                                            cashOut: "",
+                                            goldIn: "",
+                                            goldOut: "",
+                                            silverIn: "",
+                                            silverOut: "",
+                                            accountIn: "",
+                                            accountOut: newState.amount,
+                                            id: newState.transactionId,
+                                            date: newState.transactionDate
+                                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                    }
+                                }
                                 axios.put(`http://localhost:8080/TransactionInfo/updatetrans/${newState.transactionId}`, newState)
                                     .then(() => {
                                         dispatch({type:ACTIONS.MESSAGE, payload: "Transaction Updated Successfully!"})
