@@ -255,7 +255,7 @@ const OrderTaking = ({order, navigate}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const GenerateId = () => {
-        myDispatch1({type:MY_ACTIONS1.ORDER_ID, payload: false})
+        if(myNewState1.orderId){myDispatch1({type:MY_ACTIONS1.ORDER_ID, payload: false})}
         axios.get("http://localhost:8080/OrderTaking/orderid")
             .then(res => {
                 let newIdPattern = new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, "0") + new Date().getDate().toString().padStart(2, "0")
@@ -297,7 +297,7 @@ const OrderTaking = ({order, navigate}) => {
         if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
             myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: true})
         } else {
-            myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})
+            if(myNewState1.customerFullName){myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
             axios.post("http://localhost:8080/CustomerInfo/check", newState)
             .then(res => {
                 var val = res.data[0]
@@ -479,7 +479,7 @@ const OrderTaking = ({order, navigate}) => {
                 <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
                 <Form.Control type="text" style={{border: myNewState1.customerFullName ? "3px solid red" : ""}} onChange={e => {
                     dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})
-                    myDispatch1({type: MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})
+                    if(myNewState1.customerFullName){myDispatch1({type: MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
                 }}/>
                 {
                     myNewState1.customerFullName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
@@ -490,7 +490,7 @@ const OrderTaking = ({order, navigate}) => {
                     <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
                     <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: myNewState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
                         dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
-                        myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: false})
+                        if(myNewState1.customerMobile){myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: false})}
                     }}/>
                     {
                         myNewState1.customerMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
@@ -502,7 +502,7 @@ const OrderTaking = ({order, navigate}) => {
                     <Form.Label className="fw-bold m-1">Alternate Mobile 01</Form.Label>
                     <Form.Control type="text" style={{border: myNewState1.alternateMobileOne ? "3px solid red" : ""}} onChange={e => {
                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_ONE, payload: e})
-                        myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_ONE, payload: false})
+                        if(myNewState1.alternateMobileOne){myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_ONE, payload: false})}
                     }} />
                     {
                         myNewState1.alternateMobileOne ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
@@ -514,7 +514,7 @@ const OrderTaking = ({order, navigate}) => {
                     <Form.Label className="fw-bold m-1">Alternate Mobile 02</Form.Label>
                     <Form.Control type="text" style={{border: myNewState1.alternateMobileTwo ? "3px solid red" : ""}} onChange={e => {
                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_TWO, payload: e})
-                        myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_TWO, payload: false})
+                        if(myNewState1.alternateMobileTwo){myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_TWO, payload: false})}
                     }} />
                     {
                         myNewState1.alternateMobileTwo ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
@@ -526,7 +526,7 @@ const OrderTaking = ({order, navigate}) => {
                     <Form.Label className="fw-bold m-1">Address</Form.Label>
                     <Form.Control type="text" style={{border: myNewState1.address ? "3px solid red" : ""}} onChange={e => {
                         dispatch({type: ACTIONS.ADDRESS, payload: e})
-                        myDispatch1({type:MY_ACTIONS1.ADDRESS, payload: false})
+                        if(myNewState1.address){myDispatch1({type:MY_ACTIONS1.ADDRESS, payload: false})}
                     }} />
                     {
                         myNewState1.address ? (<p className="text-danger m-1 small fw-bold">Enter valid address!</p>) : <></>
@@ -612,7 +612,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Item Type</Form.Label>
                         <Form.Select style={{border: myNewState1.itemType ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_TYPE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: false})
+                            if(myNewState1.itemType){myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: false})}
                         }}>
                             <option value=""></option>
                             <option value="Gold Sale">Gold Sale</option>
@@ -634,7 +634,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Item Name</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.itemName ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_NAME, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: false})
+                            if(myNewState1.itemName){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: false})}
                         }} />
                         {
                             myNewState1.itemName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
@@ -646,7 +646,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Delivery Date</Form.Label>
                         <Form.Control type="date" style={{border: myNewState1.deliveryDate ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_DELIVERY_DATE, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: false})
+                            if(myNewState1.deliveryDate){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: false})}
                         }}/>
                         {
                             myNewState1.deliveryDate ? (<p className="text-danger m-1 small fw-bold">Enter valid date!</p>) : <></>
@@ -674,7 +674,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Item Status</Form.Label>
                         <Form.Select style={{border: myNewState1.itemStatus ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_STATUS, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: false})
+                            if(myNewState1.itemStatus){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: false})}
                         }}>
                             <option value=""></option>
                             <option value="In Progress">In Progress</option>
@@ -698,7 +698,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Making Charges</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.makingCharges ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.MAKING_CHARGES, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: false})
+                            if(myNewState1.makingCharges){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: false})}
                         }} />
                         {
                             myNewState1.makingCharges ? (<p className="text-danger m-1 small fw-bold">Enter valid value!</p>) : <></>
@@ -712,7 +712,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Item Gross Weight</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.itemGrossWeight ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_GROSS_WEIGHT, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: false})
+                            if(myNewState1.itemGrossWeight){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.itemGrossWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -724,7 +724,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Item Net Weight</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.itemNetWeight ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_NET_WEIGHT, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: false})
+                            if(myNewState1.itemNetWeight){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.itemNetWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -736,7 +736,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Wastage</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.wastage ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.WASTAGE, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: false})
+                            if(myNewState1.wastage){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: false})}
                         }} />
                         {
                             myNewState1.wastage ? (<p className="text-danger m-1 small fw-bold">Enter valid value!</p>) : <></>
@@ -750,7 +750,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Stones Type</Form.Label>
                         <Form.Select style={{border: myNewState1.stonesType ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.STONES_TYPE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: false})
+                            if(myNewState1.stonesType){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: false})}
                         }}>
                             <option value=""></option>
                             <option value="CZ">CZ</option>
@@ -771,7 +771,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">CZ Cost</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.czCost ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.CZ_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: false})
+                            if(myNewState1.czCost){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: false})}
                         }} />
                         {
                             myNewState1.czCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -783,7 +783,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Emerald Cost</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.emeraldCost ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.EMERALD_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: false})
+                            if(myNewState1.emeraldCost){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: false})}
                         }} />
                         {
                             myNewState1.emeraldCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -795,7 +795,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Ruby Cost</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.rubyCost ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.RUBY_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: false})
+                            if(myNewState1.rubyCost){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: false})}
                         }} />
                         {
                             myNewState1.rubyCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -809,7 +809,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Pearls Weight</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.pearlsWeight ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.PEARLS_WEIGHT, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: false})
+                            if(myNewState1.pearlsWeight){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.pearlsWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -821,7 +821,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Pearls Cost</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.pearlsCost ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.PEARLS_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: false})
+                            if(myNewState1.pearlsCost){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: false})}
                         }} />
                         {
                             myNewState1.pearlsCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -833,7 +833,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Overall Stone Weight</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.overallStoneWeight ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.OVERALL_STONE_WEIGHT, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: false})
+                            if(myNewState1.overallStoneWeight){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.overallStoneWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -845,7 +845,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Overall Stone Cost</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.overallStoneCost ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.OVERALL_STONE_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: false})
+                            if(myNewState1.overallStoneCost){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: false})}
                         }} />
                         {
                             myNewState1.overallStoneCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -859,7 +859,7 @@ const OrderTaking = ({order, navigate}) => {
                         <Form.Label className="fw-bold m-1">Item Price</Form.Label>
                         <Form.Control type="text" style={{border: myNewState1.itemPrice ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ITEM_PRICE, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: false})
+                            if(myNewState1.itemPrice){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: false})}
                         }} />
                         {
                             myNewState1.itemPrice ? (<p className="text-danger m-1 small fw-bold">Enter valid price!</p>) : <></>
@@ -877,19 +877,19 @@ const OrderTaking = ({order, navigate}) => {
             else if(newState.itemName === "" || !(/^[a-zA-Z]+$/.test(newState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
             else if(newState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
             else if(newState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
-            else if(!(/[\d]*/.test(newState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
             else if(!(/\d*\.?\d*/.test(newState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
             else if(!(/\d*\.?\d*/.test(newState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
             else if(!(/\d*\.?\d*/.test(newState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
             else if(newState.stonesType === ""){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: true})}
-            else if(newState.stonesType.includes("CZ") && (newState.czCost === "" || !(/[\d]*/.test(newState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
-            else if(newState.stonesType.includes("Emerald") && (newState.emeraldCost === "" || !(/[\d]*/.test(newState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
-            else if(newState.stonesType.includes("Ruby") && (newState.rubyCost === "" || !(/[\d]*/.test(newState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
+            else if(newState.stonesType.includes("CZ") && (newState.czCost === "" || !(/\d*\.?\d*/.test(newState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
+            else if(newState.stonesType.includes("Emerald") && (newState.emeraldCost === "" || !(/\d*\.?\d*/.test(newState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
+            else if(newState.stonesType.includes("Ruby") && (newState.rubyCost === "" || !(/\d*\.?\d*/.test(newState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
             else if(!(/\d*\.?\d*/.test(newState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
-            else if(!(/[\d]*/.test(newState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
             else if(!(/\d*\.?\d*/.test(newState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
-            else if(!(/[\d]*/.test(newState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
-            else if(!(/[\d]*/.test(newState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
+            else if(!(/\d*\.?\d*/.test(newState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
             else {
                 axios.post("http://localhost:8080/ItemInfo/add", newState)
                     .then(() => {
@@ -969,7 +969,7 @@ const OrderTaking = ({order, navigate}) => {
                                 <Form.Label className="fw-bold m-1">Expected Delivery Date</Form.Label>
                                 <Form.Control type="date" style={{border: myNewState1.expectedDeliveryDate ? "3px solid red" : ""}} defaultValue={newState.expectedDeliveryDate} onChange={e => {
                                     dispatch({type: ACTIONS.EXPECTED_DELIVERY_DATE, payload: String(e.target.value)})
-                                    myDispatch1({type:MY_ACTIONS1.EXPECTED_DELIVERY_DATE, payload: false})
+                                    if(myNewState1.expectedDeliveryDate){myDispatch1({type:MY_ACTIONS1.EXPECTED_DELIVERY_DATE, payload: false})}
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     }} />
                                     {
@@ -1039,13 +1039,15 @@ const OrderTaking = ({order, navigate}) => {
                                 <Form.Label className="fw-bold m-1">Order Status</Form.Label>
                                 <Form.Select defaultValue={newState.orderStatus} style={{border: myNewState1.orderStatus ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.ORDER_STATUS, payload: e.target.value})
-                                    myDispatch1({type:MY_ACTIONS1.ORDER_STATUS, payload: false})
+                                    if(myNewState1.orderStatus){myDispatch1({type:MY_ACTIONS1.ORDER_STATUS, payload: false})}
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                 }}>
                                     <option value=""></option>
                                     <option value="In Progress">In Progress</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Delivered">Delivered</option>
+                                    <option value="Completed but Delivery Pending">Completed but Delivery Pending</option>
+                                    <option value="Payment Done but Delivery Pending">Payment Done but Delivery Pending</option>
+                                    <option value="Delivered but Payment Pending">Delivered but Payment Pending</option>
+                                    <option value="Completed Successfully!">Completed Successfully!</option>
                                     <option value="Cancelled">Cancelled</option>
                                 </Form.Select>
                                 {
@@ -1058,7 +1060,7 @@ const OrderTaking = ({order, navigate}) => {
                                 <Form.Label className="fw-bold m-1">GST</Form.Label>
                                 <Form.Select defaultValue={newState.gst} style={{border: myNewState1.gst ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.GST, payload: e.target.value})
-                                    myDispatch1({type:MY_ACTIONS1.GST, payload: false})
+                                    if(myNewState1.gst){myDispatch1({type:MY_ACTIONS1.GST, payload: false})}
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                 }}>
                                     <option value=""></option>
@@ -1083,7 +1085,7 @@ const OrderTaking = ({order, navigate}) => {
                                     (order === undefined)? (
                                         <Form.Select defaultValue={newState.orderReceivedBy} style={{border: myNewState1.orderReceivedBy ? "3px solid red" : ""}} onChange={e => {
                                             dispatch({type: ACTIONS.ORDER_RECEIVED_BY, payload: e.target.value})
-                                            myDispatch1({type:MY_ACTIONS1.ORDER_RECEIVED_BY, payload: false})
+                                            if(myNewState1.orderReceivedBy){myDispatch1({type:MY_ACTIONS1.ORDER_RECEIVED_BY, payload: false})}
                                             if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                         }}>
                                             <option value=""></option>
@@ -1131,7 +1133,7 @@ const OrderTaking = ({order, navigate}) => {
                                     if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                     if(newState.customerFullName !== ""){dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: ""})}
                                     dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
-                                    myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: false})
+                                    if(myNewState1.customerMobile){myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: false})}
                                 }} />
                                 {
                                     myNewState1.customerMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>

@@ -82,7 +82,7 @@ const AddEmployee = () => {
                         <Form.Label className="fw-bold m-1">Username</Form.Label>
                         <Form.Control type="text" style={{border: newState1.employeeUsername ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.EMPLOYEE_USERNAME, payload: e.target.value})
-                            dispatch1({type:ACTIONS1.EMPLOYEE_USERNAME, payload: false})
+                            if(newState1.employeeUsername){dispatch1({type:ACTIONS1.EMPLOYEE_USERNAME, payload: false})}
                             }}/>
                         {
                             newState1.employeeUsername ? (<p className="text-danger m-1 small fw-bold">Enter valid username!</p>) : <></>
@@ -92,7 +92,7 @@ const AddEmployee = () => {
                         <Form.Label className="fw-bold m-1">Password</Form.Label>
                         <Form.Control type="password" style={{border: newState1.password ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.PASSWORD, payload: e.target.value})
-                            dispatch1({type:ACTIONS1.PASSWORD, payload: false})
+                            if(newState1.password){dispatch1({type:ACTIONS1.PASSWORD, payload: false})}
                             }} />
                         {
                             newState1.password ? (<p className="text-danger m-1 small fw-bold">Enter valid password!</p>) : <></>
@@ -102,7 +102,7 @@ const AddEmployee = () => {
                         <Form.Label className="fw-bold m-1">Employee Full Name</Form.Label>
                         <Form.Control type="text" style={{border: newState1.employeeName ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.EMPLOYEE_NAME, payload: e.target.value})
-                            dispatch1({type:ACTIONS1.EMPLOYEE_NAME, payload: false})
+                            if(newState1.employeeName){dispatch1({type:ACTIONS1.EMPLOYEE_NAME, payload: false})}
                         }} />
                         {
                             newState1.employeeName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
@@ -112,7 +112,7 @@ const AddEmployee = () => {
                         <Form.Label className="fw-bold m-1">Employee Mobile</Form.Label>
                         <Form.Control type="text" style={{border: newState1.employeeMobile ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.EMPLOYEE_MOBILE, payload: e.target.value})
-                            dispatch1({type:ACTIONS1.EMPLOYEE_MOBILE, payload: false})
+                            if(newState1.employeeMobile){dispatch1({type:ACTIONS1.EMPLOYEE_MOBILE, payload: false})}
                         }} />
                         {
                             newState1.employeeMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
@@ -122,7 +122,7 @@ const AddEmployee = () => {
                         <Form.Label className="fw-bold m-1">Role</Form.Label>
                         <Form.Select type="text" style={{border: newState1.role ? "3px solid red" : ""}} onChange={e => {
                             dispatch({type:ACTIONS.ROLE, payload: e.target.value})
-                            dispatch1({type:ACTIONS1.ROLE, payload: false})
+                            if(newState1.role){dispatch1({type:ACTIONS1.ROLE, payload: false})}
                         }} >
                             <option value=""></option>
                             <option value="Owner">Owner</option>

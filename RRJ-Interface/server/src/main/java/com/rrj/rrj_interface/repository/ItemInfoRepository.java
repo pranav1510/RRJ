@@ -14,8 +14,8 @@ public interface ItemInfoRepository extends JpaRepository<ItemInfo,Integer> {
     @Query("select e FROM ItemInfo e WHERE e.OrderId =?1")
     List<ItemInfo> getItemNameAndItemPrice(String OrderId);
 
-    @Query("select e.ItemType, e.ItemNetWeight FROM ItemInfo e WHERE e.OrderId = ?1")
-    List<Object[]> getWeight(String OrderId);
+    @Query("select e.ItemType, e.ItemNetWeight FROM ItemInfo e WHERE e.ItemId = ?1")
+    List<Object[]> getWeight(String ItemId);
 
     @Query("select e FROM ItemInfo e WHERE e.OrderId =?1")
     List<ItemInfo> getItems(String OrderId);

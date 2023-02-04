@@ -216,7 +216,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Item Type</Form.Label>
                         <Form.Select defaultValue={myNewState.itemType} style={{border: myNewState1.itemType ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.ITEM_TYPE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: false})
+                            if(myNewState1.itemType){myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: false})}
                         }}>
                             <option value=""></option>
                             <option value="Gold Sale">Gold Sale</option>
@@ -238,7 +238,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Item Name</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.itemName} style={{border: myNewState1.itemName ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.ITEM_NAME, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: false})
+                            if(myNewState1.itemName){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: false})}
                         }} />
                         {
                             myNewState1.itemName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
@@ -250,7 +250,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Delivery Date</Form.Label>
                         <Form.Control type="date" defaultValue={myNewState.deliveryDate} style={{border: myNewState1.deliveryDate ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.DELIVERY_DATE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: false})
+                            if(myNewState1.deliveryDate){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: false})}
                         }}/>
                         {
                             myNewState1.deliveryDate ? (<p className="text-danger m-1 small fw-bold">Enter valid date!</p>) : <></>
@@ -278,7 +278,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Item Status</Form.Label>
                         <Form.Select defaultValue={myNewState.itemStatus} style={{border: myNewState1.itemStatus ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.ITEM_STATUS, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: false})
+                            if(myNewState1.itemStatus){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: false})}
                         }}>
                             <option value=""></option>
                             <option value="In Progress">In Progress</option>
@@ -302,7 +302,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Making Charges</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.makingCharges} style={{border: myNewState1.makingCharges ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.MAKING_CHARGES, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: false})
+                            if(myNewState1.makingCharges){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: false})}
                         }} />
                         {
                             myNewState1.makingCharges ? (<p className="text-danger m-1 small fw-bold">Enter valid making charges!</p>) : <></>
@@ -316,7 +316,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Item Gross Weight</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.itemGrossWeight} style={{border: myNewState1.itemGrossWeight ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.ITEM_GROSS_WEIGHT, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: false})
+                            if(myNewState1.itemGrossWeight){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.itemGrossWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -328,7 +328,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Item Net Weight</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.itemNetWeight} style={{border: myNewState1.itemNetWeight ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.ITEM_NET_WEIGHT, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: false})
+                            if(myNewState1.itemNetWeight){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.itemNetWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -340,7 +340,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Wastage</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.wastage} style={{border: myNewState1.wastage ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.WASTAGE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: false})
+                            if(myNewState1.wastage){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: false})}
                         }} />
                         {
                             myNewState1.wastage ? (<p className="text-danger m-1 small fw-bold">Enter valid wastage!</p>) : <></>
@@ -354,7 +354,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Stones Type</Form.Label>
                         <Form.Select defaultValue={myNewState.stonesType} style={{border: myNewState1.stonesType ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.STONES_TYPE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: false})
+                            if(myNewState1.stonesType){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: false})}
                         }}>
                             <option value=""></option>
                             <option value="CZ">CZ</option>
@@ -375,7 +375,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">CZ Cost</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.czCost} style={{border: myNewState1.czCost ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.CZ_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: false})
+                            if(myNewState1.czCost){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: false})}
                         }} />
                         {
                             myNewState1.czCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -387,7 +387,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Emerald Cost</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.emeraldCost} style={{border: myNewState1.emeraldCost ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.EMERALD_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: false})
+                            if(myNewState1.emeraldCost){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: false})}
                         }} />
                         {
                             myNewState1.emeraldCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -399,7 +399,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Ruby Cost</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.rubyCost} style={{border: myNewState1.rubyCost ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.RUBY_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: false})
+                            if(myNewState1.rubyCost){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: false})}
                         }} />
                         {
                             myNewState1.rubyCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -413,7 +413,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Pearls Weight</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.pearlsWeight} style={{border: myNewState1.pearlsWeight ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.PEARLS_WEIGHT, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: false})
+                            if(myNewState1.pearlsWeight){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.pearlsWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -425,7 +425,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Pearls Cost</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.pearlsCost} style={{border: myNewState1.pearlsCost ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.PEARLS_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: false})
+                            if(myNewState1.pearlsCost){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: false})}
                         }} />
                         {
                             myNewState1.pearlsCost ? (<p className="text-danger m-1 small fw-bold">Enter valid item cost!</p>) : <></>
@@ -437,7 +437,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Overall Stone Weight</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.overallStoneWeight} style={{border: myNewState1.overallStoneWeight ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.OVERALL_STONE_WEIGHT, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: false})
+                            if(myNewState1.overallStoneWeight){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: false})}
                         }} />
                         {
                             myNewState1.overallStoneWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
@@ -449,7 +449,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Overall Stone Cost</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.overallStoneCost} style={{border: myNewState1.overallStoneCost ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.OVERALL_STONE_COST, payload: e})
-                            myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: false})
+                            if(myNewState1.overallStoneCost){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: false})}
                         }} />
                         {
                             myNewState1.overallStoneCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
@@ -463,7 +463,7 @@ const ItemUpdate = ({item}) => {
                         <Form.Label className="fw-bold m-1">Item Price</Form.Label>
                         <Form.Control type="text" defaultValue={myNewState.itemPrice} style={{border: myNewState1.itemPrice ? "3px solid red" : ""}} onChange={e => {
                             myDispatch({type:MY_ACTIONS.ITEM_PRICE, payload: e.target.value})
-                            myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: false})
+                            if(myNewState1.itemPrice){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: false})}
                         }} />
                         {
                             myNewState1.itemPrice ? (<p className="text-danger m-1 small fw-bold">Enter valid price!</p>) : <></>
@@ -474,22 +474,22 @@ const ItemUpdate = ({item}) => {
             <div className="d-flex justify-content-center m-3">
                 <Button variant="primary" className="mt-3 mb-3" onClick={() => {
                     if(myNewState.itemType === ""){myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: true})}
-                    else if(myNewState.itemName === "" || !(/[a-zA-Z\s]*/.test(myNewState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
+                    else if(myNewState.itemName === "" || !(/^[a-zA-Z]+$/.test(myNewState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
                     else if(myNewState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
                     else if(myNewState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
-                    else if(!(/[\d]*/.test(myNewState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
                     else if(!(/\d*\.?\d*/.test(myNewState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
                     else if(!(/\d*\.?\d*/.test(myNewState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
                     else if(!(/\d*\.?\d*/.test(myNewState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
                     else if(myNewState.stonesType === ""){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: true})}
-                    else if(myNewState.stonesType.includes("CZ") && (myNewState.czCost === "" || !(/[\d]*/.test(myNewState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
-                    else if(myNewState.stonesType.includes("Emerald") && (myNewState.emeraldCost === "" || !(/[\d]*/.test(myNewState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
-                    else if(myNewState.stonesType.includes("Ruby") && (myNewState.rubyCost === "" || !(/[\d]*/.test(myNewState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
+                    else if(myNewState.stonesType.includes("CZ") && (myNewState.czCost === "" || !(/\d*\.?\d*/.test(myNewState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
+                    else if(myNewState.stonesType.includes("Emerald") && (myNewState.emeraldCost === "" || !(/\d*\.?\d*/.test(myNewState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
+                    else if(myNewState.stonesType.includes("Ruby") && (myNewState.rubyCost === "" || !(/\d*\.?\d*/.test(myNewState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
                     else if(!(/\d*\.?\d*/.test(myNewState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
-                    else if(!(/[\d]*/.test(myNewState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
                     else if(!(/\d*\.?\d*/.test(myNewState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
-                    else if(!(/[\d]*/.test(myNewState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
-                    else if(!(/[\d]*/.test(myNewState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
+                    else if(!(/\d*\.?\d*/.test(myNewState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
                     else {
                         axios.put(`http://localhost:8080/ItemInfo/itemupdate/${item.itemId}`, myNewState)
                             .then(() => {

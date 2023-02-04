@@ -31,8 +31,8 @@ public class ItemInfoServiceImpl implements ItemInfoService {
     }
 
     @Override
-    public List<Object[]> getWeight(PaymentInfo paymentInfo) {
-        return itemInfoRepository.getWeight(paymentInfo.getOrderId());
+    public List<Object[]> getWeight(ItemInfo itemInfo) {
+        return itemInfoRepository.getWeight(itemInfo.getItemId());
     }
 
     @Override

@@ -134,7 +134,7 @@ const CustomerInfo = ({navigate, info}) => {
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
                             <Form.Control type="text" defaultValue={newState.customerFullName} style={{border: newState1.customerFullName ? "3px solid red" : ""}} onChange={e => {
                                 dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e})
-                                dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: false})
+                                if(newState1.customerFullName){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
                                 if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                 if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                 }}/>
@@ -148,7 +148,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
                                     <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: newState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
                                         dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e})
-                                        dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: false})
+                                        if(newState1.customerMobile){dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: false})}
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                         if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
@@ -162,7 +162,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Label className="fw-bold m-1">Alternate Mobile 01</Form.Label>
                                     <Form.Control type="text" defaultValue={newState.alternateMobileOne} style={{border: newState1.alternateMobileOne ? "3px solid red" : ""}} onChange={e => {
                                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_ONE, payload: e})
-                                        dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_ONE, payload: false})
+                                        if(newState1.alternateMobileOne){dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_ONE, payload: false})}
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                         if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
@@ -176,7 +176,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Label className="fw-bold m-1">Alternate Mobile 02</Form.Label>
                                     <Form.Control type="text" defaultValue={newState.alternateMobileTwo} style={{border: newState1.alternateMobileTwo ? "3px solid red" : ""}} onChange={e => {
                                         dispatch({type: ACTIONS.ALTERNATE_MOBILE_TWO, payload: e})
-                                        dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_TWO, payload: false})
+                                        if(newState1.alternateMobileTwo){dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_TWO, payload: false})}
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                         if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />
@@ -192,7 +192,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Form.Label className="fw-bold m-1">Address</Form.Label>
                                     <Form.Control type="text" defaultValue={newState.address} style={{border: newState1.address ? "3px solid red" : ""}} onChange={e => {
                                         dispatch({type: ACTIONS.ADDRESS, payload: e})
-                                        dispatch1({type:ACTIONS1.ADDRESS, payload: false})
+                                        if(newState1.address){dispatch1({type:ACTIONS1.ADDRESS, payload: false})}
                                         if(newState.status !== ""){ dispatch({type: ACTIONS.STATUS, payload: ""})}
                                         if(newState.err !== ""){ dispatch({type: ACTIONS.ERR, payload: ""})}
                                     }} />

@@ -11,7 +11,7 @@ public interface ItemInfoService {
     public ItemInfo save(ItemInfo itemInfo);
     public List<String> getItemData(ItemInfo itemInfo);
     public List<ItemInfo> getItemNameAndPrice(PaymentInfo paymentInfo);
-    public List<Object[]> getWeight(PaymentInfo paymentInfo);
+    public List<Object[]> getWeight(ItemInfo itemInfo);
     public List<ItemInfo> getItems(ItemInfo itemInfo);
     public ResponseEntity<ItemInfo> updateItem(ItemInfo itemInfo, String ItemId);
     public ItemInfo findByItemId(ItemInfo itemInfo);
