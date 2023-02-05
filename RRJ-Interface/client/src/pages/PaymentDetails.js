@@ -133,7 +133,9 @@ const ACTIONS = {
     GOLD_VALUES: "GOLD_VALUES",
     SILVER_VALUES: "SILVER_VALUES",
     PERCENTAGE: "PERCENTAGE",
-    ONE_GRAM_COST: "ONE_GRAM_COST"
+    ONE_GRAM_COST: "ONE_GRAM_COST",
+    TRANSACTION_TYPE: "TRANSACTION_TYPE",
+    PAYMENT_PURPOSE_VALUES: "PAYMENT_PURPOSE_VALUES"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -226,6 +228,10 @@ const reducer = (state, {type, payload}) => {
             return {...state, percentage: payload}
         case ACTIONS.ONE_GRAM_COST:
             return {...state, oneGramCost: payload}
+        case ACTIONS.TRANSACTION_TYPE:
+            return {...state, transactionType: payload}
+        case ACTIONS.PAYMENT_PURPOSE_VALUES:
+            return {...state, paymentPurposeValues: payload}
         default:
             return state
     }
@@ -238,6 +244,7 @@ const PaymentDetails = ({navigate}) => {
     const[newState1, dispatch1] = useReducer(reducer1, initialState1)
 
     const initialState = {
+        trsnsactionType: "",
         orderId: "",
         customerId: 0,
         paymentId: "",
@@ -253,7 +260,6 @@ const PaymentDetails = ({navigate}) => {
         goldWeight: "",
         silverWeight: "",
         orderPrice: "",
-        discounut: "",
         amountReceived: "",
         customerDueStatus: "",
         customerDueAmount: "",
@@ -283,7 +289,8 @@ const PaymentDetails = ({navigate}) => {
         receiveOptions: [],
         goldValues: [],
         silverValues: [],
-        priceValues: []
+        priceValues: [],
+        paymentPurposeValues: []
     }
 
     const [newState, dispatch] = useReducer(reducer, initialState)
@@ -295,7 +302,11 @@ const PaymentDetails = ({navigate}) => {
     }
     const handleClose3 = () => dispatch({type:ACTIONS.SHOW3, payload: false})
 
+    const options1 = ["Gold", "Silver"]
     const options2 = ["Cash", "Gold", "Gold and Cash", "Gold and Acnt Transfer", "Silver", "Silver and Cash", "Silver and Acnt Transfer", "Acnt Transfer"]
+    const options3 = ["Cash", "Acnt Transfer"]
+    const options4 = ["Advance for Order", "Order Delivery", "Return Excess", "Dues Payment"]
+    const options5 = ["Buying", "Selling", "Borrowing", "Repaying Borrowed", "Lending", "Lended Repaying", "General Expenses", "Self Transfer"]
 
     const SubmitHandler = () => {
         if(newState.paymentId === ""){dispatch1({type:ACTIONS1.PAYMENT_ID, payload: true})}
@@ -730,32 +741,82 @@ const PaymentDetails = ({navigate}) => {
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
+                            <Form.Label  className="fw-bold m-1">Transaction Type</Form.Label>
+                            <Form.Select onChange={e => {
+                                dispatch({type:ACTIONS.TRANSACTION_TYPE, payload: e.target.value})
+                                if(e.target.value === "Order Related"){
+                                    dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options4})
+                                } else if(e.target.value === "General"){
+                                    dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options5})
+                                } else {
+                                    dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: []})
+                                }
+                            } }>
+                                <option value=""></option>
+                                <option value="Order Related">Order Related</option>
+                                <option value="General">General</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </div>
+                    <div className="col">
+                        <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Purpose</Form.Label>
                             <Form.Select style={{border: newState1.paymentPurpose ? "3px solid red" : ""}} onChange={e => {
                                 if(newState1.paymentPurpose){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: false})}
                                 dispatch({type:ACTIONS.PAYMENT_PURPOSE, payload: e.target.value})
-                                if(e.target.value === "Advance for Order"){
-                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload:[]})
-                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                } else if(e.target.value === "Order Delivery"){
-                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: ["Order Related"]})
-                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                } else if(e.target.value === "Return Excess"){
-                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
-                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                } else if(e.target.value === "Dues Payment"){
-                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                if(newState.transactionType === "Order Related"){
+                                    if(e.target.value === "Advance for Order"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload:[]})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                    } else if(e.target.value === "Order Delivery"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: ["Order Related"]})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                    } else if(e.target.value === "Return Excess"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                    } else if(e.target.value === "Dues Payment"){
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                    } else {
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                    }
+                                } else if(newState.transactionType === "General"){
+                                    if(e.target.value === "Buying"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options1})    
+                                    } else if(e.target.value === "Selling"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options1})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
+                                    } else if(e.target.value === "Borrowing" || e.target.value === "Lended Repaying"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                    } else if(e.target.value === "Lending" || e.target.value === "Repaying Borrowed"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                    } else if(e.target.value === "Self Transfer"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
+                                    } else if(e.target.value === "General Expenses"){
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                    } else {
+                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                    }
                                 } else {
                                     dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
                                     dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
                                 }
                             }}>
                                 <option value=""></option>
-                                <option value="Advance for Order">Advance for Order</option>
-                                <option value="Order Delivery">Order Delivery</option>
-                                <option value="Return Excess">Return Excess</option>
-                                <option value="Dues Payment">Dues Payment</option>
+                                {
+                                    newState.paymentPurposeValues.map((info,index) => {
+                                        return(
+                                            <option value={info} key={index}>{info}</option>
+                                        )
+                                    })
+                                }
                             </Form.Select>
                             {
                                 newState1.paymentPurpose ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
@@ -804,26 +865,9 @@ const PaymentDetails = ({navigate}) => {
                             }
                         </Form.Group>
                     </div>
-                    <div className="col">
-                        <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Payment Status</Form.Label>
-                            <Form.Select style={{border: newState1.paymentStatus ? "3px solid red" : ""}} onChange={e => {
-                                    dispatch({type:ACTIONS.STATUS, payload: e.target.value})
-                                    if(newState1.paymentStatus){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: false})}
-                                }}>
-                                    <option value=""></option>
-                                    <option value="In Progress">Pending</option>
-                                    <option value="Completed">Completed</option>
-                                    <option value="Cancelled">Cancelled</option>
-                                </Form.Select>
-                                {
-                                    newState1.paymentStatus ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
-                                }
-                        </Form.Group>
-                    </div>
                 </div>
                 <div className="row">
-                    <div className="col-3">
+                    <div className="col-2">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
                             <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: newState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
@@ -873,9 +917,15 @@ const PaymentDetails = ({navigate}) => {
                 </div>
                 {
                     (newState.paymentType.includes("Gold") || newState.paymentType.includes("Silver")) ? (
-                        <Card className="mt-3 w-50" style={{backgroundColor: "skyblue"}}>
+                        <Card className="mt-3 w-75" style={{backgroundColor: "skyblue"}}>
                             <Container>
                                 <div className="row">
+                                    <div className="col">
+                                        <Form.Group className="mt-2 mb-2">
+                                            <Form.Label className="fw-bold m-1">Exchange Cost</Form.Label>
+                                            <Form.Control type="text" defaultValue={newState.exchangeCost} onChange={e => {dispatch({type:ACTIONS.EXCHANGE_COST, payload: e.target.value})}}/>
+                                        </Form.Group>
+                                    </div>
                                     <div className="col">
                                         <Form.Group className="mt-2 mb-2">
                                             <Form.Label className="fw-bold m-1">Exchange Weight</Form.Label>
@@ -965,11 +1015,19 @@ const PaymentDetails = ({navigate}) => {
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
-                            <Form.Label className="fw-bold m-1">Exchange Cost</Form.Label>
-                            <Form.Control type="text" style={{border: newState1.exchangeCost ? "3px solid red" : ""}} defaultValue={newState.exchangeCost} disabled/>
-                            {
-                                newState1.exchangeCost ? (<p className="text-danger m-1 small fw-bold">Enter valid cost!</p>) : <></>
-                            }
+                            <Form.Label className="fw-bold m-1">Payment Status</Form.Label>
+                            <Form.Select style={{border: newState1.paymentStatus ? "3px solid red" : ""}} onChange={e => {
+                                    dispatch({type:ACTIONS.STATUS, payload: e.target.value})
+                                    if(newState1.paymentStatus){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: false})}
+                                }}>
+                                    <option value=""></option>
+                                    <option value="In Progress">Pending</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </Form.Select>
+                                {
+                                    newState1.paymentStatus ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
+                                }
                         </Form.Group>
                     </div>
                 </div>
