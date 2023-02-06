@@ -573,6 +573,9 @@ const TransactionEntry = ({navigate,transin,show3}) => {
                                         } else if(e.target.value === "Order Related"){
                                             dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
                                             dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
+                                        } else{
+                                            dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                            dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
                                         }
                                     }}>
                                         <option value=""></option>

@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useReducer } from "react";
 import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
-import TransactionEntry from "./TransactionEntry";
+import PaymentDetails from "./PaymentDetails";
 
 const initialState = {
-    transactionId: "",
+    paymentId: "",
     customerFullName: "",
     customerMobile: "",
     details: [],
@@ -17,7 +17,7 @@ const initialState = {
 }
 
 const ACTIONS = {
-    TRANSACTION_ID: "TRANSACTION_ID",
+    PAYMENT_ID: "PAYMENT_ID",
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
     CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
     DETAILS: "DETAILS",
@@ -31,8 +31,8 @@ const ACTIONS = {
 
 const reducer = (state, {type,payload}) => {
     switch(type){
-        case ACTIONS.TRANSACTION_ID:
-            return {...state, transactionId: payload}
+        case ACTIONS.PAYMENT_ID:
+            return {...state, paymentId: payload}
         case ACTIONS.CUSTOMER_FULL_NAME:
             return {...state, customerFullName: payload.toLowerCase()}
         case ACTIONS.CUSTOMER_MOBILE:
@@ -83,7 +83,7 @@ const TransactionInfo = ({navigate}) => {
                     <Table className="table-hover w-100 mt-4">
                         <thead>
                             <tr>
-                                <th scope="col">Transaction Id</th>
+                                <th scope="col">Payment Id</th>
                                 <th scope="col">Customer Full Name</th>
                                 <th scope="col">Customer Mobile</th>
                                 <th scope="col">Description</th>
@@ -98,11 +98,11 @@ const TransactionInfo = ({navigate}) => {
                                             dispatch({type:ACTIONS.TRANS_IN, payload: info})
                                             dispatch({type:ACTIONS.SHOW1, payload: true})
                                         }}>
-                                            <td>{info.transactionId}</td>
+                                            <td>{info.paymentId}</td>
                                             <td>{info.customerFullName}</td>
                                             <td>{info.customerMobile}</td>
-                                            <td>{info.transactionDescription}</td>
-                                            <td>{info.transactionStatus}</td>
+                                            <td>{info.paymentDescription}</td>
+                                            <td>{info.status}</td>
                                         </tr>
                                     )
                                 })
@@ -121,7 +121,7 @@ const TransactionInfo = ({navigate}) => {
                     <Modal.Title>Transaction Update</Modal.Title>
                 </Modal.Header>
                 <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
-                    <TransactionEntry transin = {newState.transin} show3={newState.val}/>
+                    <PaymentDetails transin = {newState.transin} showMain={newState.val}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose2}>
@@ -145,14 +145,26 @@ const TransactionInfo = ({navigate}) => {
                 </Modal.Header>
                 <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
                 <Table className="table-hover w-100 mt-1 small">
-                    <tbody>
+                <tbody>
                         <tr>
-                            <th>Transaction Id</th>
-                            <td>{newState.transin.transactionId}</td>
+                            <th>Payment Id</th>
+                            <td>{newState.transin.paymentId}</td>
                         </tr>
                         <tr>
-                            <th>Order Id</th>
-                            <td>{newState.transin.orderId}</td>
+                            <th>Transaction Type</th>
+                            <td>{newState.transin.transactionType}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Purpose</th>
+                            <td>{newState.transin.paymentPurpose}</td>
+                        </tr>
+                        <tr>
+                            <th>Sent Type</th>
+                            <td>{newState.transin.sentType}</td>
+                        </tr>
+                        <tr>
+                            <th>Received Type</th>
+                            <td>{newState.transin.paymentType}</td>
                         </tr>
                         <tr>
                             <th>Customer Name</th>
@@ -162,13 +174,23 @@ const TransactionInfo = ({navigate}) => {
                             <th>Customer Mobile</th>
                             <td>{newState.transin.customerMobile}</td>
                         </tr>
+                        {
+                            (newState.transin.transactionType === "Order Related") ? (
+                                <>
+                                <tr>
+                                    <th>Order Id</th>
+                                    <td>{newState.transin.orderId}</td>
+                                </tr>
+                                <tr>
+                                    <th>Order Price</th>
+                                    <td>{newState.transin.orderPrice}</td>
+                                </tr>
+                                </>
+                            ) : <></>
+                        }
                         <tr>
-                            <th>Transaction Date</th>
-                            <td>{newState.transin.transactionDate}</td>
-                        </tr>
-                        <tr>
-                            <th>Amount</th>
-                            <td>{newState.transin.amount}</td>
+                            <th>Payment Date</th>
+                            <td>{newState.transin.paymentDate}</td>
                         </tr>
                         <tr>
                             <th>Gold Weight</th>
@@ -179,48 +201,80 @@ const TransactionInfo = ({navigate}) => {
                             <td>{newState.transin.silverWeight}</td>
                         </tr>
                         <tr>
-                            <th>Description</th>
-                            <td>{newState.transin.transactionDescription}</td>
-                        </tr>
-                        <tr>
-                            <th>Transaction Type</th>
-                            <td>{newState.transin.transactionType}</td>
-                        </tr>
-                        <tr>
-                            <th>Sent Type</th>
-                            <td>{newState.transin.paymentType}</td>
-                        </tr>
-                        <tr>
-                            <th>Received Type</th>
-                            <td>{newState.transin.receivedType}</td>
+                            <th>Amount</th>
+                            <td>{newState.transin.amountReceived}</td>
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td>{newState.transin.transactionStatus}</td>
+                            <td>{newState.transin.status}</td>
                         </tr>
                         <tr>
                             <th>Customer Due Status</th>
                             <td>{newState.transin.customerDueStatus}</td>
                         </tr>
-                        <tr>
-                            <th>Customer Due Amount</th>
-                            <td>{newState.transin.customerDueAmount}</td>
-                        </tr>
+                        {
+                            (newState.transin.customerDueAmount !== "") ? (
+                                <tr>
+                                    <th>Customer Due Amount</th>
+                                    <td>{newState.transin.customerDueAmount}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.customerDueGold !== "") ? (
+                                <tr>
+                                    <th>Customer Due Gold</th>
+                                    <td>{newState.transin.customerDueGold}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.customerDueSilver !== "") ? (
+                                <tr>
+                                    <th>Customer Due Silver</th>
+                                    <td>{newState.transin.customerDueSilver}</td>
+                                </tr>
+                            ) : <></>
+                        }
                         <tr>
                             <th>RRJ Due Status</th>
                             <td>{newState.transin.rrjDueStatus}</td>
                         </tr>
+                        {
+                            (newState.transin.rrjDueAmount !== "") ? (
+                                <tr>
+                                    <th>Customer Due Amount</th>
+                                    <td>{newState.transin.customerDueAmount}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.rrjDueGold !== "") ? (
+                                <tr>
+                                    <th>Customer Due Gold</th>
+                                    <td>{newState.transin.customerDueGold}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.rrjDueSilver !== "") ? (
+                                <tr>
+                                    <th>Customer Due Silver</th>
+                                    <td>{newState.transin.customerDueSilver}</td>
+                                </tr>
+                            ) : <></>
+                        }
                         <tr>
-                            <th>RRJ Due Amount</th>
-                            <td>{newState.transin.rrjDueAmount}</td>
+                            <th>Description</th>
+                            <td>{newState.transin.paymentDescription}</td>
                         </tr>
                         <tr>
-                            <th>Transaction Done By</th>
-                            <td>{newState.transin.transactionDoneBy}</td>
+                            <th>Payment Received By</th>
+                            <td>{newState.transin.paymentReceivedBy}</td>
                         </tr>
                         <tr>
-                            <th>Transaction Entered By</th>
-                            <td>{newState.transin.transactionEnteredBy}</td>
+                            <th>Payment Entered By</th>
+                            <td>{newState.transin.paymentEnteredBy}</td>
                         </tr>
                     </tbody>
                 </Table>
@@ -232,7 +286,7 @@ const TransactionInfo = ({navigate}) => {
                     <Button variant="primary" onClick={() => {
                         dispatch({type:ACTIONS.SHOW1, payload: false})
                         dispatch({type:ACTIONS.SHOW2, payload: true})
-                        axios.post("http://localhost:8080/ClosingInfo/getdate",{date: newState.transin.transactionDate})
+                        axios.post("http://localhost:8080/ClosingInfo/getdate",{date: newState.transin.paymentDate})
                         .then(res => {
                             dispatch({type:ACTIONS.VAL, payload: res.data})}
                             )
@@ -247,8 +301,8 @@ const TransactionInfo = ({navigate}) => {
                     <div className="row">
                         <div className="col">
                             <Form.Group className="mt-3">
-                                <Form.Label className="fw-bold m-1">Transaction Id</Form.Label>
-                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.TRANSACTION_ID, payload: e.target.value})}/>
+                                <Form.Label className="fw-bold m-1">Payment Id</Form.Label>
+                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.PAYMENT_ID, payload: e.target.value})}/>
                             </Form.Group>
                         </div>
                         <div className="col">
@@ -266,7 +320,7 @@ const TransactionInfo = ({navigate}) => {
                     </div>
                     <div className="row m-3">
                         <Button variant="primary" onClick={() => {
-                            axios.post("http://localhost:8080/TransactionInfo/gettransaction", newState)
+                            axios.post("http://localhost:8080/PaymentInfo/gettransaction", newState)
                                 .then(res => {
                                     if(res.data[0] === undefined){
                                         dispatch({type:ACTIONS.SHOW3, payload: true})

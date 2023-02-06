@@ -237,52 +237,52 @@ const reducer = (state, {type, payload}) => {
     }
 }
 
-const PaymentDetails = ({navigate}) => {
-    
+const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
+
     const myName = useSelector(state => state.LoginPage.employeeName)
 
     const[newState1, dispatch1] = useReducer(reducer1, initialState1)
 
     const initialState = {
-        trsnsactionType: "",
-        orderId: "",
-        customerId: 0,
-        paymentId: "",
+        transactionType: (transin === undefined) ? "": transin.transactionType,
+        orderId: (transin === undefined) ? "": transin.orderId,
+        customerId: (transin === undefined) ? 0 : transin.customerId,
+        paymentId: (transin === undefined) ? "": transin.paymentId,
         paymentInfoStatus: "",
         fullItemDetails: [],
         itemDetails: [],
         orderDetails: [],
         tableShow: false,
-        customerFullName: "",
-        customerMobile: "",
-        exchangeWeight: "",
-        exchangeCost: "",
-        goldWeight: "",
-        silverWeight: "",
-        orderPrice: "",
-        amountReceived: "",
-        customerDueStatus: "",
-        customerDueAmount: "",
-        customerDueGold: "",
-        customerDueSilver: "",
-        rrjDueStatus: "",
-        rrjDueAmount: "",
-        rrjDueGold: "",
-        rrjDueSilver: "",
-        paymentDescription: "",
-        sentType: "",
-        paymentType: "",
-        paymentReceivedBy: "",
+        customerFullName: (transin === undefined) ? "": transin.customerFullName,
+        customerMobile: (transin === undefined) ? "": transin.customerMobile,
+        exchangeWeight: (transin === undefined) ? "": transin.exchangeWeight,
+        exchangeCost: (transin === undefined) ? "": transin.exchangeCost,
+        goldWeight: (transin === undefined) ? "": transin.goldWeight,
+        silverWeight: (transin === undefined) ? "": transin.silverWeight,
+        orderPrice: (transin === undefined) ? "": transin.orderPrice,
+        amountReceived: (transin === undefined) ? "": transin.amountReceived,
+        customerDueStatus: (transin === undefined) ? "": transin.customerDueStatus,
+        customerDueAmount: (transin === undefined) ? "": transin.customerDueAmount,
+        customerDueGold: (transin === undefined) ? "": transin.customerDueGold,
+        customerDueSilver: (transin === undefined) ? "": transin.customerDueSilver,
+        rrjDueStatus: (transin === undefined) ? "": transin.rrjDueStatus,
+        rrjDueAmount: (transin === undefined) ? "": transin.rrjDueAmount,
+        rrjDueGold: (transin === undefined) ? "": transin.rrjDueGold,
+        rrjDueSilver: (transin === undefined) ? "": transin.rrjDueSilver,
+        paymentDescription: (transin === undefined) ? "": transin.paymentDescription,
+        sentType: (transin === undefined) ? "": transin.sentType,
+        paymentType: (transin === undefined) ? "": transin.paymentType,
+        paymentReceivedBy: (transin === undefined) ? "": transin.paymentReceivedBy,
         show1: false,
         show2: false,
         show3: false,
         exchangeShow: false,
-        percentage: "",
-        oneGramCost: "",
-        paymentDate: "",
-        paymentPurpose: "",
-        status: "",
-        paymentEnteredBy: myName,
+        percentage: (transin === undefined) ? "": transin.percentage,
+        oneGramCost: (transin === undefined) ? "": transin.oneGramCost,
+        paymentDate: (transin === undefined) ? String(date) : transin.paymentDate,
+        paymentPurpose: (transin === undefined) ? "": transin.paymentPurpose,
+        status: (transin === undefined) ? "": transin.status,
+        paymentEnteredBy: (transin === undefined) ? myName : transin.paymentEnteredBy,
         overallGold: "",
         overallSilver: "",
         sentOptions: [],
@@ -310,134 +310,330 @@ const PaymentDetails = ({navigate}) => {
 
     const SubmitHandler = () => {
         if(newState.paymentId === ""){dispatch1({type:ACTIONS1.PAYMENT_ID, payload: true})}
-        else if(newState.paymentPurpose === ""){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: true})}
-        else if((newState.paymentPurpose === "Order Delivery" || newState.paymentPurpose === "Return Excess") && newState.sentType === ""){
-            dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})
-        }else if((newState.paymentPurpose !== "Return Excess" || newState.paymentPurpose !== "") && newState.paymentType === ""){
-            dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})
-        } else if(newState.paymentStatus === ""){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: true})}
-        else if(newState.customerMobile === "" || !(/^(\d){10}$/).test(newState.customerMobile)){dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})}
-        else if(newState.customerFullName === ""){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})}
-        else if(newState.orderId === ""){dispatch1({type:ACTIONS1.ORDER_ID, payload: true})}
-        else if(newState.paymentDate === ""){dispatch1({type:ACTIONS1.PAYMENT_DATE, payload: true})}
-        else if(newState.paymentPurpose === "Order Delivery" && newState.orderPrice === ""){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: true})}
-        else if((newState.sentType.includes("Gold") || newState.paymentType.includes("Gold")) && (!(/\d*\.?\d*/.test(newState.goldWeight)) || newState.goldWeight === "")){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: true})}
-        else if((newState.sentType.includes("Silver") || newState.paymentType.includes("Silver")) && (!(/\d*\.?\d*/.test(newState.silverWeight)) || newState.silverWeight === "") ){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: true})}
-        else if((newState.sentType.includes("Cash") || newState.sentType.includes("Acnt") || newState.paymentType.includes("Cash") || newState.paymentType.includes("Acnt")) && (!(/\d*\.?\d*/.test(newState.amountReceived)) || newState.amountReceived === "")){
-            dispatch1({type:ACTIONS1.AMOUNT, payload: true})
-        } else if((newState.paymentType.includes("Gold") || newState.paymentType.includes("Silver")) && newState.exchangeCost === ""){dispatch1({type:ACTIONS1.EXCHANGE_COST, payload: true})}
-        else if(newState.customerDueStatus === ""){dispatch1({type:ACTIONS1.CUSTOMER_DUE_STATUS, payload: true})}
-        else if(newState.paymentEnteredBy === ""){dispatch1({type:ACTIONS1.PAYMENT_ENTERED_BY, payload: true})}
-        else if(newState.rrjDueStatus === ""){dispatch1({type:ACTIONS1.RRJ_DUE_STATUS, payload: true})}
-        else if(newState.paymentReceivedBy === ""){dispatch1({type:ACTIONS1.PAYMENT_RECEIVED_BY, payload: true})}
+        // else if(newState.paymentPurpose === ""){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: true})}
+        // else if((newState.paymentPurpose === "Order Delivery" || newState.paymentPurpose === "Return Excess") && newState.sentType === ""){
+        //     dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})
+        // }else if((newState.paymentPurpose !== "Return Excess" || newState.paymentPurpose !== "") && newState.paymentType === ""){
+        //     dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})
+        // } else if(newState.paymentStatus === ""){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: true})}
+        // else if(newState.customerMobile === "" || !(/^(\d){10}$/).test(newState.customerMobile)){dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})}
+        // else if(newState.customerFullName === ""){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})}
+        // else if(newState.orderId === ""){dispatch1({type:ACTIONS1.ORDER_ID, payload: true})}
+        // else if(newState.paymentDate === ""){dispatch1({type:ACTIONS1.PAYMENT_DATE, payload: true})}
+        // else if(newState.paymentPurpose === "Order Delivery" && newState.orderPrice === ""){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: true})}
+        // else if((newState.sentType.includes("Gold") || newState.paymentType.includes("Gold")) && (!(/\d*\.?\d*/.test(newState.goldWeight)) || newState.goldWeight === "")){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: true})}
+        // else if((newState.sentType.includes("Silver") || newState.paymentType.includes("Silver")) && (!(/\d*\.?\d*/.test(newState.silverWeight)) || newState.silverWeight === "") ){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: true})}
+        // else if((newState.sentType.includes("Cash") || newState.sentType.includes("Acnt") || newState.paymentType.includes("Cash") || newState.paymentType.includes("Acnt")) && (!(/\d*\.?\d*/.test(newState.amountReceived)) || newState.amountReceived === "")){
+        //     dispatch1({type:ACTIONS1.AMOUNT, payload: true})
+        // } else if((newState.paymentType.includes("Gold") || newState.paymentType.includes("Silver")) && newState.exchangeCost === ""){dispatch1({type:ACTIONS1.EXCHANGE_COST, payload: true})}
+        // else if(newState.customerDueStatus === ""){dispatch1({type:ACTIONS1.CUSTOMER_DUE_STATUS, payload: true})}
+        // else if(newState.paymentEnteredBy === ""){dispatch1({type:ACTIONS1.PAYMENT_ENTERED_BY, payload: true})}
+        // else if(newState.rrjDueStatus === ""){dispatch1({type:ACTIONS1.RRJ_DUE_STATUS, payload: true})}
+        // else if(newState.paymentReceivedBy === ""){dispatch1({type:ACTIONS1.PAYMENT_RECEIVED_BY, payload: true})}
         else{
-            if(newState.paymentPurpose === "Advance for Order" || newState.paymentPurpose === "Order Delivery" || newState.paymentPurpose === "Dues Payment"){
-                if(newState.paymentType === "Cash"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        cashIn: newState.amount,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => { console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Gold"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        goldIn: newState.goldWeight,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Gold and Cash"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        goldIn: newState.goldWeight,
-                        cashIn: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Gold and Acnt Transfer"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        goldIn: newState.goldWeight,
-                        accountIn: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Silver"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        silverIn: newState.silverWeight,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Silver and Cash"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        silverIn: newState.silverWeight,
-                        cashIn: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Silver and Acnt Transfer"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        silverIn: newState.silverWeight,
-                        accountIn: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.paymentType === "Acnt Transfer"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        accountIn: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
+            if(newState.transactionType === "Order Related"){
+                if(newState.paymentPurpose === "Buying"){
+                    if(newState.paymentType === "Gold" && newState.sentType === "Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            goldIn: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver" && newState.sentType === "Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            silverIn: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Gold" && newState.sentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountOut: newState.amountReceived,
+                            goldIn: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver" && newState.sentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountOut: newState.amountReceived,
+                            silverIn: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }}
+                if(newState.paymentPurpose === "Selling"){
+                    if(newState.paymentType === "Cash" && newState.sentType === "Gold"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            goldOut: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Acnt Transfer" && newState.sentType === "Gold"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountIn: newState.amountReceived,
+                            goldOut: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Cash" && newState.sentType === "Silver"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            silverOut: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Acnt Transfer" && newState.sentType === "Silver"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountIn: newState.amountReceived,
+                            silverOut: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }}
+                if(newState.paymentPurpose === "Borrowing" || newState.paymentPurpose === "Lended Repaying"){
+                    if(newState.paymentType === "Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.paymentType === "Gold"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldIn: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.paymentType === "Silver"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverIn: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.paymentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.paymentType === "Gold and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            goldIn: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Gold and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountIn: newState.amountReceived,
+                            goldIn: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            silverIn: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountIn: newState.amountReceived,
+                            silverIn: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }}
+                if(newState.paymentPurpose === "Lending" || newState.paymentPurpose === "Repaying Borrowed" || newState.paymentPurpose === "General Expenses"){
+                    if(newState.sentType === "Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.sentType === "Gold"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldOut: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.sentType === "Silver"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverOut: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.sentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
+                    else if(newState.sentType === "Gold and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            goldOut: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Gold and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountOut: newState.amountReceived,
+                            goldOut: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Silver and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            silverOut: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Silver and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountOut: newState.amountReceived,
+                            silverOut: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }}
+                if(newState.paymentPurpose === "Self Transfer"){
+                    if(newState.sentType === "Cash" && newState.paymentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            accountIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Acnt Transfer" && newState.paymentType === "Cash") {
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            accountOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    }
                 }
-            } else if(newState.paymentPurpose === "Return Excess"){
-                if(newState.sentType === "Cash"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        cashOut: newState.amount,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => { console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Gold"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        goldOut: newState.goldWeight,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Gold and Cash"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        goldOut: newState.goldWeight,
-                        cashOut: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Gold and Acnt Transfer"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        goldOut: newState.goldWeight,
-                        accountOut: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Silver"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        silverOut: newState.silverWeight,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Silver and Cash"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        silverOut: newState.silverWeight,
-                        cashOut: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Silver and Acnt Transfer"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        silverOut: newState.silverWeight,
-                        accountOut: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
-                } else if(newState.sentType === "Acnt Transfer"){
-                    axios.post("http://localhost:8080/DayInfo/add", {
-                        accountOut: newState.amountReceived,
-                        id: newState.paymentId,
-                        date: newState.paymentDate
-                    }).then(() => {console.log("saved")}).catch(err => console.log(err))
+            } else if(newState.transactionType === "Order Related"){
+                if(newState.paymentPurpose === "Advance for Order" || newState.paymentPurpose === "Order Delivery" || newState.paymentPurpose === "Dues Payment"){
+                    if(newState.paymentType === "Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Gold"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldIn: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Gold and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldIn: newState.goldWeight,
+                            cashIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Gold and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldIn: newState.goldWeight,
+                            accountIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverIn: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverIn: newState.silverWeight,
+                            cashIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Silver and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverIn: newState.silverWeight,
+                            accountIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.paymentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountIn: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    }
+                } else if(newState.paymentPurpose === "Return Excess"){
+                    if(newState.sentType === "Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            cashOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Gold"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldOut: newState.goldWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Gold and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldOut: newState.goldWeight,
+                            cashOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Gold and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            goldOut: newState.goldWeight,
+                            accountOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Silver"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverOut: newState.silverWeight,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Silver and Cash"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverOut: newState.silverWeight,
+                            cashOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Silver and Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            silverOut: newState.silverWeight,
+                            accountOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    } else if(newState.sentType === "Acnt Transfer"){
+                        axios.post("http://localhost:8080/DayInfo/add", {
+                            accountOut: newState.amountReceived,
+                            id: newState.paymentId,
+                            date: newState.paymentDate
+                        }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                    }
                 }
             }
             axios.post("http://localhost:8080/PaymentInfo/add", newState)
@@ -448,17 +644,32 @@ const PaymentDetails = ({navigate}) => {
     }
 
     const Validate = () => {
-        axios.post("http://localhost:8080/OrderTaking/check", newState)
-        .then(res => {
-            let arr = res.data
-            if(arr[0] !== undefined){
-                dispatch({type:ACTIONS.SHOW2, payload: true})
-                dispatch({type:ACTIONS.ORDER_DETAILS, payload: arr.reverse()})
-            } else {
-                dispatch({type: ACTIONS.SHOW1, payload: true})
-            }
-        })
-        .catch(err => console.log(err))
+        if(newState.transactionType === "Order Related"){
+            axios.post("http://localhost:8080/OrderTaking/check", newState)
+            .then(res => {
+                let arr = res.data
+                if(arr[0] !== undefined){
+                    dispatch({type:ACTIONS.SHOW2, payload: true})
+                    dispatch({type:ACTIONS.ORDER_DETAILS, payload: arr.reverse()})
+                } else {
+                    dispatch({type: ACTIONS.SHOW1, payload: true})
+                }
+            })
+            .catch(err => console.log(err))
+        } else if(newState.transactionType === "General"){
+            axios.post("http://localhost:8080/CustomerInfo/check", {customerMobile: newState.customerMobile})
+            .then(res => {
+                var val = res.data[0]
+                if(val === undefined) {
+                    dispatch({type:ACTIONS.SHOW1, payload: true})
+                }
+                else{
+                    dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: val[0]})
+                    dispatch({type: ACTIONS.CUSTOMER_ID, payload: val[1]})
+                }
+            })
+            .catch(err => console.log(err));
+        }
     }
  
     return(
@@ -565,7 +776,13 @@ const PaymentDetails = ({navigate}) => {
       </Modal>
         <Modal show={newState.show1} onHide={handleClose1}>
         <Modal.Header closeButton>
-          <Modal.Title>Order does not exist</Modal.Title>
+            {
+                (newState.transactionType === "Order Related") ? (
+                    <Modal.Title>Order does not exist</Modal.Title>
+                ) : (
+                    <Modal.Title>Customer does not exist</Modal.Title>
+                )
+            }
         </Modal.Header>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose1}>
@@ -714,110 +931,130 @@ const PaymentDetails = ({navigate}) => {
         </Modal.Footer>
       </Modal>
         <Container>
-            <nav aria-label="breadcrumb">
-                <ol className="breadcrumb flex-nowrap">
-                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
-                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
-                    <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">PaymentDetails</li>
-                </ol>
-            </nav>
+            {
+                (transin === undefined) ? (
+                    <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb flex-nowrap">
+                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
+                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                            <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">PaymentDetails</li>
+                        </ol>
+                    </nav>
+                ) : <></>
+            }
             <Form>
                 <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.paymentInfoStatus}</h5></div>
                 <div className="row">
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Id</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.paymentId} style={{border: newState1.paymentId ? "3px solid red" : ""}}/>
+                            <Form.Control type="text" defaultValue={newState.paymentId} style={{border: newState1.paymentId ? "3px solid red" : ""}} disabled/>
                             {
                                 newState1.paymentId ? (<p className="text-danger m-1 small fw-bold">Enter valid Id!</p>) : <></>
                             }
-                            <Button className="btn btn-secondary mt-2" onClick={() => {
-                                const temp = new Date()
-                                const time = String(temp.getFullYear()) + String(temp.getMonth() + 1).padStart(2, '0') + String(temp.getDate()).padStart(2, '0') + String(temp.getHours()).padStart(2, '0') + String(temp.getMinutes()).padStart(2, '0') + String(temp.getSeconds()).padStart(2, '0')
-                                dispatch({type:ACTIONS.PAYMENT_ID, payload: time})
-                                if(newState1.paymentId){dispatch1({type:ACTIONS1.PAYMENT_ID, payload: false})}
-                            }}>Get Payment Id</Button>
+                            {
+                                (transin === undefined) ? (
+                                    <Button className="btn btn-secondary mt-2" onClick={() => {
+                                        const temp = new Date()
+                                        const time = String(temp.getFullYear()) + String(temp.getMonth() + 1).padStart(2, '0') + String(temp.getDate()).padStart(2, '0') + String(temp.getHours()).padStart(2, '0') + String(temp.getMinutes()).padStart(2, '0') + String(temp.getSeconds()).padStart(2, '0')
+                                        dispatch({type:ACTIONS.PAYMENT_ID, payload: time})
+                                        if(newState1.paymentId){dispatch1({type:ACTIONS1.PAYMENT_ID, payload: false})}
+                                    }}>Get Payment Id</Button>
+                                ) : <></>
+                            }
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label  className="fw-bold m-1">Transaction Type</Form.Label>
-                            <Form.Select onChange={e => {
-                                dispatch({type:ACTIONS.TRANSACTION_TYPE, payload: e.target.value})
-                                if(e.target.value === "Order Related"){
-                                    dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options4})
-                                } else if(e.target.value === "General"){
-                                    dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options5})
-                                } else {
-                                    dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: []})
-                                }
-                            } }>
-                                <option value=""></option>
-                                <option value="Order Related">Order Related</option>
-                                <option value="General">General</option>
-                            </Form.Select>
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Select defaultValue={newState.transactionType} onChange={e => {
+                                        dispatch({type:ACTIONS.TRANSACTION_TYPE, payload: e.target.value})
+                                        if(e.target.value === "Order Related"){
+                                            dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options4})
+                                        } else if(e.target.value === "General"){
+                                            dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options5})
+                                        } else {
+                                            dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: []})
+                                        }
+                                    } }>
+                                        <option value=""></option>
+                                        <option value="Order Related">Order Related</option>
+                                        <option value="General">General</option>
+                                    </Form.Select>
+                                ) : (
+                                    <Form.Control type="text" defaultValue={newState.transactionType} disabled/>
+                                )
+                            }
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Purpose</Form.Label>
-                            <Form.Select style={{border: newState1.paymentPurpose ? "3px solid red" : ""}} onChange={e => {
-                                if(newState1.paymentPurpose){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: false})}
-                                dispatch({type:ACTIONS.PAYMENT_PURPOSE, payload: e.target.value})
-                                if(newState.transactionType === "Order Related"){
-                                    if(e.target.value === "Advance for Order"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload:[]})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                    } else if(e.target.value === "Order Delivery"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: ["Order Related"]})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                    } else if(e.target.value === "Return Excess"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                    } else if(e.target.value === "Dues Payment"){
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
-                                    } else {
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
-                                    }
-                                } else if(newState.transactionType === "General"){
-                                    if(e.target.value === "Buying"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options1})    
-                                    } else if(e.target.value === "Selling"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options1})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
-                                    } else if(e.target.value === "Borrowing" || e.target.value === "Lended Repaying"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
-                                    } else if(e.target.value === "Lending" || e.target.value === "Repaying Borrowed"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                    } else if(e.target.value === "Self Transfer"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
-                                    } else if(e.target.value === "General Expenses"){
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                    } else {
-                                        dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                        dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
-                                    }
-                                } else {
-                                    dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
-                                    dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
-                                }
-                            }}>
-                                <option value=""></option>
-                                {
-                                    newState.paymentPurposeValues.map((info,index) => {
-                                        return(
-                                            <option value={info} key={index}>{info}</option>
-                                        )
-                                    })
-                                }
-                            </Form.Select>
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Select defaultValue={newState.paymentPurpose} style={{border: newState1.paymentPurpose ? "3px solid red" : ""}} onChange={e => {
+                                        if(newState1.paymentPurpose){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: false})}
+                                        dispatch({type:ACTIONS.PAYMENT_PURPOSE, payload: e.target.value})
+                                        if(newState.transactionType === "Order Related"){
+                                            if(e.target.value === "Advance for Order"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload:[]})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                            } else if(e.target.value === "Order Delivery"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: ["Order Related"]})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                            } else if(e.target.value === "Return Excess"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                            } else if(e.target.value === "Dues Payment"){
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                            } else {
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                            }
+                                        } else if(newState.transactionType === "General"){
+                                            if(e.target.value === "Buying"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options1})    
+                                            } else if(e.target.value === "Selling"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: options1})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
+                                            } else if(e.target.value === "Borrowing" || e.target.value === "Lended Repaying"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options2})
+                                            } else if(e.target.value === "Lending" || e.target.value === "Repaying Borrowed"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                            } else if(e.target.value === "Self Transfer"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: options3})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: options3})
+                                            } else if(e.target.value === "General Expenses"){
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: options2})
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                            } else {
+                                                dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                                dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                            }
+                                        } else {
+                                            dispatch({type:ACTIONS.RECEIVE_OPTIONS, payload: []})
+                                            dispatch({type:ACTIONS.SENT_OPTIONS, payload: []})
+                                        }
+                                    }}>
+                                        <option value=""></option>
+                                        {
+                                            newState.paymentPurposeValues.map((info,index) => {
+                                                return(
+                                                    <option value={info} key={index}>{info}</option>
+                                                )
+                                            })
+                                        }
+                                    </Form.Select>
+                                ) : (
+                                    <Form.Control type="text" defaultValue={newState.paymentPurpose} disabled/>
+                                )
+                            }
                             {
                                 newState1.paymentPurpose ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
                             }
@@ -826,19 +1063,39 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Sent Type</Form.Label>
-                            <Form.Select style={{border: newState1.sentType ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type:ACTIONS.SENT_TYPE, payload: e.target.value})
-                                if(newState1.sentType){dispatch1({type:ACTIONS1.SENT_TYPE, payload: false})}
-                            }}>
-                                <option value=""></option>
-                                {
-                                    newState.sentOptions.map((info,index) => {
-                                        return(
-                                            <option key={index} value={info}>{info}</option>
-                                        )
-                                    })
-                                }
-                            </Form.Select>
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Select defaultValue={newState.sentType} style={{border: newState1.sentType ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type:ACTIONS.SENT_TYPE, payload: e.target.value})
+                                        if(newState1.sentType){dispatch1({type:ACTIONS1.SENT_TYPE, payload: false})}
+                                    }}>
+                                        <option value=""></option>
+                                        {
+                                            newState.sentOptions.map((info,index) => {
+                                                return(
+                                                    <option key={index} value={info}>{info}</option>
+                                                )
+                                            })
+                                        }
+                                    </Form.Select>
+                                ) : (
+                                    showMain ? (
+                                        <Form.Control type="text" defaultValue={newState.sentType} disabled/>
+                                    ) : (
+                                        <Form.Select defaultValue={newState.sentType}>
+                                            <option value=""></option>
+                                            {
+                                                options2.map((info, index) => {
+                                                    return(
+                                                        <option value={info} key={index}>{info}</option>
+                                                    )
+                                                })
+                                            }
+                                        </Form.Select>
+                                    )
+
+                                    )
+                            }
                             {
                                 newState1.sentType ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
                             }
@@ -847,19 +1104,38 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Received Type</Form.Label>
-                            <Form.Select style={{border: newState1.paymentType ? "3px solid red" : ""}} onChange={e => {
-                                if(newState1.paymentType){dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: false})}
-                                dispatch({type:ACTIONS.PAYMENT_TYPE, payload: e.target.value})
-                            }}>
-                                <option value=""></option>
-                                {
-                                    newState.receiveOptions.map((info,index) => {
-                                        return(
-                                            <option key={index} value={info}>{info}</option>
-                                        )
-                                    })
-                                }
-                            </Form.Select>
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Select defaultValue={newState.paymentType} style={{border: newState1.paymentType ? "3px solid red" : ""}} onChange={e => {
+                                        if(newState1.paymentType){dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: false})}
+                                        dispatch({type:ACTIONS.PAYMENT_TYPE, payload: e.target.value})
+                                    }}>
+                                        <option value=""></option>
+                                        {
+                                            newState.receiveOptions.map((info,index) => {
+                                                return(
+                                                    <option key={index} value={info}>{info}</option>
+                                                )
+                                            })
+                                        }
+                                    </Form.Select>
+                                ) : (
+                                    showMain ? (
+                                        <Form.Control type="text" defaultValue={newState.paymentType} disabled/>
+                                    ) : (
+                                        <Form.Select defaultValue={newState.paymentType}>
+                                            <option value=""></option>
+                                            {
+                                                options2.map((info, index) => {
+                                                    return(
+                                                        <option value={info} key={index}>{info}</option>
+                                                    )
+                                                })
+                                            }
+                                        </Form.Select>
+                                    )
+                                )
+                            }
                             {
                                 newState1.paymentType ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
                             }
@@ -870,18 +1146,26 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col-2">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: newState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
-                                if(newState1.customerMobile){dispatch1({type: ACTIONS1.CUSTOMER_MOBILE, payload: false})}
-                                if(newState1.customerFullName){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
-                                if(newState1.orderId){dispatch1({type:ACTIONS1.ORDER_ID, payload: false})}
-                                if(newState.orderId !== ""){dispatch({type:ACTIONS.ORDER_ID, payload: ""})}
-                                if(newState.customerFullName !== ""){dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: ""})}
-                            }} />
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Control type="text" defaultValue={newState.customerMobile} style={{border: newState1.customerMobile ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type: ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                                        if(newState1.customerMobile){dispatch1({type: ACTIONS1.CUSTOMER_MOBILE, payload: false})}
+                                        if(newState1.customerFullName){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
+                                        if(newState1.orderId){dispatch1({type:ACTIONS1.ORDER_ID, payload: false})}
+                                        if(newState.orderId !== ""){dispatch({type:ACTIONS.ORDER_ID, payload: ""})}
+                                        if(newState.customerFullName !== ""){dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: ""})}
+                                    }} />
+                                ) : (
+                                    <Form.Control type="text" defaultValue={newState.customerMobile} disabled />
+                                )
+                            }
                             {
                                 newState1.customerMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
                             }
-                            <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Id</Button>
+                            {
+                                (transin === undefined) ? <Button className="btn btn-secondary mt-2" onClick={Validate}>Validate Id</Button> : <></>
+                            }
                         </Form.Group>
                     </div>
                     <div className="col">
@@ -905,10 +1189,16 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col-2">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Date</Form.Label>
-                            <Form.Control type="date" style={{border: newState1.paymentDate ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.PAYMENT_DATE, payload: e})
-                                if(newState1.paymentDate){dispatch1({type:ACTIONS1.PAYMENT_DATE, payload: false})}
-                            }}/>
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Control type="date" defaultValue={newState.paymentDate} style={{border: newState1.paymentDate ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type: ACTIONS.PAYMENT_DATE, payload: e})
+                                        if(newState1.paymentDate){dispatch1({type:ACTIONS1.PAYMENT_DATE, payload: false})}
+                                    }}/>
+                                ) : (
+                                    <Form.Control type="date" defaultValue={newState.paymentDate} disabled />
+                                )
+                            }
                             {
                                 newState1.paymentDate ? (<p className="text-danger m-1 small fw-bold">Enter valid date!</p>) : <></>
                             }
@@ -923,25 +1213,65 @@ const PaymentDetails = ({navigate}) => {
                                     <div className="col">
                                         <Form.Group className="mt-2 mb-2">
                                             <Form.Label className="fw-bold m-1">Exchange Cost</Form.Label>
-                                            <Form.Control type="text" defaultValue={newState.exchangeCost} onChange={e => {dispatch({type:ACTIONS.EXCHANGE_COST, payload: e.target.value})}}/>
+                                            {
+                                                (transin === undefined) ? (
+                                                    <Form.Control type="text" defaultValue={newState.exchangeCost} onChange={e => {dispatch({type:ACTIONS.EXCHANGE_COST, payload: e.target.value})}}/>
+                                                ) : (
+                                                    showMain ? (
+                                                        <Form.Control type="text" defaultValue={newState.exchangeCost} disabled/>
+                                                    ) : (
+                                                        <Form.Control type="text" defaultValue={newState.exchangeCost} onChange={e => {dispatch({type:ACTIONS.EXCHANGE_COST, payload: e.target.value})}}/>
+                                                    )
+                                                )
+                                            }
                                         </Form.Group>
                                     </div>
                                     <div className="col">
                                         <Form.Group className="mt-2 mb-2">
                                             <Form.Label className="fw-bold m-1">Exchange Weight</Form.Label>
-                                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.EXCHANGE_WEIGHT, payload: e.target.value})} />
+                                            {
+                                                (transin === undefined) ? (
+                                                    <Form.Control type="text" defaultValue={newState.exchangeWeight} onChange={e => dispatch({type: ACTIONS.EXCHANGE_WEIGHT, payload: e.target.value})} />
+                                                ) : (
+                                                    showMain ? (
+                                                        <Form.Control type="text" defaultValue={newState.exchangeWeight} disabled />
+                                                    ) : (
+                                                        <Form.Control type="text" defaultValue={newState.exchangeWeight} onChange={e => dispatch({type: ACTIONS.EXCHANGE_WEIGHT, payload: e.target.value})} />
+                                                    )
+                                                )
+                                            }
                                         </Form.Group>
                                     </div>
                                     <div className="col">
                                         <Form.Group className="mt-2 mb-2">
                                             <Form.Label className="fw-bold m-1">Percentage</Form.Label>
-                                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PERCENTAGE, payload: e.target.value})} />
+                                            {
+                                                (transin === undefined) ? (
+                                                    <Form.Control type="text" defaultValue={newState.percentage} onChange={e => dispatch({type: ACTIONS.PERCENTAGE, payload: e.target.value})} />
+                                                ) : (
+                                                    showMain ? (
+                                                        <Form.Control type="text" defaultValue={newState.percentage} disabled />
+                                                    ) : (
+                                                        <Form.Control type="text" defaultValue={newState.percentage} onChange={e => dispatch({type: ACTIONS.PERCENTAGE, payload: e.target.value})} />
+                                                    )
+                                                )
+                                            }
                                         </Form.Group>
                                     </div>
                                     <div className="col">
                                         <Form.Group className="mt-2 mb-2">
                                             <Form.Label className="fw-bold m-1">One Gram Cost</Form.Label>
-                                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.ONE_GRAM_COST, payload: e.target.value})} />
+                                            {
+                                                (transin === undefined) ? (
+                                                    <Form.Control type="text" defaultValue={newState.oneGramCost} onChange={e => dispatch({type: ACTIONS.ONE_GRAM_COST, payload: e.target.value})} />
+                                                ) : (
+                                                    showMain ? (
+                                                        <Form.Control type="text" defaultValue={newState.percentage} disabled />
+                                                    ) : (
+                                                        <Form.Control type="text" defaultValue={newState.percentage} onChange={e => dispatch({type: ACTIONS.PERCENTAGE, payload: e.target.value})} />
+                                                    )
+                                                )
+                                            }
                                         </Form.Group>
                                     </div>
                                     <div className="row">
@@ -968,10 +1298,27 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Order Price</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.orderPrice} style={{border: newState1.orderPrice ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.ORDER_PRICE, payload: e.target.value})
-                                if(newState1.orderPrice){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: false})}
-                            }} />
+                            {
+                                (newState.transactionType === "Order Related" && newState.paymentPurpose === "Order Delivery") ? (
+                                    (transin === undefined) ? (
+                                        <Form.Control type="text" defaultValue={newState.orderPrice} style={{border: newState1.orderPrice ? "3px solid red" : ""}} onChange={e => {
+                                            dispatch({type: ACTIONS.ORDER_PRICE, payload: e.target.value})
+                                            if(newState1.orderPrice){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: false})}
+                                        }} />
+                                    ) : (
+                                        showMain? (
+                                            <Form.Control type="text" defaultValue={newState.orderPrice} disabled/>
+                                        ) : (
+                                            <Form.Control type="text" defaultValue={newState.orderPrice} style={{border: newState1.orderPrice ? "3px solid red" : ""}} onChange={e => {
+                                                dispatch({type: ACTIONS.ORDER_PRICE, payload: e.target.value})
+                                                if(newState1.orderPrice){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: false})}
+                                            }} />
+                                        )
+                                    )
+                                ) : (
+                                    <Form.Control type="text" disabled />
+                                )
+                            }
                             {
                                 newState1.orderPrice ? (<p className="text-danger m-1 small fw-bold">Enter valid price!</p>) : <></>
                             }
@@ -980,10 +1327,23 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Gold Weight</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.goldWeight} style={{border: newState1.goldWeight ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.GOLD_WEIGHT, payload: e.target.value})
-                                if(newState1.goldWeight){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: false})}
-                            }} />
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Control type="text" defaultValue={newState.goldWeight} style={{border: newState1.goldWeight ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type: ACTIONS.GOLD_WEIGHT, payload: e.target.value})
+                                        if(newState1.goldWeight){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: false})}
+                                    }} />
+                                ) : (
+                                    showMain ? (
+                                        <Form.Control type="text" defaultValue={newState.goldWeight} disabled />
+                                    ) : (
+                                        <Form.Control type="text" defaultValue={newState.goldWeight} style={{border: newState1.goldWeight ? "3px solid red" : ""}} onChange={e => {
+                                            dispatch({type: ACTIONS.GOLD_WEIGHT, payload: e.target.value})
+                                            if(newState1.goldWeight){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: false})}
+                                        }} />
+                                    )
+                                )
+                            }
                             {
                                 newState1.goldWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
                             }
@@ -992,10 +1352,23 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Silver Weight</Form.Label>
-                            <Form.Control type="text" defaultValue={newState.silverWeight} style={{border: newState1.silverWeight ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.SILVER_WEIGHT, payload: e.target.value})
-                                if(newState1.silverWeight){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: false})}
-                            }} />
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Control type="text" defaultValue={newState.silverWeight} style={{border: newState1.silverWeight ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type: ACTIONS.SILVER_WEIGHT, payload: e.target.value})
+                                        if(newState1.silverWeight){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: false})}
+                                    }} />
+                                ) : (
+                                    showMain ? (
+                                        <Form.Control type="text" defaultValue={newState.silverWeight} disabled />
+                                    ) : (
+                                        <Form.Control type="text" defaultValue={newState.silverWeight} style={{border: newState1.silverWeight ? "3px solid red" : ""}} onChange={e => {
+                                            dispatch({type: ACTIONS.SILVER_WEIGHT, payload: e.target.value})
+                                            if(newState1.silverWeight){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: false})}
+                                        }} />
+                                    )
+                                )
+                            }
                             {
                                 newState1.silverWeight ? (<p className="text-danger m-1 small fw-bold">Enter valid weight!</p>) : <></>
                             }
@@ -1004,10 +1377,23 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Amount</Form.Label>
-                            <Form.Control type="text" style={{border: newState1.amount ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.AMOUNT_RECEIVED, payload: e})
-                                if(newState1.amount){dispatch1({type:ACTIONS1.AMOUNT, payload: false})}
-                            }} />
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Control type="text" defaultValue={newState.amountReceived} style={{border: newState1.amount ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type: ACTIONS.AMOUNT_RECEIVED, payload: e})
+                                        if(newState1.amount){dispatch1({type:ACTIONS1.AMOUNT, payload: false})}
+                                    }} />
+                                ) : (
+                                    showMain ? (
+                                        <Form.Control type="text" defaultValue={newState.amountReceived} disabled />
+                                    ) : (
+                                        <Form.Control type="text" defaultValue={newState.amountReceived} style={{border: newState1.amount ? "3px solid red" : ""}} onChange={e => {
+                                            dispatch({type: ACTIONS.AMOUNT_RECEIVED, payload: e})
+                                            if(newState1.amount){dispatch1({type:ACTIONS1.AMOUNT, payload: false})}
+                                        }} />
+                                    )
+                                )
+                            }
                             {
                                 newState1.amount ? (<p className="text-danger m-1 small fw-bold">Enter valid value!</p>) : <></>
                             }
@@ -1016,7 +1402,7 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Status</Form.Label>
-                            <Form.Select style={{border: newState1.paymentStatus ? "3px solid red" : ""}} onChange={e => {
+                            <Form.Select defaultValue={newState.status} style={{border: newState1.paymentStatus ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.STATUS, payload: e.target.value})
                                     if(newState1.paymentStatus){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: false})}
                                 }}>
@@ -1035,7 +1421,7 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Due Status</Form.Label>
-                            <Form.Select style={{border: newState1.customerDueStatus ? "3px solid red" : ""}} onChange={e => {
+                            <Form.Select defaultValue={newState.customerDueStatus} style={{border: newState1.customerDueStatus ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.CUSTOMER_DUE_STATUS, payload: e.target.value})
                                     if(newState1.customerDueStatus){dispatch1({type:ACTIONS1.CUSTOMER_DUE_STATUS, payload: false})}
                                 }}>
@@ -1051,19 +1437,19 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Due Amount</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_AMOUNT, payload: e.target.value})} />
+                            <Form.Control type="text" defaultValue={newState.customerDueAmount} onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_AMOUNT, payload: e.target.value})} />
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Due Gold</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_GOLD, payload: e.target.value})} />
+                            <Form.Control type="text" defaultValue={newState.customerDueGold} onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_GOLD, payload: e.target.value})} />
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Due Silver</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_SILVER, payload: e.target.value})} />
+                            <Form.Control type="text" defaultValue={newState.customerDueSilver} onChange={e => dispatch({type: ACTIONS.CUSTOMER_DUE_SILVER, payload: e.target.value})} />
                         </Form.Group>
                     </div>
                     <div className="col-3">
@@ -1080,7 +1466,7 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">RRJ Due Status</Form.Label>
-                            <Form.Select style={{border: newState1.rrjDueStatus ? "3px solid red" : ""}} onChange={e => {
+                            <Form.Select defaultValue={newState.rrjDueStatus} style={{border: newState1.rrjDueStatus ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.RRJ_DUE_STATUS, payload: e.target.value})
                                     if(newState1.rrjDueStatus){dispatch1({type:ACTIONS1.RRJ_DUE_STATUS, payload: false})}
                                 }}>
@@ -1096,33 +1482,43 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">RRJ Due Amount</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_AMOUNT, payload: e.target.value})} />
+                            <Form.Control type="text" defaultValue={newState.rrjDueAmount} onChange={e => dispatch({type: ACTIONS.RRJ_DUE_AMOUNT, payload: e.target.value})} />
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">RRJ Due Gold</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_GOLD, payload: e.target.value})} />
+                            <Form.Control type="text" defaultValue={newState.rrjDueGold} onChange={e => dispatch({type: ACTIONS.RRJ_DUE_GOLD, payload: e.target.value})} />
                         </Form.Group>
                     </div>
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">RRJ Due Silver</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.RRJ_DUE_SILVER, payload: e.target.value})} />
+                            <Form.Control type="text" defaultValue={newState.rrjDueSilver} onChange={e => dispatch({type: ACTIONS.RRJ_DUE_SILVER, payload: e.target.value})} />
                         </Form.Group>
                     </div>
                     <div className="col-3">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Received By</Form.Label>
-                            <Form.Select style={{border: newState1.paymentReceivedBy ? "3px solid red" : ""}} onChange={e => {
-                                dispatch({type: ACTIONS.PAYMENT_RECEIVED_BY, payload: e.target.value})
-                                if(newState1.paymentReceivedBy){dispatch1({type:ACTIONS1.PAYMENT_RECEIVED_BY, payload: false})}
-                                }}>
-                                    <option value=""></option>
-                                    <option value="LAXMINARSAIAH YEDULAPURAM">LAXMINARSAIAH YEDULAPURAM</option>
-                                    <option value="RAVI KUMAR RANGU">RAVI KUMAR RANGU</option>
-                                    <option value="SRAVAN KUMAR RANGU">SRAVAN KUMAR RANGU</option>
-                            </Form.Select>
+                            {
+                                (transin === undefined) ? (
+                                    <Form.Select defaultValue={newState.paymentReceivedBy} style={{border: newState1.paymentReceivedBy ? "3px solid red" : ""}} onChange={e => {
+                                        dispatch({type: ACTIONS.PAYMENT_RECEIVED_BY, payload: e.target.value})
+                                        if(newState1.paymentReceivedBy){dispatch1({type:ACTIONS1.PAYMENT_RECEIVED_BY, payload: false})}
+                                        }}>
+                                            <option value=""></option>
+                                            {
+                                                names.map((name,index) => {
+                                                    return(
+                                                        <option value={name} key={index}>{name}</option>
+                                                    )
+                                                })
+                                            }
+                                    </Form.Select>
+                                ) : (
+                                    <Form.Control type="text" defaultValue={newState.paymentReceivedBy} disabled />
+                                )
+                            }
                             {
                                 newState1.paymentReceivedBy ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
                             }
@@ -1133,12 +1529,597 @@ const PaymentDetails = ({navigate}) => {
                     <div className="col">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Payment Description</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type: ACTIONS.PAYMENT_DESCRIPTION, payload: e})} />
+                            <Form.Control type="text" defaultValue={newState.paymentDescription} onChange={e => dispatch({type: ACTIONS.PAYMENT_DESCRIPTION, payload: e})} />
                         </Form.Group>
                     </div>
                 </div>
                 <div className="d-flex justify-content-center m-3">
-                    <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit Details</Button>
+                    {
+                        (transin === undefined) ? (
+                            <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit Details</Button>
+                        ) : (
+                            <Button variant="primary" className="mt-3 mb-3" onClick={() => {
+                                if(newState.transactionType === "Order Related"){
+                                    if(newState.paymentPurpose === "Buying"){
+                                        if(newState.paymentType === "Gold" && newState.sentType === "Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver" && newState.sentType === "Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Gold" && newState.sentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver" && newState.sentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }}
+                                    if(newState.paymentPurpose === "Selling"){
+                                        if(newState.paymentType === "Cash" && newState.sentType === "Gold"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Acnt Transfer" && newState.sentType === "Gold"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Cash" && newState.sentType === "Silver"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Acnt Transfer" && newState.sentType === "Silver"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }}
+                                    if(newState.paymentPurpose === "Borrowing" || newState.paymentPurpose === "Lended Repaying"){
+                                        if(newState.paymentType === "Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.paymentType === "Gold"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.paymentType === "Silver"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.paymentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.paymentType === "Gold and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Gold and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }}
+                                    if(newState.paymentPurpose === "Lending" || newState.paymentPurpose === "Repaying Borrowed" || newState.paymentPurpose === "General Expenses"){
+                                        if(newState.sentType === "Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.sentType === "Gold"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.sentType === "Silver"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverOut: newState.silverWeight,
+                                                silverIn: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.sentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                        else if(newState.sentType === "Gold and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Gold and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Silver and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Silver and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }}
+                                    if(newState.paymentPurpose === "Self Transfer"){
+                                        if(newState.sentType === "Cash" && newState.paymentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Acnt Transfer" && newState.paymentType === "Cash") {
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                    }
+                                } else if(newState.transactionType === "Order Related"){
+                                    if(newState.paymentPurpose === "Advance for Order" || newState.paymentPurpose === "Order Delivery" || newState.paymentPurpose === "Dues Payment"){
+                                        if(newState.paymentType === "Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Gold"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Gold and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Gold and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: newState.goldWeight,
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: newState.amountReceived,
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Silver and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: newState.silverWeight,
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.paymentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: newState.amountReceived,
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                    } else if(newState.paymentPurpose === "Return Excess"){
+                                        if(newState.sentType === "Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => { console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Gold"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Gold and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Gold and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: newState.goldWeight,
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Silver"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Silver and Cash"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: newState.amountReceived,
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: "",
+                                                accountOut: "",
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Silver and Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: newState.silverWeight,
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        } else if(newState.sentType === "Acnt Transfer"){
+                                            axios.post(`http://localhost:8080/DayInfo/infoupdate/${newState.paymentId}`, {
+                                                cashIn: "",
+                                                cashOut: "",
+                                                goldIn: "",
+                                                goldOut: "",
+                                                silverIn: "",
+                                                silverOut: "",
+                                                accountIn: "",
+                                                accountOut: newState.amountReceived,
+                                                id: newState.paymentId,
+                                                date: newState.paymentDate
+                                            }).then(() => {console.log("saved")}).catch(err => console.log(err))
+                                        }
+                                    }
+                                }
+                                axios.post("http://localhost:8080/PaymentInfo/add", newState)
+                                    .then(() => {
+                                        dispatch({type:ACTIONS.PAYMENT_INFO_STATUS, payload: "Details saved Successfully!"})
+                                        }).catch(err => console.log(err))
+                            
+                            }}>Modify Details</Button>
+                        )
+                    }
                 </div>
             </Form>
         </Container>

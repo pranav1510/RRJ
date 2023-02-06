@@ -21,16 +21,6 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
     }
 
     @Override
-    public List<TransactionInfo> getTransactionDetails(TransactionInfo transactionInfo) {
-        return transactionInfoRepository.getDetailsByDate(transactionInfo.getTransactionDate());
-    }
-
-    @Override
-    public List<TransactionInfo> getdetails(TransactionInfo transactionInfo) {
-        return transactionInfoRepository.getdetails(transactionInfo.getTransactionId(), transactionInfo.CustomerFullName, transactionInfo.CustomerMobile);
-    }
-
-    @Override
     public ResponseEntity<TransactionInfo> updateTrans(TransactionInfo transactionInfo, String TransactionId) {
 
         TransactionInfo updateTransaction = transactionInfoRepository.findByTransactionId(TransactionId);
@@ -57,8 +47,4 @@ public class TransactionInfoServiceImpl implements TransactionInfoService {
         return ResponseEntity.ok(updateTransaction);
     }
 
-    @Override
-    public List<TransactionInfo> getTransactionByCustomerId(TransactionInfo transactionInfo) {
-        return transactionInfoRepository.findByCustomerId(transactionInfo.CustomerId);
-    }
 }

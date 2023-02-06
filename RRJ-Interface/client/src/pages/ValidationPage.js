@@ -3,33 +3,8 @@ import React, { useReducer } from "react";
 import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
 import TransactionEntry from "./TransactionEntry";
 
-const date1 = new Date();
-const val = date1.getFullYear().toString() + "-" + (date1.getMonth() + 1).toString().padStart(2, "0") + "-" + date1.getDate().toString().padStart(2, "0")
 
-const initialState = {
-    todayDate : String(val),
-    transin: {},
-    details: [],
-    show1: false,
-    show2: false,
-    show3: false,
-    show4: false,
-    show5: false,
-    show6: false,
-    overallCashIn: "",
-    overallCashOut: "",
-    overallGoldIn: "",
-    overallGoldOut: "",
-    overallSilverIn: "",
-    overallSilverOut: "",
-    overallAccountIn: "",
-    overallAccountOut: "",
-    opening: [],
-    closingGold: "",
-    closingSilver: "",
-    closingCash: "",
-    closingAccount: ""
-}
+
 
 const ACTIONS = {
     TODAY_DATE : "TODAY_DATE",
@@ -107,7 +82,32 @@ const reducer = (state, {type, payload}) => {
     }
 }
 
-const ValidationPage = ({navigate}) => {
+const ValidationPage = ({navigate, date}) => {
+
+    const initialState = {
+        todayDate : String(date),
+        transin: {},
+        details: [],
+        show1: false,
+        show2: false,
+        show3: false,
+        show4: false,
+        show5: false,
+        show6: false,
+        overallCashIn: "",
+        overallCashOut: "",
+        overallGoldIn: "",
+        overallGoldOut: "",
+        overallSilverIn: "",
+        overallSilverOut: "",
+        overallAccountIn: "",
+        overallAccountOut: "",
+        opening: [],
+        closingGold: "",
+        closingSilver: "",
+        closingCash: "",
+        closingAccount: ""
+    }
 
     const [newState, dispatch] = useReducer(reducer, initialState)
 
@@ -139,84 +139,138 @@ const ValidationPage = ({navigate}) => {
             </Modal.Header>
             <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
             <Table className="table-hover w-100 mt-1 small">
-                <tbody>
-                    <tr>
-                        <th>Transaction Id</th>
-                        <td>{newState.transin.transactionId}</td>
-                    </tr>
-                    <tr>
-                        <th>Order Id</th>
-                        <td>{newState.transin.orderId}</td>
-                    </tr>
-                    <tr>
-                        <th>Customer Name</th>
-                        <td>{newState.transin.customerFullName}</td>
-                    </tr>
-                    <tr>
-                        <th>Customer Mobile</th>
-                        <td>{newState.transin.customerMobile}</td>
-                    </tr>
-                    <tr>
-                        <th>Transaction Date</th>
-                        <td>{newState.transin.transactionDate}</td>
-                    </tr>
-                    <tr>
-                        <th>Amount</th>
-                        <td>{newState.transin.amount}</td>
-                    </tr>
-                    <tr>
-                        <th>Gold Weight</th>
-                        <td>{newState.transin.goldWeight}</td>
-                    </tr>
-                    <tr>
-                        <th>Silver Weight</th>
-                        <td>{newState.transin.silverWeight}</td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td>{newState.transin.transactionDescription}</td>
-                    </tr>
-                    <tr>
-                        <th>Transaction Type</th>
-                        <td>{newState.transin.transactionType}</td>
-                    </tr>
-                    <tr>
-                        <th>Sent Type</th>
-                        <td>{newState.transin.paymentType}</td>
-                    </tr>
-                    <tr>
-                        <th>Received Type</th>
-                        <td>{newState.transin.receivedType}</td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>{newState.transin.transactionStatus}</td>
-                    </tr>
-                    <tr>
-                        <th>Customer Due Status</th>
-                        <td>{newState.transin.customerDueStatus}</td>
-                    </tr>
-                    <tr>
-                        <th>Customer Due Amount</th>
-                        <td>{newState.transin.customerDueAmount}</td>
-                    </tr>
-                    <tr>
-                        <th>RRJ Due Status</th>
-                        <td>{newState.transin.rrjDueStatus}</td>
-                    </tr>
-                    <tr>
-                        <th>RRJ Due Amount</th>
-                        <td>{newState.transin.rrjDueAmount}</td>
-                    </tr>
-                    <tr>
-                        <th>Transaction Done By</th>
-                        <td>{newState.transin.transactionDoneBy}</td>
-                    </tr>
-                    <tr>
-                        <th>Transaction Entered By</th>
-                        <td>{newState.transin.transactionEnteredBy}</td>
-                    </tr>
-                </tbody>
+            <tbody>
+                        <tr>
+                            <th>Payment Id</th>
+                            <td>{newState.transin.paymentId}</td>
+                        </tr>
+                        <tr>
+                            <th>Transaction Type</th>
+                            <td>{newState.transin.transactionType}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Purpose</th>
+                            <td>{newState.transin.paymentPurpose}</td>
+                        </tr>
+                        <tr>
+                            <th>Sent Type</th>
+                            <td>{newState.transin.sentType}</td>
+                        </tr>
+                        <tr>
+                            <th>Received Type</th>
+                            <td>{newState.transin.paymentType}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer Name</th>
+                            <td>{newState.transin.customerFullName}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer Mobile</th>
+                            <td>{newState.transin.customerMobile}</td>
+                        </tr>
+                        {
+                            (newState.transin.transactionType === "Order Related") ? (
+                                <>
+                                <tr>
+                                    <th>Order Id</th>
+                                    <td>{newState.transin.orderId}</td>
+                                </tr>
+                                <tr>
+                                    <th>Order Price</th>
+                                    <td>{newState.transin.orderPrice}</td>
+                                </tr>
+                                </>
+                            ) : <></>
+                        }
+                        <tr>
+                            <th>Payment Date</th>
+                            <td>{newState.transin.paymentDate}</td>
+                        </tr>
+                        <tr>
+                            <th>Gold Weight</th>
+                            <td>{newState.transin.goldWeight}</td>
+                        </tr>
+                        <tr>
+                            <th>Silver Weight</th>
+                            <td>{newState.transin.silverWeight}</td>
+                        </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <td>{newState.transin.amountReceived}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>{newState.transin.transactionStatus}</td>
+                        </tr>
+                        <tr>
+                            <th>Customer Due Status</th>
+                            <td>{newState.transin.customerDueStatus}</td>
+                        </tr>
+                        {
+                            (newState.transin.customerDueAmount !== "") ? (
+                                <tr>
+                                    <th>Customer Due Amount</th>
+                                    <td>{newState.transin.customerDueAmount}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.customerDueGold !== "") ? (
+                                <tr>
+                                    <th>Customer Due Gold</th>
+                                    <td>{newState.transin.customerDueGold}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.customerDueSilver !== "") ? (
+                                <tr>
+                                    <th>Customer Due Silver</th>
+                                    <td>{newState.transin.customerDueSilver}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        <tr>
+                            <th>RRJ Due Status</th>
+                            <td>{newState.transin.rrjDueStatus}</td>
+                        </tr>
+                        {
+                            (newState.transin.rrjDueAmount !== "") ? (
+                                <tr>
+                                    <th>Customer Due Amount</th>
+                                    <td>{newState.transin.customerDueAmount}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.rrjDueGold !== "") ? (
+                                <tr>
+                                    <th>Customer Due Gold</th>
+                                    <td>{newState.transin.customerDueGold}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        {
+                            (newState.transin.rrjDueSilver !== "") ? (
+                                <tr>
+                                    <th>Customer Due Silver</th>
+                                    <td>{newState.transin.customerDueSilver}</td>
+                                </tr>
+                            ) : <></>
+                        }
+                        <tr>
+                            <th>Description</th>
+                            <td>{newState.transin.paymentDescription}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Received By</th>
+                            <td>{newState.transin.paymentReceivedBy}</td>
+                        </tr>
+                        <tr>
+                            <th>Payment Entered By</th>
+                            <td>{newState.transin.paymentEnteredBy}</td>
+                        </tr>
+                    </tbody>
             </Table>
             </Modal.Body>
             <Modal.Footer>
@@ -240,12 +294,11 @@ const ValidationPage = ({navigate}) => {
                 <Table className="table-hover w-100 mt-1">
                     <thead>
                         <tr>
-                            <th scope="col">Transaction Id</th>
-                            <th scope="col">Full Name</th>
-                            <th scope="col">Type</th>
+                            <th scope="col">Payment Id</th>
+                            <th scope="col">Customer Full Name</th>
                             <th scope="col">Description</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Done By</th>
+                            <th scope="col">Received By</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -256,12 +309,11 @@ const ValidationPage = ({navigate}) => {
                                         dispatch({type:ACTIONS.TRANS_IN, payload: info})
                                         dispatch({type:ACTIONS.SHOW5, payload: true})
                                     }}>
-                                        <td>{info.transactionId}</td>
+                                        <td>{info.paymentId}</td>
                                         <td>{info.customerFullName}</td>
-                                        <td>{info.transactionType}</td>
-                                        <td>{info.transactionDescription}</td>
-                                        <td>{info.transactionStatus}</td>
-                                        <td>{info.transactionDoneBy}</td>
+                                        <td>{info.paymentDescription}</td>
+                                        <td>{info.status}</td>
+                                        <td>{info.paymentReceivedBy}</td>
                                     </tr>
                                 )
                             })
@@ -422,7 +474,7 @@ const ValidationPage = ({navigate}) => {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{val}</td>
+                        <td>{date}</td>
                         <td>{newState.closingCash}</td>
                         <td>{newState.closingGold}</td>
                         <td>{newState.closingSilver}</td>
@@ -437,7 +489,7 @@ const ValidationPage = ({navigate}) => {
           </Button>
           <Button variant="primary" onClick={() => {
             axios.post("http://localhost:8080/ClosingInfo/add",{
-                date: val,
+                date: date,
                 cash: newState.closingCash,
                 gold: newState.closingGold,
                 silver: newState.closingSilver,
@@ -468,7 +520,7 @@ const ValidationPage = ({navigate}) => {
                                         dispatch({type:ACTIONS.TODAY_DATE, payload: String(e.target.value)})
                                     }}/>
                                     <Button className="mt-3" variant="primary" onClick={() => {
-                                        axios.post("http://localhost:8080/TransactionInfo/getdetails", {transactionDate: newState.todayDate})
+                                        axios.post("http://localhost:8080/PaymentInfo/getdetails", {paymentDate: newState.todayDate})
                                             .then((res) => {
                                                 if(res.data[0] === undefined){
                                                     dispatch({type:ACTIONS.SHOW4, payload: true})

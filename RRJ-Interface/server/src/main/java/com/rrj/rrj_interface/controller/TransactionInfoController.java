@@ -22,23 +22,9 @@ public class TransactionInfoController {
         return transactionInfoService.save(transactionInfo);
     }
 
-    @PostMapping("/getdetails")
-    public List<TransactionInfo> getdetails(@RequestBody TransactionInfo transactionInfo){
-        return transactionInfoService.getTransactionDetails(transactionInfo);
-    }
-
-    @PostMapping("gettransaction")
-    public List<TransactionInfo> gettransaction(@RequestBody TransactionInfo transactionInfo){
-        return transactionInfoService.getdetails(transactionInfo);
-    }
-
     @PutMapping("updatetrans/{TransactionId}")
     public ResponseEntity<TransactionInfo> transupdate(@RequestBody TransactionInfo transactionInfo, @PathVariable String TransactionId){
         return transactionInfoService.updateTrans(transactionInfo, TransactionId);
     }
 
-    @PostMapping("transget")
-    public List<TransactionInfo> gettransByCustomerId(@RequestBody TransactionInfo transactionInfo){
-        return transactionInfoService.getTransactionByCustomerId(transactionInfo);
-    }
 }

@@ -7,6 +7,8 @@ import com.rrj.rrj_interface.repository.TransactionInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PaymentInfoServiceImpl implements PaymentInfoService {
 
@@ -17,8 +19,21 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     @Override
     public PaymentInfo save(PaymentInfo paymentInfo) {
-        TransactionInfo transactionInfo = new TransactionInfo(paymentInfo.getPaymentId(), paymentInfo.getOrderId(), paymentInfo.getCustomerId(), paymentInfo.getCustomerFullName(), paymentInfo.getCustomerMobile(), paymentInfo.getPaymentDate(), paymentInfo.getAmountReceived(), paymentInfo.getExchangeGoldWeight(), paymentInfo.getExchangeSilverWeight(), paymentInfo.getPaymentDescription(), paymentInfo.getTransactionType(), paymentInfo.getPaymentPurpose(), paymentInfo.getPaymentType(), paymentInfo.getStatus(), paymentInfo.getCustomerDueStatus(), paymentInfo.getCustomerDueAmount(), paymentInfo.getRrjDueStatus(), paymentInfo.getRrjDueAmount(), paymentInfo.getPaymentReceivedBy(), paymentInfo.getPaymentEnteredBy());
-        transactionInfoRepository.save(transactionInfo);
         return paymentInfoRepository.save(paymentInfo);
+    }
+
+    @Override
+    public List<PaymentInfo> getTransactionByCustomerId(PaymentInfo paymentInfo) {
+        return paymentInfoRepository.findByCustomerId(paymentInfo.getCustomerId());
+    }
+
+    @Override
+    public List<PaymentInfo> getdetails(PaymentInfo paymentInfo) {
+        return paymentInfoRepository.getdetails(paymentInfo.getPaymentId(), paymentInfo.getCustomerFullName(), paymentInfo.getCustomerMobile());
+    }
+
+    @Override
+    public List<PaymentInfo> getTransactionDetails(PaymentInfo paymentInfo) {
+        return paymentInfoRepository.getDetailsByDate(paymentInfo.getPaymentDate());
     }
 }

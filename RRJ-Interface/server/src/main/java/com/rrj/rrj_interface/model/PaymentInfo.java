@@ -32,22 +32,15 @@ public class PaymentInfo{
     private String RrjDueGold;
     private String RrjDueSilver;
     private String PaymentDescription;
+    private String TransactionType;
     private String PaymentType;
     private String PaymentReceivedBy;
     private String PaymentEnteredBy;
     private String SentType;
     private String Percentage;
-    private String OneGramWeight;
+    private String OneGramCost;
     private String PaymentPurpose;
     private String Status;
-
-    public String getTransactionType() {
-        return TransactionType;
-    }
-
-    public void setTransactionType(String transactionType) {
-        TransactionType = transactionType;
-    }
 
     public String getPaymentId() {
         return PaymentId;
@@ -105,36 +98,36 @@ public class PaymentInfo{
         AmountReceived = amountReceived;
     }
 
-    public String getExchangeGoldWeight() {
-        return ExchangeGoldWeight;
+    public String getExchangeWeight() {
+        return ExchangeWeight;
     }
 
-    public void setExchangeGoldWeight(String exchangeGoldWeight) {
-        ExchangeGoldWeight = exchangeGoldWeight;
+    public void setExchangeWeight(String exchangeWeight) {
+        ExchangeWeight = exchangeWeight;
     }
 
-    public String getExchangeGoldCost() {
-        return ExchangeGoldCost;
+    public String getExchangeCost() {
+        return ExchangeCost;
     }
 
-    public void setExchangeGoldCost(String exchangeGoldCost) {
-        ExchangeGoldCost = exchangeGoldCost;
+    public void setExchangeCost(String exchangeCost) {
+        ExchangeCost = exchangeCost;
     }
 
-    public String getExchangeSilverWeight() {
-        return ExchangeSilverWeight;
+    public String getGoldWeight() {
+        return GoldWeight;
     }
 
-    public void setExchangeSilverWeight(String exchangeSilverWeight) {
-        ExchangeSilverWeight = exchangeSilverWeight;
+    public void setGoldWeight(String goldWeight) {
+        GoldWeight = goldWeight;
     }
 
-    public String getExchangeSilverCost() {
-        return ExchangeSilverCost;
+    public String getSilverWeight() {
+        return SilverWeight;
     }
 
-    public void setExchangeSilverCost(String exchangeSilverCost) {
-        ExchangeSilverCost = exchangeSilverCost;
+    public void setSilverWeight(String silverWeight) {
+        SilverWeight = silverWeight;
     }
 
     public String getOrderPrice() {
@@ -143,14 +136,6 @@ public class PaymentInfo{
 
     public void setOrderPrice(String orderPrice) {
         OrderPrice = orderPrice;
-    }
-
-    public String getDiscount() {
-        return Discount;
-    }
-
-    public void setDiscount(String discount) {
-        Discount = discount;
     }
 
     public String getCustomerDueStatus() {
@@ -169,6 +154,22 @@ public class PaymentInfo{
         CustomerDueAmount = customerDueAmount;
     }
 
+    public String getCustomerDueGold() {
+        return CustomerDueGold;
+    }
+
+    public void setCustomerDueGold(String customerDueGold) {
+        CustomerDueGold = customerDueGold;
+    }
+
+    public String getCustomerDueSilver() {
+        return CustomerDueSilver;
+    }
+
+    public void setCustomerDueSilver(String customerDueSilver) {
+        CustomerDueSilver = customerDueSilver;
+    }
+
     public String getRrjDueStatus() {
         return RrjDueStatus;
     }
@@ -185,12 +186,36 @@ public class PaymentInfo{
         RrjDueAmount = rrjDueAmount;
     }
 
+    public String getRrjDueGold() {
+        return RrjDueGold;
+    }
+
+    public void setRrjDueGold(String rrjDueGold) {
+        RrjDueGold = rrjDueGold;
+    }
+
+    public String getRrjDueSilver() {
+        return RrjDueSilver;
+    }
+
+    public void setRrjDueSilver(String rrjDueSilver) {
+        RrjDueSilver = rrjDueSilver;
+    }
+
     public String getPaymentDescription() {
         return PaymentDescription;
     }
 
     public void setPaymentDescription(String paymentDescription) {
         PaymentDescription = paymentDescription;
+    }
+
+    public String getTransactionType() {
+        return TransactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        TransactionType = transactionType;
     }
 
     public String getPaymentType() {
@@ -209,6 +234,38 @@ public class PaymentInfo{
         PaymentReceivedBy = paymentReceivedBy;
     }
 
+    public String getPaymentEnteredBy() {
+        return PaymentEnteredBy;
+    }
+
+    public void setPaymentEnteredBy(String paymentEnteredBy) {
+        PaymentEnteredBy = paymentEnteredBy;
+    }
+
+    public String getSentType() {
+        return SentType;
+    }
+
+    public void setSentType(String sentType) {
+        SentType = sentType;
+    }
+
+    public String getPercentage() {
+        return Percentage;
+    }
+
+    public void setPercentage(String percentage) {
+        Percentage = percentage;
+    }
+
+    public String getOneGramCost() {
+        return OneGramCost;
+    }
+
+    public void setOneGramCost(String oneGramCost) {
+        OneGramCost = oneGramCost;
+    }
+
     public String getPaymentPurpose() {
         return PaymentPurpose;
     }
@@ -223,13 +280,5 @@ public class PaymentInfo{
 
     public void setStatus(String status) {
         Status = status;
-    }
-
-    public String getPaymentEnteredBy() {
-        return PaymentEnteredBy;
-    }
-
-    public void setPaymentEnteredBy(String paymentEnteredBy) {
-        PaymentEnteredBy = paymentEnteredBy;
     }
 }

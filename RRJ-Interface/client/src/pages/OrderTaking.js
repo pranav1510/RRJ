@@ -24,6 +24,7 @@ const OrderTaking = ({order, navigate}) => {
         orderReceivedBy:  (order === undefined)? "" : order.orderReceivedBy,
         orderEnteredBy:  (order === undefined)? myName : order.orderEnteredBy,
         customerFullName:  (order === undefined)? "" : order.customerFullName,
+        customerFullNameOne: "",
         customerInfoStatus: "",
         orderTakingStatus: "",
         itemInfoStatus: "",
@@ -39,7 +40,7 @@ const OrderTaking = ({order, navigate}) => {
         customerComments: "",
         orderReceiverComments: "",
         itemStatus: "",
-        itemEnteredBy: "",
+        itemEnteredBy: myName,
         makingCharges: "",
         itemGrossWeight: "",
         itemNetWeight: "",
@@ -113,11 +114,14 @@ const OrderTaking = ({order, navigate}) => {
         ITEM_PRICE: "ITEM_PRICE",
         INITIAL: "INITIAL",
         ITEM_INFO_INITIAL_STATE: "ITEM_INFO_INITIAL_STATE",
-        CUSTOMER_INFO_INITIAL_STATE: "CUSTOMER_INFO_INITIAL_STATE"
+        CUSTOMER_INFO_INITIAL_STATE: "CUSTOMER_INFO_INITIAL_STATE",
+        CUSTOMER_FULL_NAME_ONE: "CUSTOMER_FULL_NAME_ONE"
     }
     
     const reducer = (state, {type, payload}) => {
         switch(type){
+            case ACTIONS.CUSTOMER_FULL_NAME_ONE:
+                return {...state, customerFullNameOne: payload}
             case ACTIONS.EDIT_VAL:
                 return {...state, editVal: payload}
             case ACTIONS.ITEM_PRICE:
@@ -298,7 +302,7 @@ const OrderTaking = ({order, navigate}) => {
             myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: true})
         } else {
             if(myNewState1.customerFullName){myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
-            axios.post("http://localhost:8080/CustomerInfo/check", newState)
+            axios.post("http://localhost:8080/CustomerInfo/check", {customerMobile: newState.customerMobile})
             .then(res => {
                 var val = res.data[0]
                 if(val === undefined) {
@@ -321,6 +325,7 @@ const OrderTaking = ({order, navigate}) => {
         orderReceivedBy: false,
         customerMobile: false,
         customerFullName: false,
+        customerFullNameOne: false,
         alternateMobileOne: false,
         alternateMobileTwo: false,
         address: false,
@@ -350,6 +355,7 @@ const OrderTaking = ({order, navigate}) => {
         GST: "GST",
         ORDER_RECEIVED_BY: "ORDER_RECEIVED_BY",
         CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
+        CUSTOMER_FULL_NAME_ONE: "CUSTOMER_FULL_NAME_ONE",
         CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
         ALTERNATE_MOBILE_ONE: "ALTERNATE_MOBILE_ONE",
         ALTERNATE_MOBILE_TWO: "ALTERNATE_MOBILE_TWO",
@@ -389,6 +395,8 @@ const OrderTaking = ({order, navigate}) => {
                 return {...state, customerMobile: payload}
             case MY_ACTIONS1.CUSTOMER_FULL_NAME:
                 return {...state, customerFullName: payload}
+            case MY_ACTIONS1.CUSTOMER_FULL_NAME_ONE:
+                return {...state, customerFullNameOne: payload}
             case MY_ACTIONS1.ALTERNATE_MOBILE_ONE:
                 return {...state, alternateMobileOne: payload}
             case MY_ACTIONS1.ALTERNATE_MOBILE_TWO:
@@ -474,15 +482,15 @@ const OrderTaking = ({order, navigate}) => {
         </Modal.Header>
         <Modal.Body style={{height: "550px", overflow: "hidden", overflowY: "auto"}}>
             <Form>
-            <div className="row"><h5 className="text-dark d-flex flex-row justify-content-center">{newState.customerInfoStatus}</h5></div>
+            <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.customerInfoStatus}</h5></div>
             <Form.Group className="mt-3">
                 <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                <Form.Control type="text" style={{border: myNewState1.customerFullName ? "3px solid red" : ""}} onChange={e => {
-                    dispatch({type: ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})
-                    if(myNewState1.customerFullName){myDispatch1({type: MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: false})}
+                <Form.Control type="text" style={{border: myNewState1.customerFullNameOne ? "3px solid red" : ""}} onChange={e => {
+                    dispatch({type: ACTIONS.CUSTOMER_FULL_NAME_ONE, payload: e.target.value})
+                    if(myNewState1.customerFullNameOne){myDispatch1({type: MY_ACTIONS1.CUSTOMER_FULL_NAME_ONE, payload: false})}
                 }}/>
                 {
-                    myNewState1.customerFullName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                    myNewState1.customerFullNameOne ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
                 }
             </Form.Group>
             <div className="row">
@@ -547,7 +555,7 @@ const OrderTaking = ({order, navigate}) => {
           </Button>
           <Button variant="primary" onClick={() => {
               const customerData = {
-                  customerFullName: newState.customerFullName,
+                  customerFullName: newState.customerFullNameOne,
                   customerMobile: newState.customerMobile,
                   alternateMobileOne: newState.alternateMobileOne,
                   alternateMobileTwo: newState.alternateMobileTwo,
@@ -555,12 +563,12 @@ const OrderTaking = ({order, navigate}) => {
                   remarks: newState.remarks
                 }
                 if(customerData.customerFullName === "" || !(/^[a-zA-Z]+$/.test(customerData.customerFullName))){
-                    myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
+                    myDispatch1({type:MY_ACTIONS1.CUSTOMER_FULL_NAME_ONE, payload: true})
                 } else if(customerData.customerMobile === "" || !(/^(\d){10}$/.test(customerData.customerMobile))){
                     myDispatch1({type:MY_ACTIONS1.CUSTOMER_MOBILE, payload: true})
-                } else if(customerData.alternateMobileOne === "" || !(/^(\d){10}$/.test(customerData.alternateMobileOne))){
+                } else if(customerData.alternateMobileOne !== "" && !(/^(\d){10}$/.test(customerData.alternateMobileOne))){
                     myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_ONE, payload: true})
-                } else if(customerData.alternateMobileTwo === "" || !(/^(\d){10}$/.test(customerData.alternateMobileTwo))){
+                } else if(customerData.alternateMobileOne !== "" && !(/^(\d){10}$/.test(customerData.alternateMobileTwo))){
                     myDispatch1({type:MY_ACTIONS1.ALTERNATE_MOBILE_TWO, payload: true})
                 } else if(customerData.address === ""){
                     myDispatch1({type:MY_ACTIONS1.ADDRESS, payload: true})
@@ -570,6 +578,7 @@ const OrderTaking = ({order, navigate}) => {
                         axios.post("http://localhost:8080/CustomerInfo/getcustomerid", customerData)
                         .then(res => {
                             dispatch({type:ACTIONS.CUSTOMER_ID, payload: res.data})
+                            dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: customerData.customerFullName})
                             dispatch({type:ACTIONS.CUSTOMER_INFO_STATUS, payload: response.data})
                         })
                     setTimeout(() => {
