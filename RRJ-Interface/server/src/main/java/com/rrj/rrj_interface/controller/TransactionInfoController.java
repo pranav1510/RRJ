@@ -22,9 +22,6 @@ public class TransactionInfoController {
         return transactionInfoService.save(transactionInfo);
     }
 
-    @PutMapping("updatetrans/{TransactionId}")
-    public ResponseEntity<TransactionInfo> transupdate(@RequestBody TransactionInfo transactionInfo, @PathVariable String TransactionId){
-        return transactionInfoService.updateTrans(transactionInfo, TransactionId);
-    }
+
 
 }

@@ -1,10 +1,15 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
+import { Button, Card, Container, Form, Modal, Nav, Table } from "react-bootstrap";
+import { Route, Routes } from "react-router-dom";
+import CancelledOrders from "../status/orders/CancelledOrders";
+import CompletedOrders from "../status/orders/CompletedOrders";
+import InProgressOrders from "../status/orders/InProgressOrders";
+import PendingOrders from "../status/orders/PendingOrders";
 import CustomerInfo from "./CustomerInfo";
 import ItemUpdate from "./ItemUpdate";
 import OrderTaking from "./OrderTaking";
-import TransactionEntry from "./TransactionEntry";
+import PaymentDetails from "./PaymentDetails";
 
 const initialState = {
     customerMobile: "",
@@ -24,11 +29,16 @@ const initialState = {
     show12: false,
     info: {},
     message: "",
-    orderDetails: [],
+    inProgressOrderDetails: [],
+    pendingOrderDetails: [],
+    completedOrderDetails: [],
+    cancelledOrderDetails: [],
     orderin: {},
     itemDetails: [],
     itemin: {},
-    transDetails: [],
+    pendingTransDetails: [],
+    completedTransDetails: [],
+    cancelledTransDetails: [],
     transin: {},
     val: true
 }
@@ -51,11 +61,16 @@ const ACTIONS = {
     SHOW12: "SHOW12",
     INFO: "INFO",
     MESSAGE: "MESSAGE",
-    ORDER_DETAILS: "ORDER_DETAILS",
+    IN_PROGRESS_ORDER_DETAILS: "IN_PROGRESS_ORDER_DETAILS",
+    PENDING_ORDER_DETAILS: "PENDING_ORDER_DETAILS",
+    COMPLETED_ORDER_DETAILS: "COMPLETED_ORDER_DETAILS",
+    CANCELLED_ORDER_DETAILS: "CANCELLED_ORDER_DETAILS",
     ORDER_IN: "ORDER_IN",
     ITEM_DETAILS: "ITEM_DETAILS",
     ITEM_IN: "ITEM_IN",
-    TRANS_DETAILS: "TRANS_DETAILS",
+    PENDING_TRANS_DETAILS: "PENDING_TRANS_DETAILS",
+    COMPLETED_TRANS_DETAILS: "COMPLETED_TRANS_DETAILS",
+    CANCELLED_TRANS_DETAILS: "CANCELLED_TRANS_DETAILS",
     TRANS_IN: "TRANS_IN",
     VAL: "VAL"
 }
@@ -96,16 +111,26 @@ const reducer = (state, {type, payload}) => {
             return {...state, info: payload}
         case ACTIONS.MESSAGE:
             return {...state, message: payload}
-        case ACTIONS.ORDER_DETAILS:
-            return {...state, orderDetails: payload}
+        case ACTIONS.IN_PROGRESS_ORDER_DETAILS:
+            return {...state, inProgressOrderDetails: payload}
+        case ACTIONS.PENDING_ORDER_DETAILS:
+            return {...state, pendingOrderDetails: payload}
+        case ACTIONS.COMPLETED_ORDER_DETAILS:
+            return {...state, completedOrderDetails: payload}
+        case ACTIONS.CANCELLED_ORDER_DETAILS:
+            return {...state, cancelledOrderDetails: payload}
         case ACTIONS.ORDER_IN:
             return {...state, orderin: payload}
         case ACTIONS.ITEM_DETAILS:
             return {...state, itemDetails: payload}
         case ACTIONS.ITEM_IN:
             return {...state, itemin: payload}
-        case ACTIONS.TRANS_DETAILS:
-            return {...state, transDetails: payload}
+        case ACTIONS.PENDING_TRANS_DETAILS:
+            return {...state, pendingTransDetails: payload}
+        case ACTIONS.COMPLETED_TRANS_DETAILS:
+            return {...state, completedTransDetails: payload}
+        case ACTIONS.CANCELLED_TRANS_DETAILS:
+            return {...state, cancelledTransDetails: payload}
         case ACTIONS.TRANS_IN:
             return {...state, transin: payload}
         case ACTIONS.VAL:
@@ -152,7 +177,7 @@ const CustomerUpdate = ({navigate}) => {
                     <Modal.Title>Transaction Update</Modal.Title>
                 </Modal.Header>
                 <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
-                    <TransactionEntry transin = {newState.transin} show3={newState.val}/>
+                    <PaymentDetails transin = {newState.transin} showMain={newState.val}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose12}>
@@ -333,7 +358,7 @@ const CustomerUpdate = ({navigate}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {
+                            {/* {
                                 newState.transDetails.map((info, index) => {
                                     return(
                                         <tr key={index} style={{cursor: "pointer"}} onClick={() => {
@@ -348,7 +373,7 @@ const CustomerUpdate = ({navigate}) => {
                                         </tr>
                                     )
                                 })
-                            }
+                            } */}
                         </tbody>
                     </Table>
                 </Modal.Body>
@@ -623,7 +648,15 @@ const CustomerUpdate = ({navigate}) => {
                 <Modal.Title>Order Details</Modal.Title>
             </Modal.Header>
             <Modal.Body style={{height: "400px", overflow: "hidden", overflowY: "auto"}}>
-                <Table className="table-hover w-100 mt-1">
+            <ul>
+                <Nav className="nav-pills">
+                    <li><Nav.Item className="active"><p onClick={() => {navigate("/customerupdate/inprogressorders")}}>In Progress</p></Nav.Item></li>
+                    <li><Nav.Item><p onClick={() => {navigate("/customerupdate/pendingorders")}}>Pending</p></Nav.Item></li>
+                    <li><Nav.Item><p onClick={() => {navigate("/customerupdate/completedorders")}}>Completed</p></Nav.Item></li>
+                    <li><Nav.Item><p onClick={() => {navigate("/customerupdate/cancelledorders")}}>Cancelled</p></Nav.Item></li>
+                </Nav>
+            </ul>
+                {/* <Table className="table-hover w-100 mt-1">
                     <thead>
                     <tr>
                         <th scope="col">Order Id</th>
@@ -654,7 +687,7 @@ const CustomerUpdate = ({navigate}) => {
                             })
                         }
                     </tbody>
-                </Table>
+                </Table> */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose4}>
@@ -722,7 +755,12 @@ const CustomerUpdate = ({navigate}) => {
                                     if(res.data[0] === undefined){
                                         dispatch({type:ACTIONS.MESSAGE, payload: "Orders not found!"})
                                     } else {
-                                        dispatch({type:ACTIONS.ORDER_DETAILS, payload: res.data})
+                                        res.data.forEach(element => {
+                                            if(element.orderStatus === "In Progress"){newState.inProgressOrderDetails.push(element)}
+                                            else if(element.orderStatus.includes("Pending")){newState.pendingOrderDetails.push(element)}
+                                            else if(element.orderStatus === "Completed Successfully!"){newState.completedOrderDetails.push(element)}
+                                            else if(element.orderStatus === "Cancelled"){newState.cancelledOrderDetails.push(element)}
+                                        });
                                         dispatch({type:ACTIONS.SHOW4, payload: true})
                                     }
                                 }).catch(err => console.log(err))

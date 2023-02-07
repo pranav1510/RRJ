@@ -5,6 +5,7 @@ import com.rrj.rrj_interface.model.TransactionInfo;
 import com.rrj.rrj_interface.service.PaymentInfoService;
 import com.rrj.rrj_interface.service.TransactionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,5 +36,10 @@ public class PaymentInfoController {
     @PostMapping("/getdetails")
     public List<PaymentInfo> getdetails(@RequestBody PaymentInfo paymentInfo){
         return paymentInfoService.getTransactionDetails(paymentInfo);
+    }
+
+    @PutMapping("updatetrans/{PaymentId}")
+    public ResponseEntity<PaymentInfo> transupdate(@RequestBody PaymentInfo paymentInfo, @PathVariable String PaymentId){
+        return paymentInfoService.updateTrans(paymentInfo, PaymentId);
     }
 }

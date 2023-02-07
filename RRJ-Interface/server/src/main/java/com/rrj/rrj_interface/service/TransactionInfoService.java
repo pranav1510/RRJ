@@ -9,6 +9,5 @@ import java.util.List;
 public interface TransactionInfoService {
 
     public TransactionInfo save(TransactionInfo transactionInfo);
-    public ResponseEntity<TransactionInfo> updateTrans(TransactionInfo transactionInfo, String TransactionId);
 
 }

@@ -16,4 +16,7 @@ public interface PaymentInfoRepository extends JpaRepository<PaymentInfo,Integer
 
     @Query("select e FROM PaymentInfo e WHERE e.PaymentDate =?1")
     public List<PaymentInfo> getDetailsByDate(String PaymentDate);
+
+    @Query("select e FROM PaymentInfo e WHERE e.PaymentId =?1")
+    public PaymentInfo findByPaymentId(String PaymentId);
 }

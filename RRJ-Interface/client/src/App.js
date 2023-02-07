@@ -21,11 +21,12 @@ import AddEmployee from './pages/AddEmployee';
 function App() {
 
   const title = "Rangu Rajaiah Jewellers";
+  const names = ["LAXMINARSAIAH YEDULAPURAM", "RAVI KUMAR RANGU", "SRAVAN KUMAR RANGU"]
   const date = new Date();
   const val = date.getFullYear().toString() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0")
   const path = useLocation();
   const navigate = useNavigate();
-  
+
   const goldprice = useSelector(state => state.DailyPrice.goldPrice)
   const silverprice = useSelector(state => state.DailyPrice.silverPrice)
 
@@ -69,9 +70,9 @@ function App() {
       <Routes>
         <Route exact path='/' element={<LoginPage navigate={navigate}/>} />
         <Route exact path='/homepage' element={<HomePage  navigate={navigate}/>}/>
-        <Route exact path='/ordertaking' element={<OrderTaking navigate={navigate}/>}/>
+        <Route exact path='/ordertaking' element={<OrderTaking navigate={navigate} names={names}/>}/>
         <Route exact path='/customerinfo' element={<CustomerInfo navigate={navigate}/>}/>
-        <Route exact path='/paymentdetails' element={<PaymentDetails date={val} navigate={navigate}/>}/>
+        <Route exact path='/paymentdetails' element={<PaymentDetails date={val} navigate={navigate} names={names}/>}/>
         <Route exact path='/dailyprice' element={<DailyPrice navigate={navigate}/>}/>
         <Route exact path='/infoentry' element={<InfoEntry navigate={navigate}/>}/>
         <Route exact path='/searchinfo' element={<SearchInfo navigate={navigate}/>}/>

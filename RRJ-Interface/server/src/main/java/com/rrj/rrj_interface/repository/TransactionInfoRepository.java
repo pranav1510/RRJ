@@ -10,6 +10,5 @@ public interface TransactionInfoRepository extends JpaRepository<TransactionInfo
 
 
 
-    @Query("select e FROM TransactionInfo e WHERE e.TransactionId =?1")
-    public TransactionInfo findByTransactionId(String TransactionId);
+
 }
