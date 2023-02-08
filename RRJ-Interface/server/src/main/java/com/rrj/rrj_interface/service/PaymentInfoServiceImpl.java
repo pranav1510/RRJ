@@ -1,9 +1,7 @@
 package com.rrj.rrj_interface.service;
 
 import com.rrj.rrj_interface.model.PaymentInfo;
-import com.rrj.rrj_interface.model.TransactionInfo;
 import com.rrj.rrj_interface.repository.PaymentInfoRepository;
-import com.rrj.rrj_interface.repository.TransactionInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,8 +13,6 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     @Autowired
     private PaymentInfoRepository paymentInfoRepository;
-    @Autowired
-    private TransactionInfoRepository transactionInfoRepository;
 
     @Override
     public PaymentInfo save(PaymentInfo paymentInfo) {

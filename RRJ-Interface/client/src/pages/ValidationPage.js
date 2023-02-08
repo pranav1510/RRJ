@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useReducer } from "react";
 import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
-import TransactionEntry from "./TransactionEntry";
+import { useSelector } from "react-redux";
+import PaymentDetails from "./PaymentDetails";
 
 
 
@@ -84,8 +85,11 @@ const reducer = (state, {type, payload}) => {
 
 const ValidationPage = ({navigate, date}) => {
 
+    const myName = useSelector(state => state.LoginPage.employeeName)
+
     const initialState = {
         todayDate : String(date),
+        validationDoneBy: myName,
         transin: {},
         details: [],
         show1: false,
@@ -125,7 +129,7 @@ const ValidationPage = ({navigate, date}) => {
                 <Modal.Title>Transaction Update</Modal.Title>
             </Modal.Header>
             <Modal.Body  style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
-                <TransactionEntry transin = {newState.transin}/>
+                <PaymentDetails transin = {newState.transin}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose6}>
@@ -200,7 +204,7 @@ const ValidationPage = ({navigate, date}) => {
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td>{newState.transin.transactionStatus}</td>
+                            <td>{newState.transin.status}</td>
                         </tr>
                         <tr>
                             <th>Customer Due Status</th>
@@ -415,6 +419,7 @@ const ValidationPage = ({navigate, date}) => {
                         <th scope="col">Gold</th>
                         <th scope="col">Silver</th>
                         <th scope="col">Account</th>
+                        <th scope="col">Done By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -470,6 +475,7 @@ const ValidationPage = ({navigate, date}) => {
                         <th scope="col">Gold</th>
                         <th scope="col">Silver</th>
                         <th scope="col">Account</th>
+                        <th scope="col">Done By</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -479,6 +485,7 @@ const ValidationPage = ({navigate, date}) => {
                         <td>{newState.closingGold}</td>
                         <td>{newState.closingSilver}</td>
                         <td>{newState.closingAccount}</td>
+                        <td>{newState.validationDoneBy}</td>
                     </tr>
                 </tbody>
             </Table>
@@ -493,7 +500,8 @@ const ValidationPage = ({navigate, date}) => {
                 cash: newState.closingCash,
                 gold: newState.closingGold,
                 silver: newState.closingSilver,
-                account: newState.closingAccount
+                account: newState.closingAccount,
+                validationDoneBy: newState.validationDoneBy
             })
                 .then(() => {console.log("saved")})
                 .catch(err => console.log(err))
@@ -515,6 +523,10 @@ const ValidationPage = ({navigate, date}) => {
                     <Card className="m-3 rounded">
                         <Card.Body>
                             <Card.Title>
+                                <Form.Group>
+                                    <Form.Label>Validation By</Form.Label>
+                                    <Form.Control type="text" defaultValue={newState.validationDoneBy} />
+                                </Form.Group>
                                 <Form.Group>
                                     <Form.Control type="date" defaultValue={newState.todayDate} onChange={e => {
                                         dispatch({type:ACTIONS.TODAY_DATE, payload: String(e.target.value)})

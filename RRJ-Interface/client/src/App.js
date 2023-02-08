@@ -10,7 +10,6 @@ import DailyPrice from './features/DailyPrice/DailyPrice';
 import InfoEntry from '../src/pages/InfoEntry';
 import SearchInfo from '../src/pages/SearchInfo';
 import { useSelector } from 'react-redux';
-import TransactionEntry from './pages/TransactionEntry';
 import OrderInfo from './pages/OrderInfo';
 import TransactionInfo from './pages/TransactionInfo';
 import CustomerUpdate from './pages/CustomerUpdate';
@@ -68,21 +67,20 @@ function App() {
         ) : <></>
       }
       <Routes>
-        <Route exact path='/' element={<LoginPage navigate={navigate}/>} />
-        <Route exact path='/homepage' element={<HomePage  navigate={navigate}/>}/>
-        <Route exact path='/ordertaking' element={<OrderTaking navigate={navigate} names={names}/>}/>
-        <Route exact path='/customerinfo' element={<CustomerInfo navigate={navigate}/>}/>
-        <Route exact path='/paymentdetails' element={<PaymentDetails date={val} navigate={navigate} names={names}/>}/>
-        <Route exact path='/dailyprice' element={<DailyPrice navigate={navigate}/>}/>
-        <Route exact path='/infoentry' element={<InfoEntry navigate={navigate}/>}/>
-        <Route exact path='/searchinfo' element={<SearchInfo navigate={navigate}/>}/>
-        <Route exact path='/transactionentry' element={<TransactionEntry navigate={navigate} />} />
-        <Route exact path='/orderinfo' element={<OrderInfo navigate={navigate} />} />
-        <Route exact path='/transactioninfo' element={<TransactionInfo navigate={navigate} />} />
-        <Route exact path='/customerupdate' element={<CustomerUpdate navigate={navigate}/>} />
-        <Route exact path='/validation' element={<ValidationPage date={val} navigate={navigate} />} />
-        <Route exact path='/closing' element={<Closing />} />
-        <Route exact path='/addemployee' element={<AddEmployee />} />
+        <Route path='/' element={<LoginPage navigate={navigate}/>} />
+        <Route path='homepage' element={<HomePage  navigate={navigate}/>}/>
+        <Route path='ordertaking' element={<OrderTaking navigate={navigate} names={names}/>}/>
+        <Route path='customerinfo' element={<CustomerInfo navigate={navigate}/>}/>
+        <Route path='paymentdetails' element={<PaymentDetails date={val} navigate={navigate} names={names}/>}/>
+        <Route path='dailyprice' element={<DailyPrice navigate={navigate}/>}/>
+        <Route path='infoentry' element={<InfoEntry navigate={navigate}/>}/>
+        <Route path='searchinfo' element={<SearchInfo navigate={navigate}/>}/>
+        <Route path='orderinfo' element={<OrderInfo navigate={navigate} />} />
+        <Route path='transactioninfo' element={<TransactionInfo navigate={navigate} />} />
+        <Route path='customerupdate' element={<CustomerUpdate navigate={navigate}/>} />
+        <Route path='validation' element={<ValidationPage date={val} navigate={navigate} />} />
+        <Route path='closing' element={<Closing />} />
+        <Route path='addemployee' element={<AddEmployee />} />
       </Routes>
     </div>
   );

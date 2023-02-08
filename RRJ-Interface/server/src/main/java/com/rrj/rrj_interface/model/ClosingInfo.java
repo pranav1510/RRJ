@@ -12,6 +12,7 @@ public class ClosingInfo {
     public String Gold;
     public String Silver;
     public String Account;
+    public String ValidationDoneBy;
 
     public String getDate() {
         return Date;
@@ -56,11 +57,20 @@ public class ClosingInfo {
     public ClosingInfo() {
     }
 
-    public ClosingInfo(String date, String cash, String gold, String silver, String account) {
+    public String getValidationDoneBy() {
+        return ValidationDoneBy;
+    }
+
+    public void setValidationDoneBy(String validationDoneBy) {
+        ValidationDoneBy = validationDoneBy;
+    }
+
+    public ClosingInfo(String date, String cash, String gold, String silver, String account, String validationDoneBy) {
         Date = date;
         Cash = cash;
         Gold = gold;
         Silver = silver;
         Account = account;
+        ValidationDoneBy = validationDoneBy;
     }
 }

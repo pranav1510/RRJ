@@ -1,9 +1,7 @@
 package com.rrj.rrj_interface.controller;
 
 import com.rrj.rrj_interface.model.PaymentInfo;
-import com.rrj.rrj_interface.model.TransactionInfo;
 import com.rrj.rrj_interface.service.PaymentInfoService;
-import com.rrj.rrj_interface.service.TransactionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

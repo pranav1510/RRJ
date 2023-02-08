@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
+import { Button, Card, Container, Form, Modal, Nav, Table } from "react-bootstrap";
 import ItemUpdate from "./ItemUpdate";
 import OrderTaking from "./OrderTaking";
 
@@ -8,7 +8,10 @@ const initialState = {
     orderId: "",
     customerFullName: "",
     customerMobile: "",
-    orderDetails: [],
+    inProgressOrderDetails: [],
+    pendingOrderDetails: [],
+    completedOrderDetails: [],
+    cancelledOrderDetails: [],
     tableShow: false,
     show1: false,
     show2: false,
@@ -16,6 +19,10 @@ const initialState = {
     show4: false,
     show5: false,
     show6: false,
+    orderShow1: true,
+    orderShow2: false,
+    orderShow3: false,
+    orderShow4: false,
     itemDetails: [],
     orderin: {},
     itemin: {},
@@ -26,7 +33,10 @@ const ACTIONS = {
     ORDER_ID: "ORDER_ID",
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
     CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
-    ORDER_DETAILS: "ORDER_DETAILS",
+    IN_PROGRESS_ORDER_DETAILS: "IN_PROGRESS_ORDER_DETAILS",
+    PENDING_ORDER_DETAILS: "PENDING_ORDER_DETAILS",
+    COMPLETED_ORDER_DETAILS: "COMPLETED_ORDER_DETAILS",
+    CANCELLED_ORDER_DETAILS: "CANCELLED_ORDER_DETAILS",
     TABLE_SHOW: "TABLE_SHOW",
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
@@ -34,6 +44,10 @@ const ACTIONS = {
     SHOW4: "SHOW4",
     SHOW5: "SHOW5",
     SHOW6: "SHOW6",
+    ORDER_SHOW1: "ORDER_SHOW1",
+    ORDER_SHOW2: "ORDER_SHOW2",
+    ORDER_SHOW3: "ORDER_SHOW3",
+    ORDER_SHOW4: "ORDER_SHOW4",
     ITEM_DETAILS: "ITEM_DETAILS",
     ORDER_IN: "ORDER_IN",
     ITEM_IN: "ITEM_IN",
@@ -56,14 +70,28 @@ const reducer = (state, {type, payload}) => {
             return {...state, show5: payload}
         case ACTIONS.SHOW6:
             return {...state, show6: payload}
+        case ACTIONS.ORDER_SHOW1:
+            return {...state, orderShow1: payload}
+        case ACTIONS.ORDER_SHOW2:
+            return {...state, orderShow2: payload}
+        case ACTIONS.ORDER_SHOW3:
+            return {...state, orderShow3: payload}
+        case ACTIONS.ORDER_SHOW4:
+            return {...state, orderShow4: payload}
         case ACTIONS.ORDER_ID:
             return {...state, orderId: payload}
         case ACTIONS.CUSTOMER_FULL_NAME:
             return {...state, customerFullName: payload.toLowerCase()}
         case ACTIONS.CUSTOMER_MOBILE:
             return {...state, customerMobile: payload.toLowerCase()}
-        case ACTIONS.ORDER_DETAILS:
-            return {...state, orderDetails: payload}
+        case ACTIONS.IN_PROGRESS_ORDER_DETAILS:
+            return {...state, inProgressOrderDetails: payload}
+        case ACTIONS.PENDING_ORDER_DETAILS:
+            return {...state, pendingOrderDetails: payload}
+        case ACTIONS.COMPLETED_ORDER_DETAILS:
+            return {...state, completedOrderDetails: payload}
+        case ACTIONS.CANCELLED_ORDER_DETAILS:
+            return {...state, cancelledOrderDetails: payload}
         case ACTIONS.TABLE_SHOW:
             return {...state, tableShow: payload}
         case ACTIONS.ORDER_IN:
@@ -108,7 +136,193 @@ const OrderInfo = ({navigate}) => {
                 <Modal.Title>Order Details</Modal.Title>
             </Modal.Header>
             <Modal.Body style={{height: "400px", overflow: "hidden", overflowY: "auto"}}>
-                <Table className="table-hover w-100 mt-1">
+            <Nav className="nav-tabs">
+                    <Nav.Link active= {newState.orderShow1 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.ORDER_SHOW4, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW3, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW2, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW1, payload: true})
+                    }}>In Progress</Nav.Link>
+                    <Nav.Link active= {newState.orderShow2 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.ORDER_SHOW4, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW3, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW1, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW2, payload: true})
+                    }}>Pending</Nav.Link>
+                    <Nav.Link active= {newState.orderShow3 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.ORDER_SHOW4, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW2, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW1, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW3, payload: true})
+                    }}>Completed</Nav.Link>
+                    <Nav.Link active= {newState.orderShow4 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.ORDER_SHOW3, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW2, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW1, payload: false})
+                        dispatch({type:ACTIONS.ORDER_SHOW4, payload: true})
+                    }}>Cancelled</Nav.Link>
+                </Nav>
+                {
+                    newState.orderShow1 ? (
+                        (newState.inProgressOrderDetails[0] === undefined) ? (
+                            <p className="d-flex justify-content-center text-danger mt-5">Orders not found!</p>
+                        ) : (
+                            <Table className="table-hover w-100 mt-2">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Order Id</th>
+                                    <th scope="col">Customer Full Name</th>
+                                    <th scope="col">Expected Delivery date</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Order Entered By</th>
+                                    <th scope="col">Order Received By</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        newState.inProgressOrderDetails.map((order, index) => {
+                                            return(
+                                                <tr key={index} style={{"cursor":"pointer"}} onClick={() => {
+                                                    dispatch({type:ACTIONS.ORDER_IN, payload: order})
+                                                    dispatch({type:ACTIONS.SHOW4, payload: true})
+                                                }}>
+                                                    <td>{order.orderId}</td>
+                                                    <td>{order.customerFullName}</td>
+                                                    <td>{order.expectedDeliveryDate}</td>
+                                                    <td>{order.orderStatus}</td>
+                                                    <td>{order.orderEnteredBy}</td>
+                                                    <td>{order.orderReceivedBy}</td>
+                                                </tr>
+                                                
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
+                        )
+                    ) : <></>
+                }
+                {
+                    newState.orderShow2 ? (
+                        (newState.pendingOrderDetails[0] === undefined) ? (
+                            <p className="d-flex justify-content-center text-danger mt-5">Orders not found!</p>
+                        ) : (
+                            <Table className="table-hover w-100 mt-2">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Order Id</th>
+                                    <th scope="col">Customer Full Name</th>
+                                    <th scope="col">Expected Delivery date</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Order Entered By</th>
+                                    <th scope="col">Order Received By</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        newState.pendingOrderDetails.map((order, index) => {
+                                            return(
+                                                <tr key={index} style={{"cursor":"pointer"}} onClick={() => {
+                                                    dispatch({type:ACTIONS.ORDER_IN, payload: order})
+                                                    dispatch({type:ACTIONS.SHOW4, payload: true})
+                                                }}>
+                                                    <td>{order.orderId}</td>
+                                                    <td>{order.customerFullName}</td>
+                                                    <td>{order.expectedDeliveryDate}</td>
+                                                    <td>{order.orderStatus}</td>
+                                                    <td>{order.orderEnteredBy}</td>
+                                                    <td>{order.orderReceivedBy}</td>
+                                                </tr>
+                                                
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
+                        )
+                    ) : <></>
+                }
+                {
+                    newState.orderShow3 ? (
+                        (newState.completedOrderDetails[0] === undefined) ? (
+                            <p className="d-flex justify-content-center mt-5 text-danger">Orders not found!</p>
+                        ) : (
+                            <Table className="table-hover w-100 mt-2">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Order Id</th>
+                                    <th scope="col">Customer Full Name</th>
+                                    <th scope="col">Expected Delivery date</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Order Entered By</th>
+                                    <th scope="col">Order Received By</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        newState.completedOrderDetails.map((order, index) => {
+                                            return(
+                                                <tr key={index} style={{"cursor":"pointer"}} onClick={() => {
+                                                    dispatch({type:ACTIONS.ORDER_IN, payload: order})
+                                                    dispatch({type:ACTIONS.SHOW4, payload: true})
+                                                }}>
+                                                    <td>{order.orderId}</td>
+                                                    <td>{order.customerFullName}</td>
+                                                    <td>{order.expectedDeliveryDate}</td>
+                                                    <td>{order.orderStatus}</td>
+                                                    <td>{order.orderEnteredBy}</td>
+                                                    <td>{order.orderReceivedBy}</td>
+                                                </tr>
+                                                
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
+                        )
+                    ) : <></>
+                }
+                {
+                    newState.orderShow4 ? (
+                        (newState.cancelledOrderDetails[0] === undefined) ? (
+                            <p className="d-flex justify-content-center mt-5 text-danger">Orders not found!</p>
+                        ) : (
+                            <Table className="table-hover w-100 mt-2">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Order Id</th>
+                                    <th scope="col">Customer Full Name</th>
+                                    <th scope="col">Expected Delivery date</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Order Entered By</th>
+                                    <th scope="col">Order Received By</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        newState.cancelledOrderDetails.map((order, index) => {
+                                            return(
+                                                <tr key={index} style={{"cursor":"pointer"}} onClick={() => {
+                                                    dispatch({type:ACTIONS.ORDER_IN, payload: order})
+                                                    dispatch({type:ACTIONS.SHOW4, payload: true})
+                                                }}>
+                                                    <td>{order.orderId}</td>
+                                                    <td>{order.customerFullName}</td>
+                                                    <td>{order.expectedDeliveryDate}</td>
+                                                    <td>{order.orderStatus}</td>
+                                                    <td>{order.orderEnteredBy}</td>
+                                                    <td>{order.orderReceivedBy}</td>
+                                                </tr>
+                                                
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </Table>
+                        )
+                    ) : <></>
+                }
+                {/* <Table className="table-hover w-100 mt-2">
                     <thead>
                     <tr>
                         <th scope="col">Order Id</th>
@@ -139,7 +353,7 @@ const OrderInfo = ({navigate}) => {
                             })
                         }
                     </tbody>
-                </Table>
+                </Table> */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleTableShow}>
@@ -452,7 +666,20 @@ const OrderInfo = ({navigate}) => {
                                     if(res.data[0] === undefined){
                                         dispatch({type:ACTIONS.SHOW6, payload: true})
                                     }else {
-                                        dispatch({type:ACTIONS.ORDER_DETAILS, payload: res.data})
+                                        let set1 = new Set()
+                                        let set2 = new Set()
+                                        let set3 = new Set()
+                                        let set4 = new Set()
+                                        res.data.forEach(element => {
+                                            if(element.orderStatus === "In Progress"){set1.add(element)}
+                                            else if(element.orderStatus.includes("Pending")){set2.add(element)}
+                                            else if(element.orderStatus === "Completed Successfully!"){set3.add(element)}
+                                            else if(element.orderStatus === "Cancelled"){set4.add(element)}
+                                        });
+                                        dispatch({type:ACTIONS.IN_PROGRESS_ORDER_DETAILS, payload: [...set1]})
+                                        dispatch({type:ACTIONS.PENDING_ORDER_DETAILS, payload: [...set2]})
+                                        dispatch({type:ACTIONS.COMPLETED_ORDER_DETAILS, payload: [...set3]})
+                                        dispatch({type:ACTIONS.CANCELLED_ORDER_DETAILS, payload: [...set4]})
                                         dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
                                     }
                                 })

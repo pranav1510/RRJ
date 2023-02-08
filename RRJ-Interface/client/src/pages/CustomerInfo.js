@@ -94,9 +94,9 @@ const CustomerInfo = ({navigate, info}) => {
             dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
         } else if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
             dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})
-        } else if(newState.alternateMobileOne === "" || !(/^(\d){10}$/.test(newState.alternateMobileOne))){
+        } else if(newState.alternateMobileOne !== "" && !(/^(\d){10}$/.test(newState.alternateMobileOne))){
             dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_ONE, payload: true})
-        } else if(newState.alternateMobileTwo === "" || !(/^(\d){10}$/.test(newState.alternateMobileTwo))){
+        } else if(newState.alternateMobileTwo !== "" && !(/^(\d){10}$/.test(newState.alternateMobileTwo))){
             dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_TWO, payload: true})
         } else if(newState.address === ""){
             dispatch1({type:ACTIONS1.ADDRESS, payload: true})
@@ -222,9 +222,9 @@ const CustomerInfo = ({navigate, info}) => {
                                             dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
                                         } else if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
                                             dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})
-                                        } else if(newState.alternateMobileOne === "" || !(/^(\d){10}$/.test(newState.alternateMobileOne))){
+                                        } else if(newState.alternateMobileOne !== "" && !(/^(\d){10}$/.test(newState.alternateMobileOne))){
                                             dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_ONE, payload: true})
-                                        } else if(newState.alternateMobileTwo === "" || !(/^(\d){10}$/.test(newState.alternateMobileTwo))){
+                                        } else if(newState.alternateMobileTwo !== "" && !(/^(\d){10}$/.test(newState.alternateMobileTwo))){
                                             dispatch1({type:ACTIONS1.ALTERNATE_MOBILE_TWO, payload: true})
                                         } else if(newState.address === ""){
                                             dispatch1({type:ACTIONS1.ADDRESS, payload: true})

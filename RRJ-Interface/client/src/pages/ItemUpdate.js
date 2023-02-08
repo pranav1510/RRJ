@@ -477,19 +477,18 @@ const ItemUpdate = ({item}) => {
                     else if(myNewState.itemName === "" || !(/^[a-zA-Z]+$/.test(myNewState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
                     else if(myNewState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
                     else if(myNewState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
-                    else if(myNewState.stonesType === ""){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: true})}
+                    else if(myNewState.makingCharges !== "" && !(/\d*\.?\d*/.test(myNewState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
+                    else if(myNewState.itemGrossWeight !== "" && !(/\d*\.?\d*/.test(myNewState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
+                    else if(myNewState.itemNetWeight !== "" && !(/\d*\.?\d*/.test(myNewState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
+                    else if(myNewState.wastage !== "" && !(/\d*\.?\d*/.test(myNewState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
                     else if(myNewState.stonesType.includes("CZ") && (myNewState.czCost === "" || !(/\d*\.?\d*/.test(myNewState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
                     else if(myNewState.stonesType.includes("Emerald") && (myNewState.emeraldCost === "" || !(/\d*\.?\d*/.test(myNewState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
                     else if(myNewState.stonesType.includes("Ruby") && (myNewState.rubyCost === "" || !(/\d*\.?\d*/.test(myNewState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
-                    else if(!(/\d*\.?\d*/.test(myNewState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
+                    else if(myNewState.pearlsWeight !== "" && !(/\d*\.?\d*/.test(myNewState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
+                    else if(myNewState.pearlsCost !== "" && !(/\d*\.?\d*/.test(myNewState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
+                    else if(myNewState.overallStoneWeight !== "" && !(/\d*\.?\d*/.test(myNewState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
+                    else if(myNewState.overallStoneCost !== "" && !(/\d*\.?\d*/.test(myNewState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
+                    else if(myNewState.itemPrice !== "" && !(/\d*\.?\d*/.test(myNewState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
                     else {
                         axios.put(`http://localhost:8080/ItemInfo/itemupdate/${item.itemId}`, myNewState)
                             .then(() => {

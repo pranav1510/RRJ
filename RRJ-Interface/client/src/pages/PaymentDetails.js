@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const initialState1 = {
     paymentId: false,
+    transactionType: false,
     paymentPurpose: false,
     sentType: false,
     paymnetType: false,
@@ -26,6 +27,7 @@ const initialState1 = {
 
 const ACTIONS1 = {
     PAYMENT_ID: "PAYMENT_ID",
+    TRANSACTION_TYPE: "TRANSACTION_TYPE",
     PAYMENT_PURPOSE: "PAYMENT_PURPOSE",
     SENT_TYPE: "SENT_TYPE",
     PAYMENT_TYPE: "PAYMENT_TYPE",
@@ -49,6 +51,8 @@ const reducer1 = (state, {type,payload}) => {
     switch(type){
         case ACTIONS1.PAYMENT_ID:
             return {...state, paymentId: payload}
+        case ACTIONS1.TRANSACTION_TYPE:
+            return {...state, transactionType: payload}
         case ACTIONS1.PAYMENT_PURPOSE:
             return {...state, paymentPurpose: payload}
         case ACTIONS1.SENT_TYPE:
@@ -123,6 +127,7 @@ const ACTIONS = {
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
     SHOW3: "SHOW3",
+    SHOW4: "SHOW4",
     EXCHANGE_SHOW: "EXCHANGE_SHOW",
     STATUS: "STATUS",
     PAYMENT_DATE: "PAYMENT_DATE",
@@ -212,6 +217,8 @@ const reducer = (state, {type, payload}) => {
             return {...state, show2: payload}
         case ACTIONS.SHOW3:
             return {...state, show3: payload}
+        case ACTIONS.SHOW4:
+            return {...state, show4: payload}
         case ACTIONS.PAYMENT_DATE:
             return {...state, paymentDate: String(payload.target.value)}
         case ACTIONS.SENT_OPTIONS:
@@ -276,6 +283,7 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
         show1: false,
         show2: false,
         show3: false,
+        show4: false,
         exchangeShow: false,
         percentage: (transin === undefined) ? "": transin.percentage,
         oneGramCost: (transin === undefined) ? "": transin.oneGramCost,
@@ -301,6 +309,7 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
         dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: ""})
     }
     const handleClose3 = () => dispatch({type:ACTIONS.SHOW3, payload: false})
+    const handleClose4 = () => dispatch({type:ACTIONS.SHOW4, payload: false})
 
     const options1 = ["Gold", "Silver"]
     const options2 = ["Cash", "Gold", "Gold and Cash", "Gold and Acnt Transfer", "Silver", "Silver and Cash", "Silver and Acnt Transfer", "Acnt Transfer"]
@@ -674,6 +683,17 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
  
     return(
         <>
+        <Modal show={newState.show4} onHide={handleClose4}>
+            <Modal.Header closeButton>
+                <Modal.Title>Enter Valid Item Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Note: Item Price and Item weight must be filled to proceed for Delivery</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose4}>Close</Button>
+            </Modal.Footer>
+        </Modal>
         <Modal show={newState.show3} onHide={handleClose3}>
         <Modal.Header closeButton>
           <Modal.Title>Item Details</Modal.Title>
@@ -881,19 +901,23 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
                                 (info.itemStatus !== "Delivered")? (
                                     <div key={index} className="form-check ms-5">
                                         <Form.Check type="checkbox" onClick={e => {
-                                            if(e.target.checked){
-                                                newState.priceValues.push(Number(info.itemPrice))
-                                                if(info.itemType.includes("Gold")){
-                                                    newState.goldValues.push(Number(info.itemNetWeight))
-                                                } else{
-                                                    newState.silverValues.push(Number(info.itemNetWeight))
-                                                }
+                                            if(info.itemPrice === "" || info.itemNetWeight === ""){
+                                                dispatch({type:ACTIONS.SHOW4, payload: true})
                                             } else {
-                                                newState.priceValues.splice(newState.priceValues.indexOf(Number(info.itemPrice)))
-                                                if(info.itemType.includes("Gold")){
-                                                    newState.goldValues.splice(newState.goldValues.indexOf(Number(info.itemNetWeight)),1)
-                                                } else{
-                                                    newState.silverValues.splice(newState.silverValues.indexOf(Number(info.itemNetWeight)),1)
+                                                if(e.target.checked){
+                                                    newState.priceValues.push(Number(info.itemPrice))
+                                                    if(info.itemType.includes("Gold")){
+                                                        newState.goldValues.push(Number(info.itemNetWeight))
+                                                    } else{
+                                                        newState.silverValues.push(Number(info.itemNetWeight))
+                                                    }
+                                                } else {
+                                                    newState.priceValues.splice(newState.priceValues.indexOf(Number(info.itemPrice)))
+                                                    if(info.itemType.includes("Gold")){
+                                                        newState.goldValues.splice(newState.goldValues.indexOf(Number(info.itemNetWeight)),1)
+                                                    } else{
+                                                        newState.silverValues.splice(newState.silverValues.indexOf(Number(info.itemNetWeight)),1)
+                                                    }
                                                 }
                                             }
                                         }}/>
@@ -969,7 +993,8 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
                             <Form.Label  className="fw-bold m-1">Transaction Type</Form.Label>
                             {
                                 (transin === undefined) ? (
-                                    <Form.Select defaultValue={newState.transactionType} onChange={e => {
+                                    <Form.Select defaultValue={newState.transactionType}  style={{border: newState1.transactionType ? "3px solid red" : ""}} onChange={e => {
+                                        if(newState1.transactionType){dispatch1({type:ACTIONS1.TRANSACTION_TYPE, payload: false})}
                                         dispatch({type:ACTIONS.TRANSACTION_TYPE, payload: e.target.value})
                                         if(e.target.value === "Order Related"){
                                             dispatch({type:ACTIONS.PAYMENT_PURPOSE_VALUES, payload: options4})
@@ -986,6 +1011,9 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
                                 ) : (
                                     <Form.Control type="text" defaultValue={newState.transactionType} disabled/>
                                 )
+                            }
+                            {
+                                newState1.transactionType ? (<p className="text-danger m-1 small fw-bold">Enter valid option!</p>) : <></>
                             }
                         </Form.Group>
                     </div>

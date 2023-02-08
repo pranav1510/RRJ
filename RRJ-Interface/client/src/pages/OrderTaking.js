@@ -4,7 +4,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import ItemUpdate from "./ItemUpdate";
 
-const OrderTaking = ({order, navigate}) => {
+const OrderTaking = ({order, navigate, names}) => {
     
     const myName = useSelector(state => state.LoginPage.employeeName)
 
@@ -882,24 +882,23 @@ const OrderTaking = ({order, navigate}) => {
             Close
           </Button>
           <Button variant="primary" onClick={() => {
-            if(newState.itemType === ""){myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: true})}
-            else if(newState.itemName === "" || !(/^[a-zA-Z]+$/.test(newState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
-            else if(newState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
-            else if(newState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
-            else if(newState.stonesType === ""){myDispatch1({type:MY_ACTIONS1.STONES_TYPE, payload: true})}
-            else if(newState.stonesType.includes("CZ") && (newState.czCost === "" || !(/\d*\.?\d*/.test(newState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
-            else if(newState.stonesType.includes("Emerald") && (newState.emeraldCost === "" || !(/\d*\.?\d*/.test(newState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
-            else if(newState.stonesType.includes("Ruby") && (newState.rubyCost === "" || !(/\d*\.?\d*/.test(newState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
-            else if(!(/\d*\.?\d*/.test(newState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
-            else {
+             if(newState.itemType === ""){myDispatch1({type:MY_ACTIONS1.ITEM_TYPE, payload: true})}
+             else if(newState.itemName === "" || !(/^[a-zA-Z]+$/.test(newState.itemName))){myDispatch1({type:MY_ACTIONS1.ITEM_NAME, payload: true})}
+             else if(newState.deliveryDate === ""){myDispatch1({type:MY_ACTIONS1.DELIVERY_DATE, payload: true})}
+             else if(newState.itemStatus === ""){myDispatch1({type:MY_ACTIONS1.ITEM_STATUS, payload: true})}
+             else if(newState.makingCharges !== "" && !(/\d*\.?\d*/.test(newState.makingCharges))){myDispatch1({type:MY_ACTIONS1.MAKING_CHARGES, payload: true})}
+             else if(newState.itemGrossWeight !== "" && !(/\d*\.?\d*/.test(newState.itemGrossWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_GROSS_WEIGHT, payload: true})}
+             else if(newState.itemNetWeight !== "" && !(/\d*\.?\d*/.test(newState.itemNetWeight))){myDispatch1({type:MY_ACTIONS1.ITEM_NET_WEIGHT, payload: true})}
+             else if(newState.wastage !== "" && !(/\d*\.?\d*/.test(newState.wastage))){myDispatch1({type:MY_ACTIONS1.WASTAGE, payload: true})}
+             else if(newState.stonesType.includes("CZ") && (newState.czCost === "" || !(/\d*\.?\d*/.test(newState.czCost)))){myDispatch1({type:MY_ACTIONS1.CZ_COST, payload: true})}
+             else if(newState.stonesType.includes("Emerald") && (newState.emeraldCost === "" || !(/\d*\.?\d*/.test(newState.emeraldCost)))){myDispatch1({type:MY_ACTIONS1.EMERALD_COST, payload: true})}
+             else if(newState.stonesType.includes("Ruby") && (newState.rubyCost === "" || !(/\d*\.?\d*/.test(newState.rubyCost)))){myDispatch1({type:MY_ACTIONS1.RUBY_COST, payload: true})}
+             else if(newState.pearlsWeight !== "" && !(/\d*\.?\d*/.test(newState.pearlsWeight))){myDispatch1({type:MY_ACTIONS1.PEARLS_WEIGHT, payload: true})}
+             else if(newState.pearlsCost !== "" && !(/\d*\.?\d*/.test(newState.pearlsCost))){myDispatch1({type:MY_ACTIONS1.PEARLS_COST, payload: true})}
+             else if(newState.overallStoneWeight !== "" && !(/\d*\.?\d*/.test(newState.overallStoneWeight))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_WEIGHT, payload: true})}
+             else if(newState.overallStoneCost !== "" && !(/\d*\.?\d*/.test(newState.overallStoneCost))){myDispatch1({type:MY_ACTIONS1.OVERALL_STONE_COST, payload: true})}
+             else if(newState.itemPrice !== "" && !(/\d*\.?\d*/.test(newState.itemPrice))){myDispatch1({type:MY_ACTIONS1.ITEM_PRICE, payload: true})}
+             else {
                 axios.post("http://localhost:8080/ItemInfo/add", newState)
                     .then(() => {
                         dispatch({type:ACTIONS.ITEM_INFO_STATUS, payload: "Item saved Successfully!"})
@@ -1098,9 +1097,13 @@ const OrderTaking = ({order, navigate}) => {
                                             if(newState.status !== ""){dispatch({type: ACTIONS.STATUS, payload: ""})}
                                         }}>
                                             <option value=""></option>
-                                            <option value="LAXMINARSAIAH YEDULAPURAM">LAXMINARSAIAH YEDULAPURAM</option>
-                                            <option value="RAVI KUMAR RANGU">RAVI KUMAR RANGU</option>
-                                            <option value="SRAVAN KUMAR RANGU">SRAVAN KUMAR RANGU</option>
+                                            {
+                                                names.map((name,index) => {
+                                                    return(
+                                                        <option value={name} key={index}>{name}</option>
+                                                    )
+                                                })
+                                            }
                                         </Form.Select>
                                     ) : (
                                         <Form.Control defaultValue={newState.orderReceivedBy} disabled />

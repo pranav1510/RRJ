@@ -1,31 +1,41 @@
 import axios from "axios";
 import React, { useReducer } from "react";
-import { Button, Card, Container, Form, Modal, Table } from "react-bootstrap";
+import { Button, Card, Container, Form, Modal, Nav, Table } from "react-bootstrap";
 import PaymentDetails from "./PaymentDetails";
 
 const initialState = {
     paymentId: "",
     customerFullName: "",
     customerMobile: "",
-    details: [],
     tableShow: false,
     transin: {},
     show1: false,
     show2: false,
     show3: false,
-    val: true
+    val: true,
+    transShow1: true,
+    transShow2: false,
+    transShow3: false,
+    pendingTransDetails: [],
+    completedTransDetails: [],
+    cancelledTransDetails: []
 }
 
 const ACTIONS = {
     PAYMENT_ID: "PAYMENT_ID",
     CUSTOMER_FULL_NAME: "CUSTOMER_FULL_NAME",
     CUSTOMER_MOBILE: "CUSTOMER_MOBILE",
-    DETAILS: "DETAILS",
     TABLE_SHOW: "TABLE_SHOW",
     TRANS_IN: "TRANS_IN",
     SHOW1: "SHOW1",
     SHOW2: "SHOW2",
     SHOW3: "SHOW3",
+    TRANS_SHOW1: "TRANS_SHOW1",
+    TRANS_SHOW2: "TRANS_SHOW2",
+    TRANS_SHOW3: "TRANS_SHOW3",
+    PENDING_TRANS_DETAILS: "PENDING_TRANS_DETAILS",
+    COMPLETED_TRANS_DETAILS: "COMPLETED_TRANS_DETAILS",
+    CANCELLED_TRANS_DETAILS: "CANCELLED_TRANS_DETAILS",
     VAL: "VAL"
 }
 
@@ -39,8 +49,12 @@ const reducer = (state, {type,payload}) => {
             return {...state, customerMobile: payload}
         case ACTIONS.TABLE_SHOW:
             return {...state, tableShow: payload}
-        case ACTIONS.DETAILS:
-            return {...state, details: payload}
+        case ACTIONS.PENDING_TRANS_DETAILS:
+            return {...state, pendingTransDetails: payload}
+        case ACTIONS.COMPLETED_TRANS_DETAILS:
+            return {...state, completedTransDetails: payload}
+        case ACTIONS.CANCELLED_TRANS_DETAILS:
+            return {...state, cancelledTransDetails: payload}
         case ACTIONS.TRANS_IN:
             return {...state, transin: payload}
         case ACTIONS.SHOW1:
@@ -49,6 +63,12 @@ const reducer = (state, {type,payload}) => {
             return {...state, show2: payload}
         case ACTIONS.SHOW3:
             return {...state, show3: payload}
+        case ACTIONS.TRANS_SHOW1:
+            return {...state, transShow1: payload}
+        case ACTIONS.TRANS_SHOW2:
+            return {...state, transShow2: payload}
+        case ACTIONS.TRANS_SHOW3:
+            return {...state, transShow3: payload}
         case ACTIONS.VAL:
             return {...state, val: payload}
         default:
@@ -80,7 +100,135 @@ const TransactionInfo = ({navigate}) => {
                     <Modal.Title>Transaction Details</Modal.Title>
                 </Modal.Header>
                 <Modal.Body  style={{height: "400px", overflow: "hidden", overflowY: "auto"}}>
-                    <Table className="table-hover w-100 mt-4">
+                <Nav className="nav-tabs">
+                        <Nav.Link active= {newState.transShow1 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.TRANS_SHOW3, payload: false})
+                        dispatch({type:ACTIONS.TRANS_SHOW2, payload: false})
+                        dispatch({type:ACTIONS.TRANS_SHOW1, payload: true})
+                    }}>Pending</Nav.Link>
+                        <Nav.Link active= {newState.transShow2 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.TRANS_SHOW3, payload: false})
+                        dispatch({type:ACTIONS.TRANS_SHOW1, payload: false})
+                        dispatch({type:ACTIONS.TRANS_SHOW2, payload: true})
+                    }}>Completed</Nav.Link>
+                        <Nav.Link active= {newState.transShow3 ? true : false} onClick={() => {
+                        dispatch({type:ACTIONS.TRANS_SHOW2, payload: false})
+                        dispatch({type:ACTIONS.TRANS_SHOW1, payload: false})
+                        dispatch({type:ACTIONS.TRANS_SHOW3, payload: true})
+                    }}>Cancelled</Nav.Link>
+                    </Nav>
+                    {
+                        newState.transShow1 ? (
+                            (newState.pendingTransDetails[0] === undefined) ? (
+                                <p className="d-flex justify-content-center text-danger mt-5">Transactions not found!</p>
+                            ) : (
+                                <Table className="table-hover w-100 mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Payment Id</th>
+                                            <th scope="col">Customer Full Name</th>
+                                            <th scope="col">Customer Mobile</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            newState.pendingTransDetails.map((info, index) => {
+                                                return(
+                                                    <tr key={index} style={{cursor: "pointer"}} onClick={() => {
+                                                        dispatch({type:ACTIONS.TRANS_IN, payload: info})
+                                                        dispatch({type:ACTIONS.SHOW1, payload: true})
+                                                    }}>
+                                                        <td>{info.paymentId}</td>
+                                                        <td>{info.customerFullName}</td>
+                                                        <td>{info.customerMobile}</td>
+                                                        <td>{info.paymentDescription}</td>
+                                                        <td>{info.status}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </Table>
+                            )
+                        ) : <></>
+                    }
+                    {
+                        newState.transShow2 ? (
+                            (newState.completedTransDetails[0] === undefined) ? (
+                                <p className="d-flex justify-content-center text-danger mt-5">Transactions not found!</p>
+                            ) : (
+                                <Table className="table-hover w-100 mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Payment Id</th>
+                                            <th scope="col">Customer Full Name</th>
+                                            <th scope="col">Customer Mobile</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            newState.completedTransDetails.map((info, index) => {
+                                                return(
+                                                    <tr key={index} style={{cursor: "pointer"}} onClick={() => {
+                                                        dispatch({type:ACTIONS.TRANS_IN, payload: info})
+                                                        dispatch({type:ACTIONS.SHOW1, payload: true})
+                                                    }}>
+                                                        <td>{info.paymentId}</td>
+                                                        <td>{info.customerFullName}</td>
+                                                        <td>{info.customerMobile}</td>
+                                                        <td>{info.paymentDescription}</td>
+                                                        <td>{info.status}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </Table>
+                            )
+                        ) : <></>
+                    }
+                    {
+                        newState.transShow3 ? (
+                            (newState.cancelledTransDetails[0] === undefined) ? (
+                                <p className="d-flex justify-content-center text-danger mt-5">Transactions not found!</p>
+                            ) : (
+                                <Table className="table-hover w-100 mt-2">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Payment Id</th>
+                                            <th scope="col">Customer Full Name</th>
+                                            <th scope="col">Customer Mobile</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {
+                                            newState.cancelledTransDetails.map((info, index) => {
+                                                return(
+                                                    <tr key={index} style={{cursor: "pointer"}} onClick={() => {
+                                                        dispatch({type:ACTIONS.TRANS_IN, payload: info})
+                                                        dispatch({type:ACTIONS.SHOW1, payload: true})
+                                                    }}>
+                                                        <td>{info.paymentId}</td>
+                                                        <td>{info.customerFullName}</td>
+                                                        <td>{info.customerMobile}</td>
+                                                        <td>{info.paymentDescription}</td>
+                                                        <td>{info.status}</td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </Table>
+                            )
+                        ) : <></>
+                    }
+                    {/* <Table className="table-hover w-100 mt-2">
                         <thead>
                             <tr>
                                 <th scope="col">Payment Id</th>
@@ -108,7 +256,7 @@ const TransactionInfo = ({navigate}) => {
                                 })
                             }
                         </tbody>
-                    </Table>
+                    </Table> */}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleTableShow}>
@@ -325,7 +473,17 @@ const TransactionInfo = ({navigate}) => {
                                     if(res.data[0] === undefined){
                                         dispatch({type:ACTIONS.SHOW3, payload: true})
                                     } else {
-                                        dispatch({type:ACTIONS.DETAILS, payload: res.data})
+                                        let set1 = new Set()
+                                        let set2 = new Set()
+                                        let set3 = new Set()
+                                        res.data.forEach(element => {
+                                            if(element.status === "Pending"){set1.add(element)}
+                                            else if(element.status === "Completed"){set2.add(element)}
+                                            else if(element.status === "Cancelled"){set3.add(element)}
+                                        });
+                                        dispatch({type:ACTIONS.PENDING_TRANS_DETAILS, payload: [...set1]})
+                                        dispatch({type:ACTIONS.COMPLETED_TRANS_DETAILS, payload: [...set2]})
+                                        dispatch({type:ACTIONS.CANCELLED_TRANS_DETAILS, payload: [...set3]})
                                         dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
                                     }
                                 })
