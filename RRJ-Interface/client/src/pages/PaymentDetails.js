@@ -319,26 +319,36 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
 
     const SubmitHandler = () => {
         if(newState.paymentId === ""){dispatch1({type:ACTIONS1.PAYMENT_ID, payload: true})}
-        // else if(newState.paymentPurpose === ""){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: true})}
-        // else if((newState.paymentPurpose === "Order Delivery" || newState.paymentPurpose === "Return Excess") && newState.sentType === ""){
-        //     dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})
-        // }else if((newState.paymentPurpose !== "Return Excess" || newState.paymentPurpose !== "") && newState.paymentType === ""){
-        //     dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})
-        // } else if(newState.paymentStatus === ""){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: true})}
-        // else if(newState.customerMobile === "" || !(/^(\d){10}$/).test(newState.customerMobile)){dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})}
-        // else if(newState.customerFullName === ""){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})}
-        // else if(newState.orderId === ""){dispatch1({type:ACTIONS1.ORDER_ID, payload: true})}
-        // else if(newState.paymentDate === ""){dispatch1({type:ACTIONS1.PAYMENT_DATE, payload: true})}
-        // else if(newState.paymentPurpose === "Order Delivery" && newState.orderPrice === ""){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: true})}
-        // else if((newState.sentType.includes("Gold") || newState.paymentType.includes("Gold")) && (!(/\d*\.?\d*/.test(newState.goldWeight)) || newState.goldWeight === "")){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: true})}
-        // else if((newState.sentType.includes("Silver") || newState.paymentType.includes("Silver")) && (!(/\d*\.?\d*/.test(newState.silverWeight)) || newState.silverWeight === "") ){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: true})}
-        // else if((newState.sentType.includes("Cash") || newState.sentType.includes("Acnt") || newState.paymentType.includes("Cash") || newState.paymentType.includes("Acnt")) && (!(/\d*\.?\d*/.test(newState.amountReceived)) || newState.amountReceived === "")){
-        //     dispatch1({type:ACTIONS1.AMOUNT, payload: true})
-        // } else if((newState.paymentType.includes("Gold") || newState.paymentType.includes("Silver")) && newState.exchangeCost === ""){dispatch1({type:ACTIONS1.EXCHANGE_COST, payload: true})}
-        // else if(newState.customerDueStatus === ""){dispatch1({type:ACTIONS1.CUSTOMER_DUE_STATUS, payload: true})}
-        // else if(newState.paymentEnteredBy === ""){dispatch1({type:ACTIONS1.PAYMENT_ENTERED_BY, payload: true})}
-        // else if(newState.rrjDueStatus === ""){dispatch1({type:ACTIONS1.RRJ_DUE_STATUS, payload: true})}
-        // else if(newState.paymentReceivedBy === ""){dispatch1({type:ACTIONS1.PAYMENT_RECEIVED_BY, payload: true})}
+        else if(newState.transactionType === ""){dispatch1({type:ACTIONS1.TRANSACTION_TYPE, payload: true})}
+        else if(newState.paymentPurpose === ""){dispatch1({type:ACTIONS1.PAYMENT_PURPOSE, payload: true})}
+        else if(newState.transactionType === "Order Related"){
+            if((newState.paymentPurpose === "Advance for Order" || newState.paymentPurpose === "Dues Payment") && newState.paymentType === ""){dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})}
+            else if(newState.paymentPurpose === "Order Delivery"){
+                if(newState.sentType === ""){dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})}
+                if(newState.paymentType === ""){dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})}
+                if(newState.orderPrice === ""){dispatch1({type:ACTIONS1.ORDER_PRICE, payload: true})}
+            }
+            else if(newState.paymentPurpose === "Return Excess" && newState.sentType === ""){dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})}
+            else if(newState.orderId === ""){dispatch1({type:ACTIONS1.ORDER_ID, payload: true})}
+        } else if(newState.transactionType === "General"){
+            if(newState.paymentPurpose === "Buying" || newState.paymentPurpose === "Selling" || newState.paymentPurpose === "Self Transfer"){
+                if(newState.sentType === ""){dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})}
+                if(newState.paymentType === ""){dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})}
+            } else if(newState.paymentPurpose === "Borrowing" || newState.paymentPurpose === "Lended Repaying"){dispatch1({type:ACTIONS1.PAYMENT_TYPE, payload: true})
+            } else if(newState.paymentPurpose === "Lending" || newState.paymentPurpose === "Repaying Borrowed" || newState.paymentPurpose === "General Expenses"){dispatch1({type:ACTIONS1.SENT_TYPE, payload: true})}
+        } else if(newState.customerMobile === "" || !(/^(\d){10}$/).test(newState.customerMobile)){dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})}
+        else if(newState.customerFullName === ""){dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})}
+        else if(newState.paymentStatus === ""){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: true})}
+        else if(newState.paymentDate === ""){dispatch1({type:ACTIONS1.PAYMENT_DATE, payload: true})}
+        else if((newState.sentType.includes("Gold") || newState.paymentType.includes("Gold")) && (!(/\d*\.?\d*/.test(newState.goldWeight)) || newState.goldWeight === "")){dispatch1({type:ACTIONS1.GOLD_WEIGHT, payload: true})}
+        else if((newState.sentType.includes("Silver") || newState.paymentType.includes("Silver")) && (!(/\d*\.?\d*/.test(newState.silverWeight)) || newState.silverWeight === "") ){dispatch1({type:ACTIONS1.SILVER_WEIGHT, payload: true})}
+        else if((newState.sentType.includes("Cash") || newState.sentType.includes("Acnt")) && (!(/\d*\.?\d*/.test(newState.amountReceived)) || newState.amountReceived === "")){dispatch1({type:ACTIONS1.AMOUNT, payload: true})}
+        else if((newState.paymentType.includes("Cash") || newState.paymentType.includes("Acnt")) && (!(/\d*\.?\d*/.test(newState.amountReceived)) || newState.amountReceived === "")){dispatch1({type:ACTIONS1.AMOUNT, payload: true})}
+        else if((newState.paymentType.includes("Gold") || newState.paymentType.includes("Silver")) && newState.exchangeCost === ""){dispatch1({type:ACTIONS1.EXCHANGE_COST, payload: true})}
+        else if(newState.customerDueStatus === ""){dispatch1({type:ACTIONS1.CUSTOMER_DUE_STATUS, payload: true})}
+        else if(newState.paymentEnteredBy === ""){dispatch1({type:ACTIONS1.PAYMENT_ENTERED_BY, payload: true})}
+        else if(newState.rrjDueStatus === ""){dispatch1({type:ACTIONS1.RRJ_DUE_STATUS, payload: true})}
+        else if(newState.paymentReceivedBy === ""){dispatch1({type:ACTIONS1.PAYMENT_RECEIVED_BY, payload: true})}
         else{
             if(newState.transactionType === "Order Related"){
                 if(newState.paymentPurpose === "Buying"){
@@ -1441,7 +1451,7 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
                                     if(newState1.paymentStatus){dispatch1({type:ACTIONS1.PAYMENT_STATUS, payload: false})}
                                 }}>
                                     <option value=""></option>
-                                    <option value="In Progress">Pending</option>
+                                    <option value="Pending">Pending</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Cancelled">Cancelled</option>
                                 </Form.Select>
@@ -2146,7 +2156,7 @@ const PaymentDetails = ({date, navigate, transin, showMain, names}) => {
                                         }
                                     }
                                 }
-                                axios.put(`http://localhost:8080/TransactionInfo/updatetrans/${newState.paymentId}`, newState)
+                                axios.put(`http://localhost:8080/PaymentInfo/updatetrans/${newState.paymentId}`, newState)
                                     .then(() => {
                                         dispatch({type:ACTIONS.PAYMENT_INFO_STATUS, payload: "Details modified Successfully!"})
                                         }).catch(err => console.log(err))

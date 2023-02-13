@@ -51,4 +51,9 @@ public class OrdertakingController {
     public List<Ordertaking> getOrderByCustomerId(@RequestBody Ordertaking ordertaking){
         return ordertakingservice.getOrdersByCustomerId(ordertaking);
     }
+
+    @GetMapping("pendingorders")
+    public List<Ordertaking> getPendingOrders(){
+        return ordertakingservice.getPendingOrders();
+    }
 }

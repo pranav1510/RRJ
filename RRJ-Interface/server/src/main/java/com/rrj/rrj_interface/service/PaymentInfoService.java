@@ -12,6 +12,7 @@ public interface PaymentInfoService {
     public List<PaymentInfo> getdetails(PaymentInfo paymentInfo);
     public List<PaymentInfo> getTransactionDetails(PaymentInfo paymentInfo);
     public ResponseEntity<PaymentInfo> updateTrans(PaymentInfo paymentInfo, String PaymentId);
+    public List<PaymentInfo> getPendingTransactions();
 
 
 

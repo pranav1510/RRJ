@@ -50,15 +50,6 @@ const InfoEntry = ({navigate}) => {
         </div>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <Card style={{"cursor":"pointer"}}  className="m-3 rounded" onClick={() => {navigate('/transactionentry')}}>
-                    <Card.Body>
-                        <Card.Title><h5 className="link-dark"> ENTER TRANSACTION DETAILS</h5></Card.Title>
-                    </Card.Body>
-                </Card>
-            </div>
-        </div>
-        <div className="row justify-content-center">
-            <div className="col-sm-6">
                 <Card style={{"cursor":"pointer"}}  className="m-3 rounded" onClick={() => {navigate('/validation')}}>
                     <Card.Body>
                         <Card.Title><h5 className="link-dark">TRANSACTIONS VALIDATION</h5></Card.Title>

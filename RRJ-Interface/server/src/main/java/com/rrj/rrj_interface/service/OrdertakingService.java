@@ -17,4 +17,5 @@ public interface OrdertakingService {
     public ResponseEntity<Ordertaking> updateOrder(Ordertaking ordertaking, String OrderId);
     public List<Object[]> getCustomerId(Ordertaking ordertaking);
     public List<Ordertaking> getOrdersByCustomerId(Ordertaking ordertaking);
+    public List<Ordertaking> getPendingOrders();
 }

@@ -19,4 +19,7 @@ public interface PaymentInfoRepository extends JpaRepository<PaymentInfo,Integer
 
     @Query("select e FROM PaymentInfo e WHERE e.PaymentId =?1")
     public PaymentInfo findByPaymentId(String PaymentId);
+
+    @Query("select e FROM PaymentInfo e WHERE e.Status = 'Pending'")
+    public List<PaymentInfo> getPendingTransactions();
 }

@@ -71,4 +71,9 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
         return ResponseEntity.ok(updateTransaction);
     }
+
+    @Override
+    public List<PaymentInfo> getPendingTransactions() {
+        return paymentInfoRepository.getPendingTransactions();
+    }
 }

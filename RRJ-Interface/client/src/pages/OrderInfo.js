@@ -26,7 +26,10 @@ const initialState = {
     itemDetails: [],
     orderin: {},
     itemin: {},
-    message: ""
+    message: "",
+    validId: false,
+    validName: false,
+    validmobile: false
 }
 
 const ACTIONS = {
@@ -51,7 +54,10 @@ const ACTIONS = {
     ITEM_DETAILS: "ITEM_DETAILS",
     ORDER_IN: "ORDER_IN",
     ITEM_IN: "ITEM_IN",
-    MESSAGE: "MESSAGE"
+    MESSAGE: "MESSAGE",
+    VALID_ID: "VALID_ID",
+    VALID_NAME: "VALID_NAME",
+    VALID_MOBILE: "VALID_MOBILE"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -100,6 +106,12 @@ const reducer = (state, {type, payload}) => {
             return {...state, itemin: payload}
         case ACTIONS.MESSAGE:
             return {...state, message: payload}
+        case ACTIONS.VALID_ID:
+            return {...state, validId: payload}
+        case ACTIONS.VALID_MOBILE:
+            return {...state, validmobile: payload}
+        case ACTIONS.VALID_NAME:
+            return {...state, validName: payload}
         default:
             return state
     }
@@ -322,38 +334,6 @@ const OrderInfo = ({navigate}) => {
                         )
                     ) : <></>
                 }
-                {/* <Table className="table-hover w-100 mt-2">
-                    <thead>
-                    <tr>
-                        <th scope="col">Order Id</th>
-                        <th scope="col">Customer Full Name</th>
-                        <th scope="col">Expected Delivery date</th>
-                        <th scope="col">Order Status</th>
-                        <th scope="col">Order Entered By</th>
-                        <th scope="col">Order Received By</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            newState.orderDetails.map((order, index) => {
-                                return(
-                                    <tr key={index} style={{"cursor":"pointer"}} onClick={() => {
-                                        dispatch({type:ACTIONS.ORDER_IN, payload: order})
-                                        dispatch({type:ACTIONS.SHOW4, payload: true})
-                                    }} >
-                                        <td>{order.orderId}</td>
-                                        <td>{order.customerFullName}</td>
-                                        <td>{order.expectedDeliveryDate}</td>
-                                        <td>{order.orderStatus}</td>
-                                        <td>{order.orderEnteredBy}</td>
-                                        <td>{order.orderReceivedBy}</td>
-                                    </tr>
-                                    
-                                )
-                            })
-                        }
-                    </tbody>
-                </Table> */}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleTableShow}>
@@ -637,53 +617,70 @@ const OrderInfo = ({navigate}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Order Id</Form.Label>
-                                <Form.Control type="text" onChange={e => {
+                                <Form.Control type="text" style={{border: newState.validId ? "3px solid red" : ""}} onChange={e => {
                                     dispatch({type:ACTIONS.ORDER_ID, payload: e.target.value})
+                                    if(newState.validId){dispatch({type:ACTIONS.VALID_ID, payload: false})}
                                 }} />
+                                {
+                                    newState.validId ? (<p className="text-danger m-1 small fw-bold">Enter valid Id!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                                <Form.Control type="text" onChange={e => {
+                                <Form.Control style={{border: newState.validMobile ? "3px solid red" : ""}} type="text" onChange={e => {
                                     dispatch({type:ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                                    if(newState.validMobile){dispatch({type:ACTIONS.VALID_MOBILE, payload: false})}
                                 }} />
+                                {
+                                    newState.validMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                     </div>
                     <div className="row">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                            <Form.Control type="text" onChange={e => {
+                            <Form.Control style={{border: newState.validName ? "3px solid red" : ""}} type="text" onChange={e => {
                                 dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})
+                                if(newState.validName){dispatch({type:ACTIONS.VALID_NAME, payload: false})}
                             }} />
+                            {
+                                newState.validName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                            }
                         </Form.Group>
                     </div>
                     <div className="row m-3">
                         <Button variant="primary" onClick={() => {
-                            axios.post("http://localhost:8080/OrderTaking/searchOrder", newState)
-                                .then(res => {
-                                    if(res.data[0] === undefined){
-                                        dispatch({type:ACTIONS.SHOW6, payload: true})
-                                    }else {
-                                        let set1 = new Set()
-                                        let set2 = new Set()
-                                        let set3 = new Set()
-                                        let set4 = new Set()
-                                        res.data.forEach(element => {
-                                            if(element.orderStatus === "In Progress"){set1.add(element)}
-                                            else if(element.orderStatus.includes("Pending")){set2.add(element)}
-                                            else if(element.orderStatus === "Completed Successfully!"){set3.add(element)}
-                                            else if(element.orderStatus === "Cancelled"){set4.add(element)}
-                                        });
-                                        dispatch({type:ACTIONS.IN_PROGRESS_ORDER_DETAILS, payload: [...set1]})
-                                        dispatch({type:ACTIONS.PENDING_ORDER_DETAILS, payload: [...set2]})
-                                        dispatch({type:ACTIONS.COMPLETED_ORDER_DETAILS, payload: [...set3]})
-                                        dispatch({type:ACTIONS.CANCELLED_ORDER_DETAILS, payload: [...set4]})
-                                        dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
-                                    }
-                                })
-                                .catch(err => console.log(err))
+                            if(newState.orderId !== "" && !(/^(\d){10}$/).test(newState.orderId)){dispatch({type:ACTIONS.VALID_ID, payload: true})}
+                            else if(newState.customerMobile !== "" && !(/^(\d){10}$/).test(newState.customerMobile)){dispatch({type:ACTIONS.VALID_MOBILE, payload: true})}
+                            else if(newState.customerFullName !== "" && !(/[a-zA-Z\s]*/.test(newState.customerFullName))){dispatch({type:ACTIONS.VALID_NAME, payload: true})}
+                            else {
+                                axios.post("http://localhost:8080/OrderTaking/searchOrder", newState)
+                                    .then(res => {
+                                        if(res.data[0] === undefined){
+                                            dispatch({type:ACTIONS.SHOW6, payload: true})
+                                        }else {
+                                            let set1 = new Set()
+                                            let set2 = new Set()
+                                            let set3 = new Set()
+                                            let set4 = new Set()
+                                            res.data.forEach(element => {
+                                                if(element.orderStatus === "In Progress"){set1.add(element)}
+                                                else if(element.orderStatus.includes("Pending")){set2.add(element)}
+                                                else if(element.orderStatus === "Completed Successfully!"){set3.add(element)}
+                                                else if(element.orderStatus === "Cancelled"){set4.add(element)}
+                                            });
+                                            dispatch({type:ACTIONS.IN_PROGRESS_ORDER_DETAILS, payload: [...set1]})
+                                            dispatch({type:ACTIONS.PENDING_ORDER_DETAILS, payload: [...set2]})
+                                            dispatch({type:ACTIONS.COMPLETED_ORDER_DETAILS, payload: [...set3]})
+                                            dispatch({type:ACTIONS.CANCELLED_ORDER_DETAILS, payload: [...set4]})
+                                            dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
+                                        }
+                                    })
+                                    .catch(err => console.log(err))
+                            }
                         }}>Search</Button>
                     </div>
                 </Container>

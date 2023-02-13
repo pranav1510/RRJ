@@ -64,4 +64,9 @@ public class OrdertakingServiceImpl implements OrdertakingService {
     public List<Ordertaking> getOrdersByCustomerId(Ordertaking ordertaking) {
         return ordertakingrepository.ordersbycustomerid(ordertaking.getCustomerId());
     }
+
+    @Override
+    public List<Ordertaking> getPendingOrders() {
+        return ordertakingrepository.getPendingOrders();
+    }
 }

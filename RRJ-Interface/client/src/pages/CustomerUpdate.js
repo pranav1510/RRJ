@@ -42,7 +42,9 @@ const initialState = {
     completedTransDetails: [],
     cancelledTransDetails: [],
     transin: {},
-    val: true
+    val: true,
+    validMobile: false,
+    validName: false
 }
 
 const ACTIONS = {
@@ -81,7 +83,9 @@ const ACTIONS = {
     COMPLETED_TRANS_DETAILS: "COMPLETED_TRANS_DETAILS",
     CANCELLED_TRANS_DETAILS: "CANCELLED_TRANS_DETAILS",
     TRANS_IN: "TRANS_IN",
-    VAL: "VAL"
+    VAL: "VAL",
+    VALID_MOBILE: "VALID_MOBILE",
+    VALID_NAME: "VALID_NAME"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -158,6 +162,10 @@ const reducer = (state, {type, payload}) => {
             return {...state, transin: payload}
         case ACTIONS.VAL:
             return {...state, val: payload}
+        case ACTIONS.VALID_MOBILE:
+            return {...state, validMobile: payload}
+        case ACTIONS.VALID_NAME:
+            return {...state, validName: payload}
         default:
             return state
     }
@@ -1087,27 +1095,43 @@ const CustomerUpdate = ({navigate}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})}/>
+                                <Form.Control type="text" style={{border: newState.validMobile ? "3px solid red" : ""}} onChange={e => {
+                                    dispatch({type:ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                                    if(newState.validMobile){dispatch({type:ACTIONS.VALID_MOBILE, payload: false})}
+                                }}/>
+                                {
+                                    newState.validMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                     </div>
                     <div className="row">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})}/>
+                            <Form.Control type="text" style={{border: newState.validName ? "3px solid red" : ""}} onChange={e => {
+                                dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})
+                                if(newState.validName){dispatch({type:ACTIONS.VALID_NAME, payload: false})}
+                            }}/>
+                            {
+                                newState.validName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                            }
                         </Form.Group>
                     </div>
                     <div className="row m-3">
                         <Button variant="primary" onClick={() => {
-                            axios.post("http://localhost:8080/CustomerInfo/getcustomer", newState)
-                                .then(res => {
-                                    if(res.data[0] === undefined){
-                                        dispatch({type:ACTIONS.SHOW3, payload: true})
-                                    } else {
-                                        dispatch({type:ACTIONS.INFO, payload: res.data[0]})
-                                        dispatch({type:ACTIONS.SHOW2, payload: true})
-                                    }
-                                }).catch(err => console.log(err))
+                            if(newState.customerMobile !== "" && !(/^(\d){10}$/).test(newState.customerMobile)){dispatch({type:ACTIONS.VALID_MOBILE, payload: true})}
+                            else if(newState.customerFullName !== "" && !(/[a-zA-Z\s]*/.test(newState.customerFullName))){dispatch({type:ACTIONS.VALID_NAME, payload: true})}
+                            else {
+                                axios.post("http://localhost:8080/CustomerInfo/getcustomer", newState)
+                                    .then(res => {
+                                        if(res.data[0] === undefined){
+                                            dispatch({type:ACTIONS.SHOW3, payload: true})
+                                        } else {
+                                            dispatch({type:ACTIONS.INFO, payload: res.data[0]})
+                                            dispatch({type:ACTIONS.SHOW2, payload: true})
+                                        }
+                                    }).catch(err => console.log(err))
+                            }
                         }}>Search</Button>
                     </div>
                 </Container>

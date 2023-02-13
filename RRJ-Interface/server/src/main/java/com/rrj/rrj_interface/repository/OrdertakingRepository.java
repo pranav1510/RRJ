@@ -25,4 +25,7 @@ public interface OrdertakingRepository extends JpaRepository<Ordertaking,Integer
 
     @Query("select e FROM Ordertaking e WHERE e.CustomerId =?1 ORDER BY e.OrderId DESC")
     public List<Ordertaking> ordersbycustomerid(int CustomerId);
+
+    @Query("select e FROM Ordertaking e WHERE e.OrderStatus != 'Completed Successfully!' AND e.OrderStatus != 'Cancelled'")
+    public List<Ordertaking> getPendingOrders();
 }

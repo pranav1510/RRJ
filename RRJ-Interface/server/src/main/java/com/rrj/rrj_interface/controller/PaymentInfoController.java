@@ -40,4 +40,9 @@ public class PaymentInfoController {
     public ResponseEntity<PaymentInfo> transupdate(@RequestBody PaymentInfo paymentInfo, @PathVariable String PaymentId){
         return paymentInfoService.updateTrans(paymentInfo, PaymentId);
     }
+
+    @GetMapping("/pendingtransactions")
+    public List<PaymentInfo> getPendingTransactions(){
+        return paymentInfoService.getPendingTransactions();
+    }
 }

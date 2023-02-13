@@ -18,7 +18,10 @@ const initialState = {
     transShow3: false,
     pendingTransDetails: [],
     completedTransDetails: [],
-    cancelledTransDetails: []
+    cancelledTransDetails: [],
+    validId: false,
+    validName: false,
+    validmobile: false
 }
 
 const ACTIONS = {
@@ -36,7 +39,10 @@ const ACTIONS = {
     PENDING_TRANS_DETAILS: "PENDING_TRANS_DETAILS",
     COMPLETED_TRANS_DETAILS: "COMPLETED_TRANS_DETAILS",
     CANCELLED_TRANS_DETAILS: "CANCELLED_TRANS_DETAILS",
-    VAL: "VAL"
+    VAL: "VAL",
+    VALID_ID: "VALID_ID",
+    VALID_NAME: "VALID_NAME",
+    VALID_MOBILE: "VALID_MOBILE"
 }
 
 const reducer = (state, {type,payload}) => {
@@ -71,6 +77,12 @@ const reducer = (state, {type,payload}) => {
             return {...state, transShow3: payload}
         case ACTIONS.VAL:
             return {...state, val: payload}
+        case ACTIONS.VALID_ID:
+            return {...state, validId: payload}
+        case ACTIONS.VALID_MOBILE:
+            return {...state, validmobile: payload}
+        case ACTIONS.VALID_NAME:
+            return {...state, validName: payload}
         default:
             return state
     }
@@ -228,35 +240,6 @@ const TransactionInfo = ({navigate}) => {
                             )
                         ) : <></>
                     }
-                    {/* <Table className="table-hover w-100 mt-2">
-                        <thead>
-                            <tr>
-                                <th scope="col">Payment Id</th>
-                                <th scope="col">Customer Full Name</th>
-                                <th scope="col">Customer Mobile</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                newState.details.map((info, index) => {
-                                    return(
-                                        <tr key={index} style={{cursor: "pointer"}} onClick={() => {
-                                            dispatch({type:ACTIONS.TRANS_IN, payload: info})
-                                            dispatch({type:ACTIONS.SHOW1, payload: true})
-                                        }}>
-                                            <td>{info.paymentId}</td>
-                                            <td>{info.customerFullName}</td>
-                                            <td>{info.customerMobile}</td>
-                                            <td>{info.paymentDescription}</td>
-                                            <td>{info.status}</td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </Table> */}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleTableShow}>
@@ -450,44 +433,67 @@ const TransactionInfo = ({navigate}) => {
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Payment Id</Form.Label>
-                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.PAYMENT_ID, payload: e.target.value})}/>
+                                <Form.Control type="text" style={{border: newState.validId ? "3px solid red" : ""}} onChange={e => {
+                                    dispatch({type:ACTIONS.PAYMENT_ID, payload: e.target.value})
+                                    if(newState.validId){dispatch({type:ACTIONS.VALID_ID, payload: false})}
+                                }}/>
+                                {
+                                    newState.validId ? (<p className="text-danger m-1 small fw-bold">Enter valid Id!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                         <div className="col">
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">Customer Mobile</Form.Label>
-                                <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})}/>
+                                <Form.Control type="text" style={{border: newState.validMobile ? "3px solid red" : ""}} onChange={e => {
+                                    dispatch({type:ACTIONS.CUSTOMER_MOBILE, payload: e.target.value})
+                                    if(newState.validMobile){dispatch({type:ACTIONS.VALID_MOBILE, payload: false})}
+                                }}/>
+                                {
+                                    newState.validMobile ? (<p className="text-danger m-1 small fw-bold">Enter valid mobile!</p>) : <></>
+                                }
                             </Form.Group>
                         </div>
                     </div>
                     <div className="row">
                         <Form.Group className="mt-3">
                             <Form.Label className="fw-bold m-1">Customer Full Name</Form.Label>
-                            <Form.Control type="text" onChange={e => dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})}/>
+                            <Form.Control type="text" style={{border: newState.validName ? "3px solid red" : ""}} onChange={e => {
+                                dispatch({type:ACTIONS.CUSTOMER_FULL_NAME, payload: e.target.value})
+                                if(newState.validName){dispatch({type:ACTIONS.VALID_NAME, payload: false})}
+                            }}/>
+                            {
+                                newState.validName ? (<p className="text-danger m-1 small fw-bold">Enter valid name!</p>) : <></>
+                            }
                         </Form.Group>
                     </div>
                     <div className="row m-3">
                         <Button variant="primary" onClick={() => {
-                            axios.post("http://localhost:8080/PaymentInfo/gettransaction", newState)
-                                .then(res => {
-                                    if(res.data[0] === undefined){
-                                        dispatch({type:ACTIONS.SHOW3, payload: true})
-                                    } else {
-                                        let set1 = new Set()
-                                        let set2 = new Set()
-                                        let set3 = new Set()
-                                        res.data.forEach(element => {
-                                            if(element.status === "Pending"){set1.add(element)}
-                                            else if(element.status === "Completed"){set2.add(element)}
-                                            else if(element.status === "Cancelled"){set3.add(element)}
-                                        });
-                                        dispatch({type:ACTIONS.PENDING_TRANS_DETAILS, payload: [...set1]})
-                                        dispatch({type:ACTIONS.COMPLETED_TRANS_DETAILS, payload: [...set2]})
-                                        dispatch({type:ACTIONS.CANCELLED_TRANS_DETAILS, payload: [...set3]})
-                                        dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
-                                    }
-                                })
-                                .catch(err => console.log(err))
+                            if(newState.paymentId !== "" && !(/^(\d){14}$/).test(newState.orderId)){dispatch({type:ACTIONS.VALID_ID, payload: true})}
+                            else if(newState.customerMobile !== "" && !(/^(\d){10}$/).test(newState.customerMobile)){dispatch({type:ACTIONS.VALID_MOBILE, payload: true})}
+                            else if(newState.customerFullName !== "" && !(/[a-zA-Z\s]*/.test(newState.customerFullName))){dispatch({type:ACTIONS.VALID_NAME, payload: true})}
+                            else {
+                                axios.post("http://localhost:8080/PaymentInfo/gettransaction", newState)
+                                    .then(res => {
+                                        if(res.data[0] === undefined){
+                                            dispatch({type:ACTIONS.SHOW3, payload: true})
+                                        } else {
+                                            let set1 = new Set()
+                                            let set2 = new Set()
+                                            let set3 = new Set()
+                                            res.data.forEach(element => {
+                                                if(element.status === "Pending"){set1.add(element)}
+                                                else if(element.status === "Completed"){set2.add(element)}
+                                                else if(element.status === "Cancelled"){set3.add(element)}
+                                            });
+                                            dispatch({type:ACTIONS.PENDING_TRANS_DETAILS, payload: [...set1]})
+                                            dispatch({type:ACTIONS.COMPLETED_TRANS_DETAILS, payload: [...set2]})
+                                            dispatch({type:ACTIONS.CANCELLED_TRANS_DETAILS, payload: [...set3]})
+                                            dispatch({type:ACTIONS.TABLE_SHOW, payload: true})
+                                        }
+                                    })
+                                    .catch(err => console.log(err))
+                            }
                         }}>Search</Button>
                     </div>
                 </Container>
