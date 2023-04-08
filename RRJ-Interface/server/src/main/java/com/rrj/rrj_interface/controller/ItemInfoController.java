@@ -33,11 +33,6 @@ public class ItemInfoController {
         return itemInfoService.getItemNameAndPrice(paymentInfo);
     }
 
-    @PostMapping("/getweight")
-    public List<Object[]> getWeight(@RequestBody ItemInfo itemInfo){
-        return itemInfoService.getWeight(itemInfo);
-    }
-
     @PostMapping("/getitems")
     public List<ItemInfo> getItems(@RequestBody ItemInfo itemInfo){
         return itemInfoService.getItems(itemInfo);

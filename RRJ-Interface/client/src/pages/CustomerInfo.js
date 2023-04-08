@@ -90,7 +90,7 @@ const CustomerInfo = ({navigate, info}) => {
     const [newState1, dispatch1] = useReducer(reducer1, initialState1)
     
     const SubmitHandler = () => {
-        if(newState.customerFullName === "" || !(/^[a-zA-Z]+$/.test(newState.customerFullName))){
+        if(newState.customerFullName === "" || !(/^[a-zA-Z\s]*$/.test(newState.customerFullName))){
             dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
         } else if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
             dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})
@@ -101,7 +101,7 @@ const CustomerInfo = ({navigate, info}) => {
         } else if(newState.address === ""){
             dispatch1({type:ACTIONS1.ADDRESS, payload: true})
         } else {
-            axios.post("http://localhost:8080/CustomerInfo/add", newState)
+            axios.post("http://localhost:8080/RRJ/CustomerInfo/add", newState)
             .then((res) => {
                 (res.data === "Customer already exists!") ?
                 dispatch({type:ACTIONS.ERR, payload: res.data}) : dispatch({type: ACTIONS.STATUS, payload: res.data})
@@ -118,8 +118,8 @@ const CustomerInfo = ({navigate, info}) => {
                 (info === undefined) ? (
                     <nav aria-label="breadcrumb">
                         <ol className="breadcrumb flex-nowrap">
-                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
-                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage', { replace: true })}}>Home</p></li>
+                            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry', { replace: true })}}>InfoEntry__</p></li>
                             <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">CustomerInfo</li>
                         </ol>
                     </nav>
@@ -218,7 +218,7 @@ const CustomerInfo = ({navigate, info}) => {
                                     <Button variant="primary" className="mt-3 mb-3" onClick={SubmitHandler}>Submit</Button>
                                 ): (
                                     <Button variant="primary" className="mt-3 mb-3" onClick={() => {
-                                        if(newState.customerFullName === "" || !(/[a-zA-Z\s]*/.test(newState.customerFullName))){
+                                        if(newState.customerFullName === "" || !(/^[a-zA-Z\s]*$/.test(newState.customerFullName))){
                                             dispatch1({type:ACTIONS1.CUSTOMER_FULL_NAME, payload: true})
                                         } else if(newState.customerMobile === "" || !(/^(\d){10}$/.test(newState.customerMobile))){
                                             dispatch1({type:ACTIONS1.CUSTOMER_MOBILE, payload: true})
@@ -229,9 +229,12 @@ const CustomerInfo = ({navigate, info}) => {
                                         } else if(newState.address === ""){
                                             dispatch1({type:ACTIONS1.ADDRESS, payload: true})
                                         } else {
-                                            axios.put(`http://localhost:8080/CustomerInfo/customerupdate/${info.customerId}`, newState)
+                                            axios.put(`http://localhost:8080/RRJ/CustomerInfo/customerupdate/${info.customerId}`, newState)
                                                 .then(() => {
                                                     dispatch({type:ACTIONS.STATUS, payload: "Updated Successfully!"})
+                                                    setTimeout(() => {
+                                                        window.location.reload(false)
+                                                    },1200)
                                                 }).catch(err => {console.log(err)})   
                                         }
                                     }}>Modify</Button>

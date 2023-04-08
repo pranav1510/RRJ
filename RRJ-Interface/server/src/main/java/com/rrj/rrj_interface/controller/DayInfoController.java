@@ -30,4 +30,9 @@ public class DayInfoController {
     public ResponseEntity<DayInfo> updateinfo(@RequestBody DayInfo dayInfo, @PathVariable String Id) {
         return dayInfoService.updateinfo(dayInfo, Id);
     }
+
+    @DeleteMapping("/deleteinfo")
+    public void delete(){
+        dayInfoService.deleteinfo();
+    }
 }

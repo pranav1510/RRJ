@@ -138,8 +138,8 @@ const OrderInfo = ({navigate}) => {
         <Container>
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb flex-nowrap">
-            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
-            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/searchinfo')}}>SearchInfo</p></li>
+            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage', { replace: true })}}>Home</p></li>
+            <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/searchinfo', { replace: true })}}>SearchInfo</p></li>
             <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">SearchOrder</li>
             </ol>
         </nav>
@@ -384,90 +384,196 @@ const OrderInfo = ({navigate}) => {
         <Modal.Body style={{height: "500px", overflow: "hidden", overflowY: "auto"}}>
             <Table className="table-hover w-100 mt-1 small" >
                 <tbody>
+                <tr>
+                    <th>Gold Cost</th>
+                    <td>{newState.itemin.goldCost}</td>
+                </tr>
+                <tr>
+                    <th>Silver Cost</th>
+                    <td>{newState.itemin.silverCost}</td>
+                </tr>
+                <tr>
+                    <th>Item Id</th>
+                    <td>{newState.itemin.itemId}</td>
+                </tr>
+                <tr>
+                    <th>Item Type</th>
+                    <td>{newState.itemin.itemType}</td>
+                </tr>
+                <tr>
+                    <th>Item Name</th>
+                    <td>{newState.itemin.itemName}</td>
+                </tr>
+                <tr>
+                    <th>Item Delivery Date</th>
+                    <td>{newState.itemin.itemDeliveryDate}</td>
+                </tr>
+                {(newState.itemin.estimatedWeight !== "") ?
+                <tr>
+                    <th>Estimated Weight</th>
+                    <td>{newState.itemin.estimatedWeight}</td>
+                </tr> : <></>
+                }
+                {(newState.itemin.designDetails !== "") ?
+                <tr>
+                    <th>Design Details</th>
+                    <td>{newState.itemin.designDetails}</td>
+                </tr> : <></>
+                }
+                {
+                    (newState.itemin.customerComments !== "") ? (
+                        <tr>
+                            <th>Customer Comments</th>
+                            <td>{newState.itemin.customerComments}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.orderReceiverComments !== "") ? (
+                        <tr>
+                            <th>Order Receiver Comments</th>
+                            <td>{newState.itemin.orderReceiverComments}</td>
+                        </tr>
+                    ) : <></>
+                }
+                <tr>
+                    <th>Item Status</th>
+                    <td>{newState.itemin.itemStatus}</td>
+                </tr>
+                <tr>
+                    <th>Item Entered By</th>
+                    <td>{newState.itemin.itemEnteredBy}</td>
+                </tr>
+                {
+                    (newState.itemin.stonesType !== "") ? (
+                        <tr>
+                            <th>Stones Type</th>
+                            <td>{newState.itemin.stonesType}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                (newState.itemin.czWeight !== "") ? <>
                     <tr>
-                        <th>Item Id</th>
-                        <td>{newState.itemin.itemId}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Name</th>
-                        <td>{newState.itemin.itemName}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Type</th>
-                        <td>{newState.itemin.itemType}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Delivery Date</th>
-                        <td>{newState.itemin.itemDeliveryDate}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Price</th>
-                        <td>{newState.itemin.itemPrice}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Status</th>
-                        <td>{newState.itemin.itemStatus}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Entered By</th>
-                        <td>{newState.itemin.itemEnteredBy}</td>
-                    </tr>
-                    <tr>
-                        <th>Customer Comments</th>
-                        <td>{newState.itemin.customerComments}</td>
-                    </tr>
-                    <tr>
-                        <th>Order Receiver Comments</th>
-                        <td>{newState.itemin.orderReceiverComments}</td>
-                    </tr>
-                    <tr>
-                        <th>Making Charges</th>
-                        <td>{newState.itemin.makingCharges}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Gross Weight</th>
-                        <td>{newState.itemin.itemGrossWeight}</td>
-                    </tr>
-                    <tr>
-                        <th>Item Net Weight</th>
-                        <td>{newState.itemin.itemNetWeight}</td>
-                    </tr>
-                    <tr>
-                        <th>Wastage</th>
-                        <td>{newState.itemin.wastage}</td>
-                    </tr>
-                    <tr>
-                        <th>Pearls Weight</th>
-                        <td>{newState.itemin.pearlsWeight}</td>
-                    </tr>
-                    <tr>
-                        <th>Pearls Cost</th>
-                        <td>{newState.itemin.pearlsCost}</td>
-                    </tr>
-                    <tr>
-                        <th>Stones Type</th>
-                        <td>{newState.itemin.stonesType}</td>
+                        <th>Cz Weight</th>
+                        <td>{newState.itemin.czWeight}</td>
                     </tr>
                     <tr>
                         <th>Cz Cost</th>
                         <td>{newState.itemin.czCost}</td>
                     </tr>
+                </> : <></>
+                }
+                {
+                (newState.itemin.emeraldWeight !== "") ? <>
+                    <tr>
+                        <th>Emerald Weight</th>
+                        <td>{newState.itemin.emeraldWeight}</td>
+                    </tr>
                     <tr>
                         <th>Emerald Cost</th>
                         <td>{newState.itemin.emeraldCost}</td>
+                    </tr>
+                </> : <></>
+                }
+                {
+                (newState.itemin.rubyWeight !== "") ? <>
+                    <tr>
+                        <th>Ruby Weight</th>
+                        <td>{newState.itemin.rubyWeight}</td>
                     </tr>
                     <tr>
                         <th>Ruby Cost</th>
                         <td>{newState.itemin.rubyCost}</td>
                     </tr>
-                    <tr>
-                        <th>Overall Stone Weight</th>
-                        <td>{newState.itemin.overallStoneWeight}</td>
-                    </tr>
-                    <tr>
-                        <th>Overall Stone Cost</th>
-                        <td>{newState.itemin.overallStoneCost}</td>
-                    </tr>
+                </> : <></>
+                }
+                {
+                    (newState.itemin.overallStoneWeight !== "") ? (
+                        <>
+                        <tr>
+                            <th>Overall Stone Weight</th>
+                            <td>{newState.itemin.overallStoneWeight}</td>
+                        </tr>
+                        <tr>
+                            <th>Overall Stone Cost</th>
+                            <td>{newState.itemin.overallStoneCost}</td>
+                        </tr>
+                        </>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.pearlsWeight !== "") ? (
+                        <tr>
+                            <th>Pearls Weight</th>
+                            <td>{newState.itemin.pearlsWeight}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.pearlsCost !== "") ? (
+                        <tr>
+                            <th>Pearls Cost</th>
+                            <td>{newState.itemin.pearlsCost}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.makingCharges !== "") ? (
+                        <tr>
+                            <th>Making Charges</th>
+                            <td>{newState.itemin.makingCharges}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.itemGrossWeight !== "") ? (
+                        <tr>
+                            <th>Item Gross Weight</th>
+                            <td>{newState.itemin.itemGrossWeight}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.itemNetWeight !== "") ? (
+                        <tr>
+                            <th>Item Net Weight</th>
+                            <td>{newState.itemin.itemNetWeight}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.wastage !== "") ? (
+                        <tr>
+                            <th>Wastage</th>
+                            <td>{newState.itemin.wastage}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.otherWeight !== "") ? (
+                        <tr>
+                            <th>Other Weight</th>
+                            <td>{newState.itemin.otherWeight}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.totalWeight !== "") ? (
+                        <tr>
+                            <th>Total Weight</th>
+                            <td>{newState.itemin.totalWeight}</td>
+                        </tr>
+                    ) : <></>
+                }
+                {
+                    (newState.itemin.itemPrice !== "") ? (
+                        <tr>
+                            <th>Item Price</th>
+                            <td>{newState.itemin.itemPrice}</td>
+                        </tr>
+                    ) : <></>
+                }
                 </tbody>
             </Table>
         </Modal.Body>
@@ -541,7 +647,7 @@ const OrderInfo = ({navigate}) => {
                     </tbody>
                 </Table>
                 <Button variant="info" onClick={() => {
-                    axios.post("http://localhost:8080/ItemInfo/getitems", newState.orderin)
+                    axios.post("http://localhost:8080/RRJ/ItemInfo/getitems", newState.orderin)
                         .then(res => {
                             const val = res.data[0]
                             if(val !== undefined){
@@ -657,7 +763,7 @@ const OrderInfo = ({navigate}) => {
                             else if(newState.customerMobile !== "" && !(/^(\d){10}$/).test(newState.customerMobile)){dispatch({type:ACTIONS.VALID_MOBILE, payload: true})}
                             else if(newState.customerFullName !== "" && !(/[a-zA-Z\s]*/.test(newState.customerFullName))){dispatch({type:ACTIONS.VALID_NAME, payload: true})}
                             else {
-                                axios.post("http://localhost:8080/OrderTaking/searchOrder", newState)
+                                axios.post("http://localhost:8080/RRJ/OrderTaking/searchOrder", newState)
                                     .then(res => {
                                         if(res.data[0] === undefined){
                                             dispatch({type:ACTIONS.SHOW6, payload: true})

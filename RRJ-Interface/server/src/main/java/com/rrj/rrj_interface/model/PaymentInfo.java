@@ -2,12 +2,8 @@ package com.rrj.rrj_interface.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 public class PaymentInfo{
 
     @Id
@@ -15,14 +11,16 @@ public class PaymentInfo{
     private String PaymentDate;
     private String OrderId;
     private int CustomerId;
+    private String BillNo;
     private String CustomerMobile;
     private String CustomerFullName;
-    private String AmountReceived;
+    private String Cash;
+    private String AcntTransfer;
     private String ExchangeWeight;
-    private String ExchangeCost;
+    private String ReceivedWeight;
     private String GoldWeight;
     private String SilverWeight;
-    private String OrderPrice;
+    private String TotalPrice;
     private String CustomerDueStatus;
     private String CustomerDueAmount;
     private String CustomerDueGold;
@@ -41,6 +39,8 @@ public class PaymentInfo{
     private String OneGramCost;
     private String PaymentPurpose;
     private String Status;
+    private String OldWeight;
+    private String FineWeight;
 
     public String getPaymentId() {
         return PaymentId;
@@ -48,6 +48,22 @@ public class PaymentInfo{
 
     public void setPaymentId(String paymentId) {
         PaymentId = paymentId;
+    }
+
+    public String getAcntTransfer() {
+        return AcntTransfer;
+    }
+
+    public void setAcntTransfer(String acntTransfer) {
+        AcntTransfer = acntTransfer;
+    }
+
+    public String getBillNo() {
+        return BillNo;
+    }
+
+    public void setBillNo(String billNo) {
+        BillNo = billNo;
     }
 
     public String getPaymentDate() {
@@ -90,12 +106,12 @@ public class PaymentInfo{
         CustomerFullName = customerFullName;
     }
 
-    public String getAmountReceived() {
-        return AmountReceived;
+    public String getCash() {
+        return Cash;
     }
 
-    public void setAmountReceived(String amountReceived) {
-        AmountReceived = amountReceived;
+    public void setCash(String cash) {
+        Cash = cash;
     }
 
     public String getExchangeWeight() {
@@ -106,12 +122,12 @@ public class PaymentInfo{
         ExchangeWeight = exchangeWeight;
     }
 
-    public String getExchangeCost() {
-        return ExchangeCost;
+    public String getReceivedWeight() {
+        return ReceivedWeight;
     }
 
-    public void setExchangeCost(String exchangeCost) {
-        ExchangeCost = exchangeCost;
+    public void setReceivedWeight(String receivedWeight) {
+        ReceivedWeight = receivedWeight;
     }
 
     public String getGoldWeight() {
@@ -130,12 +146,12 @@ public class PaymentInfo{
         SilverWeight = silverWeight;
     }
 
-    public String getOrderPrice() {
-        return OrderPrice;
+    public String getTotalPrice() {
+        return TotalPrice;
     }
 
-    public void setOrderPrice(String orderPrice) {
-        OrderPrice = orderPrice;
+    public void setTotalPrice(String totalPrice) {
+        TotalPrice = totalPrice;
     }
 
     public String getCustomerDueStatus() {
@@ -280,5 +296,61 @@ public class PaymentInfo{
 
     public void setStatus(String status) {
         Status = status;
+    }
+
+    public String getOldWeight() {
+        return OldWeight;
+    }
+
+    public void setOldWeight(String oldWeight) {
+        OldWeight = oldWeight;
+    }
+
+    public String getFineWeight() {
+        return FineWeight;
+    }
+
+    public void setFineWeight(String fineWeight) {
+        FineWeight = fineWeight;
+    }
+
+    public PaymentInfo() {
+    }
+
+    public PaymentInfo(String paymentId, String paymentDate, String orderId, int customerId, String billNo, String customerMobile, String customerFullName, String cash, String acntTransfer, String exchangeWeight, String receivedWeight, String goldWeight, String silverWeight, String totalPrice, String customerDueStatus, String customerDueAmount, String customerDueGold, String customerDueSilver, String rrjDueStatus, String rrjDueAmount, String rrjDueGold, String rrjDueSilver, String paymentDescription, String transactionType, String paymentType, String paymentReceivedBy, String paymentEnteredBy, String sentType, String percentage, String oneGramCost, String paymentPurpose, String status, String oldWeight, String fineWeight) {
+        PaymentId = paymentId;
+        PaymentDate = paymentDate;
+        OrderId = orderId;
+        CustomerId = customerId;
+        BillNo = billNo;
+        CustomerMobile = customerMobile;
+        CustomerFullName = customerFullName;
+        Cash = cash;
+        AcntTransfer = acntTransfer;
+        ExchangeWeight = exchangeWeight;
+        ReceivedWeight = receivedWeight;
+        GoldWeight = goldWeight;
+        SilverWeight = silverWeight;
+        TotalPrice = totalPrice;
+        CustomerDueStatus = customerDueStatus;
+        CustomerDueAmount = customerDueAmount;
+        CustomerDueGold = customerDueGold;
+        CustomerDueSilver = customerDueSilver;
+        RrjDueStatus = rrjDueStatus;
+        RrjDueAmount = rrjDueAmount;
+        RrjDueGold = rrjDueGold;
+        RrjDueSilver = rrjDueSilver;
+        PaymentDescription = paymentDescription;
+        TransactionType = transactionType;
+        PaymentType = paymentType;
+        PaymentReceivedBy = paymentReceivedBy;
+        PaymentEnteredBy = paymentEnteredBy;
+        SentType = sentType;
+        Percentage = percentage;
+        OneGramCost = oneGramCost;
+        PaymentPurpose = paymentPurpose;
+        Status = status;
+        OldWeight = oldWeight;
+        FineWeight = fineWeight;
     }
 }

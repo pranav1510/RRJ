@@ -26,7 +26,7 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     @Override
     public List<PaymentInfo> getdetails(PaymentInfo paymentInfo) {
-        return paymentInfoRepository.getdetails(paymentInfo.getPaymentId(), paymentInfo.getCustomerFullName(), paymentInfo.getCustomerMobile());
+        return paymentInfoRepository.getdetails(paymentInfo.getPaymentId(), paymentInfo.getCustomerFullName(), paymentInfo.getCustomerMobile(), paymentInfo.getPaymentDate(), paymentInfo.getPaymentReceivedBy());
     }
 
     @Override
@@ -40,6 +40,7 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
         PaymentInfo updateTransaction = paymentInfoRepository.findByPaymentId(PaymentId);
 
         updateTransaction.setTransactionType(paymentInfo.getTransactionType());
+        updateTransaction.setBillNo(paymentInfo.getBillNo());
         updateTransaction.setPaymentPurpose(paymentInfo.getPaymentPurpose());
         updateTransaction.setSentType(paymentInfo.getSentType());
         updateTransaction.setPaymentType(paymentInfo.getPaymentType());
@@ -48,14 +49,12 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
         updateTransaction.setCustomerId(paymentInfo.getCustomerId());
         updateTransaction.setOrderId(paymentInfo.getOrderId());
         updateTransaction.setPaymentDate(paymentInfo.getPaymentDate());
-        updateTransaction.setExchangeCost(paymentInfo.getExchangeCost());
+        updateTransaction.setReceivedWeight(paymentInfo.getReceivedWeight());
         updateTransaction.setExchangeWeight(paymentInfo.getExchangeWeight());
-        updateTransaction.setPercentage(paymentInfo.getPercentage());
-        updateTransaction.setOneGramCost(paymentInfo.getOneGramCost());
-        updateTransaction.setOrderPrice(paymentInfo.getOrderPrice());
+        updateTransaction.setTotalPrice(paymentInfo.getTotalPrice());
         updateTransaction.setGoldWeight(paymentInfo.getGoldWeight());
         updateTransaction.setSilverWeight(paymentInfo.getSilverWeight());
-        updateTransaction.setAmountReceived(paymentInfo.getAmountReceived());
+        updateTransaction.setCash(paymentInfo.getCash());
         updateTransaction.setStatus(paymentInfo.getStatus());
         updateTransaction.setCustomerDueStatus(paymentInfo.getCustomerDueStatus());
         updateTransaction.setCustomerDueAmount(paymentInfo.getCustomerDueAmount());
@@ -66,6 +65,11 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
         updateTransaction.setRrjDueGold(paymentInfo.getRrjDueGold());
         updateTransaction.setRrjDueSilver(paymentInfo.getRrjDueSilver());
         updateTransaction.setPaymentDescription(paymentInfo.getPaymentDescription());
+        updateTransaction.setAcntTransfer(paymentInfo.getAcntTransfer());
+        updateTransaction.setPercentage(paymentInfo.getPercentage());
+        updateTransaction.setOneGramCost(paymentInfo.getOneGramCost());
+        updateTransaction.setOldWeight(paymentInfo.getOldWeight());
+        updateTransaction.setFineWeight(paymentInfo.getFineWeight());
 
         paymentInfoRepository.save(updateTransaction);
 

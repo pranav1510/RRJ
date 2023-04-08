@@ -9,6 +9,7 @@ public interface DayInfoService {
 
     public DayInfo save(DayInfo dayInfo);
     public List<DayInfo> getdetails(DayInfo dayInfo);
-
     public ResponseEntity<DayInfo> updateinfo(DayInfo dayInfo, String Id);
+
+    public void deleteinfo();
 }

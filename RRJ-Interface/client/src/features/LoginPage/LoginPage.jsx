@@ -37,11 +37,11 @@ const reducer = (state, {type, payload}) => {
 const LoginPage = ({navigate}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
     const dispatcher = useDispatch()
-    const SubmitHandler = () => {
+    const SubmitHandler = (e) => {
         if(newState.username === "" || newState.password === ""){
             dispatch({type:ACTIONS.ERR, payload: "Fields must not be Empty!"})
         } else {
-            axios.get("http://localhost:8080/DailyPrice/dailyprice")
+            axios.get("http://localhost:8080/RRJ/DailyPrice/dailyprice")
                 .then(res => {
                     let val = res.data[0]
                     if(val !== undefined){
@@ -49,11 +49,11 @@ const LoginPage = ({navigate}) => {
                         dispatcher(setSilverPrice(val[1]))
                     }
                 }).catch(err => console.log(err))
-            axios.get("http://localhost:8080/OrderTaking/pendingorders")
+            axios.get("http://localhost:8080/RRJ/OrderTaking/pendingorders")
                 .then(res => {dispatcher(setPendingOrders(res.data))}).catch(err => console.log(err))
-            axios.get("http://localhost:8080/PaymentInfo/pendingtransactions")
+            axios.get("http://localhost:8080/RRJ/PaymentInfo/pendingtransactions")
                 .then(res => {dispatcher(setPendingTransactions(res.data))}).catch(err => console.log(err))
-            axios.get("http://localhost:8080/EmployeeInfo/getlogininfo")
+            axios.get("http://localhost:8080/RRJ/EmployeeInfo/getlogininfo")
                 .then(res => {
                     if(res.data[0] === undefined){
                         dispatch({type:ACTIONS.ERR, payload: "Invalid Login Details"})
@@ -62,7 +62,8 @@ const LoginPage = ({navigate}) => {
                             if(newState.username === element[0] && newState.password === element[1]){
                                 dispatcher(setEmployeeName(element[2]))
                                 dispatch({type:ACTIONS.DETAILS, payload: res.data})
-                                navigate("/homepage")
+                                navigate("/homepage", { replace: true })
+                                dispatcher(setStatusShow(true))
                             } else if(newState.username === element[0] && newState.password !== element[1]){
                                 dispatch({type:ACTIONS.ERR, payload: "Enter Valid Password"})
                             } else if(newState.username !== element[0] && newState.password === element[1]){
@@ -74,7 +75,6 @@ const LoginPage = ({navigate}) => {
                     }
                 }).catch(err => console.log(err))
 
-            dispatcher(setStatusShow(true))
         }
     }
 
@@ -87,7 +87,9 @@ const LoginPage = ({navigate}) => {
                         <Form>
                             <Form.Group className="mt-3">
                                 <Form.Label className="fw-bold m-1">UserName</Form.Label>
-                                <Form.Control type="email" onChange={e => {
+                                <Form.Control type="email" onKeyDown={e => {
+                                    if(e.key === "Enter"){SubmitHandler()}
+                                }} onChange={e => {
                                     dispatch({type:ACTIONS.USERNAME, payload: e})
                                     if(newState.err !== ""){dispatch({type:ACTIONS.ERR, payload: ""})}
                                     }}/>

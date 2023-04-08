@@ -13,4 +13,5 @@ public interface DayInfoRepository extends JpaRepository<DayInfo,String> {
 
     @Query("select e FROM DayInfo e WHERE e.Id =?1")
     public DayInfo findbyId(String Id);
+
 }

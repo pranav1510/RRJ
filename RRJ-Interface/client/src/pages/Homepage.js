@@ -13,7 +13,7 @@ const HomePage = ({navigate}) => {
         </Container>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/infoentry')}}>
+                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/infoentry', { replace: true })}}>
                     <Card.Body>
                         <Card.Title><h5 className="link-dark">INFORMATION ENTRY</h5></Card.Title>
                     </Card.Body>
@@ -22,7 +22,7 @@ const HomePage = ({navigate}) => {
         </div>
         <div className="row justify-content-center">
             <div className="col-sm-6">
-                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/searchinfo')}}>
+                <Card style={{"cursor":"pointer"}} className="m-3 rounded" onClick={() => {navigate('/searchinfo', { replace: true })}}>
                     <Card.Body>
                         <Card.Title><h5 className="link-dark">SEARCH INFORMATION</h5></Card.Title>
                     </Card.Body>

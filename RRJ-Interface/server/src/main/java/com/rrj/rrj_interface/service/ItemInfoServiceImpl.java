@@ -31,11 +31,6 @@ public class ItemInfoServiceImpl implements ItemInfoService {
     }
 
     @Override
-    public List<Object[]> getWeight(ItemInfo itemInfo) {
-        return itemInfoRepository.getWeight(itemInfo.getItemId());
-    }
-
-    @Override
     public List<ItemInfo> getItems(ItemInfo itemInfo) {
         return itemInfoRepository.getItems(itemInfo.getOrderId());
     }
@@ -50,13 +45,16 @@ public class ItemInfoServiceImpl implements ItemInfoService {
         updateitem.setItemStatus(itemInfo.getItemStatus());
         updateitem.setItemType(itemInfo.getItemType());
         updateitem.setCustomerComments(itemInfo.getCustomerComments());
+        updateitem.setCzWeight(itemInfo.getCzWeight());
         updateitem.setCzCost(itemInfo.getCzCost());
+        updateitem.setEmeraldWeight(itemInfo.getEmeraldWeight());
         updateitem.setEmeraldCost(itemInfo.getEmeraldCost());
         updateitem.setItemDeliveryDate(itemInfo.getItemDeliveryDate());
         updateitem.setItemGrossWeight(itemInfo.getItemGrossWeight());
         updateitem.setItemNetWeight(itemInfo.getItemNetWeight());
         updateitem.setMakingCharges(itemInfo.getMakingCharges());
         updateitem.setOrderReceiverComments(itemInfo.getOrderReceiverComments());
+        updateitem.setRubyWeight(itemInfo.getRubyWeight());
         updateitem.setRubyCost(itemInfo.getRubyCost());
         updateitem.setPearlsCost(itemInfo.getPearlsCost());
         updateitem.setPearlsWeight(itemInfo.getPearlsWeight());
@@ -64,6 +62,10 @@ public class ItemInfoServiceImpl implements ItemInfoService {
         updateitem.setOverallStoneCost(itemInfo.getOverallStoneCost());
         updateitem.setStonesType(itemInfo.getStonesType());
         updateitem.setWastage(itemInfo.getWastage());
+        updateitem.setOtherWeight(itemInfo.getOtherWeight());
+        updateitem.setTotalWeight(itemInfo.getTotalWeight());
+        updateitem.setEstimatedWeight(itemInfo.getEstimatedWeight());
+        updateitem.setDesignDetails(itemInfo.getDesignDetails());
 
         itemInfoRepository.save(updateitem);
 

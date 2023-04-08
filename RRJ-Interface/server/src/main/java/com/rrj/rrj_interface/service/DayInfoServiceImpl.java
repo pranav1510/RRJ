@@ -41,4 +41,9 @@ public class DayInfoServiceImpl implements DayInfoService{
 
         return ResponseEntity.ok(infoupdate);
     }
+
+    @Override
+    public void deleteinfo() {
+        dayInfoRepository.deleteAll();
+    }
 }

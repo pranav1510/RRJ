@@ -7,7 +7,8 @@ const initialState = {
     cash: "",
     gold: "",
     silver: "",
-    account: ""
+    account: "",
+    status: ""
 }
 
 const ACTIONS = {
@@ -15,7 +16,8 @@ const ACTIONS = {
     CASH: "CASH",
     GOLD: "GOLD",
     SILVER: "SILVER",
-    ACCOUNT: "ACCOUNT"
+    ACCOUNT: "ACCOUNT",
+    STATUS: "STATUS"
 }
 
 const reducer = (state, {type, payload}) => {
@@ -30,6 +32,8 @@ const reducer = (state, {type, payload}) => {
             return {...state, silver: payload}
         case ACTIONS.ACCOUNT:
             return {...state, account: payload}
+        case ACTIONS.STATUS:
+            return {...state, status: payload}
         default:
             return state
     }
@@ -42,6 +46,7 @@ const Closing = () => {
     return(
         <Card>
             <Container>
+            <div className="row"><h5 className="text-success d-flex flex-row justify-content-center">{newState.status}</h5></div>
                 <Form>
                     <Form.Group className="mt-3">
                         <Form.Label className="fw-bold m-1">Date</Form.Label>
@@ -66,8 +71,13 @@ const Closing = () => {
                 </Form>
                 <div className="d-flex justify-content-center m-3">
                     <Button variant="primary" onClick={() => {
-                        axios.post("http://localhost:8080/ClosingInfo/add", newState)
-                            .then(() => {console.log("saved")})
+                        axios.post("http://localhost:8080/RRJ/ClosingInfo/add", newState)
+                            .then(() => {
+                                dispatch({type:ACTIONS.STATUS, payload: "Saved Successfully!"})
+                                setTimeout(() => {
+                                    window.location.reload(false)
+                                },1200)
+                            })
                             .catch(err => console.log(err))
                     }}>Submit</Button>
                 </div>

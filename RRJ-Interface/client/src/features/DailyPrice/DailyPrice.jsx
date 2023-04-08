@@ -41,7 +41,7 @@ const DailyPrice = ({navigate}) => {
     const [newState, dispatch] = useReducer(reducer, initialState)
 
     const SubmitHandler = () => {
-        axios.post("http://localhost:8080/DailyPrice/add", newState)
+        axios.post("http://localhost:8080/RRJ/DailyPrice/add", newState)
             .then((res) => {
                 let val = res.data[0]
                 if(val !== undefined){
@@ -57,8 +57,8 @@ const DailyPrice = ({navigate}) => {
         <Container>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb flex-nowrap">
-                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage')}}>Home</p></li>
-                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry')}}>InfoEntry__</p></li>
+                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/homepage', { replace: true })}}>Home</p></li>
+                    <li className="breadcrumb-item fw-bold text-truncate"><p style={{"cursor":"pointer"}} onClick={() => {navigate('/infoentry', { replace: true })}}>InfoEntry__</p></li>
                     <li className="breadcrumb-item active text-white fw-bold text-truncate" aria-current="page">DailyPriceEntry</li>
                 </ol>
             </nav>
